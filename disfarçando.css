@@ -1,0 +1,39 @@
+#alvoimg{
+    width: 500px;
+}
+#pinguim-container {
+    margin-top: 60px;
+    position: relative;
+    width: 300px;
+    height: 400px;
+}
+#pinguim {
+    width: 100%;
+    display: block;
+}
+.vestimenta {
+    position: absolute;
+    width: 100%;
+    height: auto;
+    top: 0;
+    left: 0;
+}
+#alvo, #disfarce {
+    display: none;
+}
+.acessorio{
+    width: 40px;
+    height: 40px;
+}
+#chapeu-escolhido{
+    position: absolute;
+    top: -50px;
+    left: 25px;
+    width: 250px;
+}
+#camisa-escolhida{
+    position: absolute;
+    top: 145px;
+    left: 25px;
+    width: 250px;
+}
