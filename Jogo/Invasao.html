@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pinguim Espião: Invasão</title>
+    <link rel="stylesheet" href="Invasao.css">
+</head>
+<body>
+
+    <div id="caixinha">
+        <div id="tela-dificuldade">
+            <h2>Quanto cê acertou do disfarce</h2>
+            <select id="select-dificuldade">
+                <option value="100">Acertou Tudo</option>
+                <option value="66" selected>Acertou +ou-</option>
+                <option value="33">Acertou pouco</option>
+                <option value="0">Errou Tudo</option>
+            </select>
+            <button onclick="iniciarInvasao()">Iniciar Invasão</button>
+        </div>
+
+        <div id="tela-jogo" class="hidden">
+            <div id="hud">Alerta: <span id="texto-alerta">0%</span></div>
+            <canvas id="game" width="400" height="500"></canvas>
+        </div>
+    </div>
+
+    <script src="Invasao.js"></script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+body {
+    background-color: #000000;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+#caixinha {
+    background-color: #000000;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    width: 440px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+button, select {
+    width: 100%;
+    padding: 12px;
+    margin-top: 15px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 6px;
+    border: none;
+}
+
+button {
+    background-color: #ffffff;
+    color: #020617;
+}
+
+select {
+    background-color: #000000;
+    color: #ffffff;
+    border: 1px solid #334155;
+}
+
+#game {
+    background-color: #787878;
+    margin-top: 10px;
+    border: 1px solid #1e293b;
+}
+
+#hud {
+    font-size: 0.9rem;
+    color: #38bdf8;
+    text-align: left;
+}
