@@ -1,5 +1,6 @@
+
 body {
-    background-color: #020617;
+    background: linear-gradient(135deg, #020617, #0f172a, #082f49);
     color: white;
     font-family: Arial, sans-serif;
     min-height: 100vh;
@@ -15,21 +16,30 @@ body {
 #img1 {
     width: 200px;
     max-width: 80%;
+    filter: drop-shadow(0 0 15px rgba(56, 189, 248, 0.4));
+    transition: transform 0.3s ease;
+}
+
+#img1:hover {
+    transform: scale(1.05);
 }
 
 #caixinha {
-    background-color: #0f172a;
+    background: linear-gradient(145deg, #0f172a, #172554);
     padding: 30px;
-    border-radius: 12px;
+    border: 1px solid #1e40af;
+    border-radius: 16px;
     text-align: center;
     width: 350px;
     max-width: 85%;
     box-sizing: border-box;
+    box-shadow: 0 0 25px rgba(2, 132, 199, 0.2);
 }
 
 h2 {
     font-size: 22px;
     margin-bottom: 25px;
+    color: #bae6fd;
 }
 
 #inicio,
@@ -37,17 +47,16 @@ h2 {
     display: inline-block;
     padding: 12px 20px;
     margin: 5px;
-    background-color: #0284c7;
-
-#inicio,
-.botao-link {
     background: linear-gradient(135deg, #0284c7, #0369a1);
+    color: white;
+    text-decoration: none;
     border: 1px solid #38bdf8;
     border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
     box-shadow: 0 0 8px rgba(56, 189, 248, 0.25);
     transition: all 0.3s ease;
 }
-
 
 #inicio:hover,
 .botao-link:hover {
@@ -65,11 +74,4 @@ h2 {
 .botao-link:focus-visible {
     outline: 2px solid #7dd3fc;
     outline-offset: 4px;
-}
-    color: white;
-    text-decoration: none;
-    border: none;
-    border-radius: 6px;
-    font-size: 16px;
-    cursor: pointer;
 }
