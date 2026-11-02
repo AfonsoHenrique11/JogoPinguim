@@ -1,20 +1,27 @@
+
 body {
-    background-color: #000000;
+    background: linear-gradient(135deg, #020617, #0f172a, #082f49);
     color: #ffffff;
     font-family: Arial, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0;
+    padding: 15px;
+    box-sizing: border-box;
 }
 
 #caixinha {
-    background-color: #000000;
+    background: linear-gradient(145deg, #0f172a, #172554);
     padding: 20px;
-    border-radius: 8px;
+    border: 1px solid #1e40af;
+    border-radius: 16px;
     text-align: center;
     width: 440px;
+    max-width: 100%;
+    box-sizing: border-box;
+    box-shadow: 0 0 25px rgba(2, 132, 199, 0.2);
 }
 
 .hidden {
@@ -28,25 +35,46 @@ button, select {
     font-size: 1rem;
     font-weight: bold;
     cursor: pointer;
-    border-radius: 6px;
-    border: none;
+    border-radius: 8px;
+    box-sizing: border-box;
 }
 
 button {
-    background-color: #ffffff;
-    color: #020617;
+    background: linear-gradient(135deg, #0284c7, #0369a1);
+    color: #ffffff;
+    border: 1px solid #38bdf8;
+    box-shadow: 0 0 8px rgba(56, 189, 248, 0.25);
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background: linear-gradient(135deg, #0ea5e9, #0284c7);
+    box-shadow: 0 0 16px rgba(56, 189, 248, 0.65);
+    transform: translateY(-3px);
+}
+
+button:active {
+    transform: scale(0.96);
 }
 
 select {
-    background-color: #000000;
+    background-color: #0f172a;
     color: #ffffff;
-    border: 1px solid #334155;
+    border: 1px solid #38bdf8;
+}
+
+button:focus-visible,
+select:focus-visible {
+    outline: 2px solid #7dd3fc;
+    outline-offset: 4px;
 }
 
 #game {
-    background-color: #787878;
+    background-color: #0f172a;
     margin-top: 10px;
-    border: 1px solid #1e293b;
+    border: 1px solid #38bdf8;
+    border-radius: 8px;
+    max-width: 100%;
 }
 
 #hud {
