@@ -38,6 +38,34 @@ h2 {
     padding: 12px 20px;
     margin: 5px;
     background-color: #0284c7;
+
+#inicio,
+.botao-link {
+    background: linear-gradient(135deg, #0284c7, #0369a1);
+    border: 1px solid #38bdf8;
+    border-radius: 8px;
+    box-shadow: 0 0 8px rgba(56, 189, 248, 0.25);
+    transition: all 0.3s ease;
+}
+
+
+#inicio:hover,
+.botao-link:hover {
+    background: linear-gradient(135deg, #0ea5e9, #0284c7);
+    box-shadow: 0 0 16px rgba(56, 189, 248, 0.65);
+    transform: translateY(-3px);
+}
+
+#inicio:active,
+.botao-link:active {
+    transform: scale(0.96);
+}
+
+#inicio:focus-visible,
+.botao-link:focus-visible {
+    outline: 2px solid #7dd3fc;
+    outline-offset: 4px;
+}
     color: white;
     text-decoration: none;
     border: none;
