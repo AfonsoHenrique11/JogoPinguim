@@ -55,6 +55,15 @@ body {
     display: none;
 }
 
+#alvoimg {
+    display: block;
+    width: 500px;
+    max-width: 100%;
+    height: auto;
+    margin: auto;
+    border-radius: 12px;
+}
+
 .acessorio {
     width: 40px;
     height: 40px;
@@ -118,3 +127,55 @@ button:focus-visible {
         top: 125px;
     }
 }
+
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+
+    #inicio,
+    #alvo,
+    #disfarce,
+    #acessorios {
+        width: 100%;
+        padding: 15px;
+        box-sizing: border-box;
+    }
+
+    #pinguim-container {
+        width: min(260px, 85vw);
+        height: auto;
+        aspect-ratio: 3 / 4;
+    }
+
+    #chapeu-escolhido {
+        width: 83.33%;
+        left: 8.33%;
+        top: -12.5%;
+    }
+
+    #camisa-escolhida {
+        width: 83.33%;
+        left: 8.33%;
+        top: 36.25%;
+    }
+
+    #alvoimg {
+        width: 100%;
+    }
+
+    button {
+        max-width: 100%;
+        font-size: 15px;
+    }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+    #inicio,
+    #alvo,
+    #disfarce,
+    #acessorios {
+        width: 90%;
+    }
+}
+
