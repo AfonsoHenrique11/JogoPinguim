@@ -1,4 +1,3 @@
-
 body {
     background: linear-gradient(135deg, #020617, #0f172a, #082f49);
     color: #ffffff;
@@ -12,125 +11,102 @@ body {
     box-sizing: border-box;
 }
 
-#caixinha {
-    background: linear-gradient(145deg, #0f172a, #172554);
-    padding: 20px;
-    border: 1px solid #1e40af;
-    border-radius: 16px;
-    text-align: center;
-    width: 440px;
+#invasao {
+    width: 1024px;
     max-width: 100%;
-    box-sizing: border-box;
-    box-shadow: 0 0 25px rgba(2, 132, 199, 0.2);
 }
 
 .hidden {
     display: none !important;
 }
 
-button, select {
-    width: 100%;
-    padding: 12px;
-    margin-top: 15px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    border-radius: 8px;
-    box-sizing: border-box;
+/* DEBUG provisório (etapas 1 a 4) */
+#debug {
+    margin: 0 0 8px;
+    font-size: 0.9rem;
+    color: #38bdf8;
 }
 
-button {
-    background: linear-gradient(135deg, #0284c7, #0369a1);
-    color: #ffffff;
+/* HUD: barra de alerta/detecção (progresso da missão e informações do jogador: a definir) */
+#hud {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 8px;
+    font-size: 0.9rem;
+    color: #38bdf8;
+}
+
+#barra-alerta {
+    flex: 1;
+    height: 14px;
+    background-color: #0f172a;
     border: 1px solid #38bdf8;
-    box-shadow: 0 0 8px rgba(56, 189, 248, 0.25);
+    border-radius: 7px;
+    overflow: hidden;
+}
+
+#barra-alerta-nivel {
+    width: 0%;
+    height: 100%;
+    background-color: hsl(200, 85%, 55%);
+}
+
+#palco {
+    position: relative;
+}
+
+/* O canvas tem resolução interna 1024x640 (provisório); o CSS só escala a exibição */
+#game {
+    display: block;
+    width: 100%;
+    height: auto;
+    background-color: #020617;
+    border: 1px solid #38bdf8;
+    border-radius: 8px;
+    box-shadow: 0 0 25px rgba(2, 132, 199, 0.2);
+}
+
+#tela-resultado {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    background-color: rgba(2, 6, 23, 0.85);
+    border-radius: 8px;
+    text-align: center;
+}
+
+#tela-resultado h2,
+#tela-resultado p {
+    margin: 0;
+}
+
+#tela-resultado h2 {
+    color: #bae6fd;
+}
+
+#tela-resultado button {
+    padding: 12px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #ffffff;
+    background: linear-gradient(135deg, #0284c7, #0369a1);
+    border: 1px solid #38bdf8;
+    border-radius: 8px;
+    cursor: pointer;
     transition: all 0.3s ease;
 }
 
-button:hover {
+#tela-resultado button:hover {
     background: linear-gradient(135deg, #0ea5e9, #0284c7);
     box-shadow: 0 0 16px rgba(56, 189, 248, 0.65);
-    transform: translateY(-3px);
 }
 
-button:active {
-    transform: scale(0.96);
-}
-
-select {
-    background-color: #0f172a;
-    color: #ffffff;
-    border: 1px solid #38bdf8;
-}
-
-button:focus-visible,
-select:focus-visible {
+#tela-resultado button:focus-visible {
     outline: 2px solid #7dd3fc;
     outline-offset: 4px;
 }
-
-#game {
-    background-color: #0f172a;
-    margin-top: 10px;
-    border: 1px solid #38bdf8;
-    border-radius: 8px;
-    max-width: 100%;
-}
-
-#hud {
-    font-size: 0.9rem;
-    color: #38bdf8;
-    text-align: left;
-}
-
-@media (max-width: 480px) {
-    body {
-        padding: 10px;
-    }
-
-    #inicio,
-    #alvo,
-    #disfarce,
-    #acessorios {
-        width: 100%;
-        padding: 15px;
-        box-sizing: border-box;
-    }
-
-    #pinguim-container {
-        width: min(260px, 85vw);
-        height: auto;
-        aspect-ratio: 3 / 4;
-    }
-
-    #chapeu-escolhido {
-        width: 83.33%;
-        left: 8.33%;
-        top: -12.5%;
-    }
-
-    #camisa-escolhida {
-        width: 83.33%;
-        left: 8.33%;
-        top: 36.25%;
-    }
-
-    #alvoimg {
-        width: 100%;
-    }
-
-    button {
-        max-width: 100%;
-        font-size: 15px;
-    }
-}
-
-@media (min-width: 481px) and (max-width: 768px) {
-    #inicio,
-    #alvo,
-    #disfarce,
-    #acessorios {
-        width: 90%;
-    }
-}
-
