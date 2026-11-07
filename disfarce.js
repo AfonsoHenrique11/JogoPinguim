@@ -31,11 +31,11 @@ acessorios.forEach((acessorio) => {
     })
 });
 let delet = document.querySelector('#lixo');
-let roupas = document.querySelectorAll('.vestimenta');
+let acessories = document.querySelectorAll('.vestimenta');
 
 delet.addEventListener('click', () => {
-    roupas.forEach((roupa) => {
-        roupa.src = '';
-        roupa.style.display = 'none';
+    acessories.forEach((acessory) => {
+        acessory.src = '';
+        acessory.style.display = 'none';
     });
 });
