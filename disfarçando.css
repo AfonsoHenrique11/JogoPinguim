@@ -33,7 +33,26 @@
 }
 #camisa-escolhida{
     position: absolute;
-    top: 145px;
+    top: 75px;
+    width: 110%;
+    height: 250px;
+    left: -15px
+}
+#cabelo-escolhido{
+    position: absolute;
+    top: 0px;
     left: 25px;
     width: 250px;
+}
+#colar-escolhido{
+    position: absolute;
+    top: 125px;
+    left: 50px;
+    width: 200px;
+}
+#oculos-escolhidos{
+    position: absolute;
+    top: 85px;
+    left: 65px;
+    width: 170px;
 }
