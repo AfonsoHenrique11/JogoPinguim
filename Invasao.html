@@ -8,7 +8,7 @@
 </head>
 <body>
     <main id="invasao">
-        <!-- DEBUG provisório (etapas 1 a 5): será removido quando o HUD estiver completo -->
+        <!-- DEBUG provisório (etapas 1 a 6): será removido quando o HUD estiver completo -->
         <p id="debug"></p>
 
         <div id="hud">
@@ -31,11 +31,19 @@
                 <div id="painel-digitos"><span></span><span></span><span></span><span></span></div>
             </div>
 
-            <!-- Tela de resultados: por enquanto só falha e vitória simples (etapa 5); será completada na etapa 6 -->
+            <!-- Tela de resultados: falha (pontuação 0, só "jogar de novo") ou vitória (pontuação, nickname e ranking) -->
             <div id="tela-resultado" class="hidden">
                 <h2 id="resultado-titulo">Missão falhou</h2>
                 <p id="resultado-pontuacao">Pontuação: 0</p>
-                <button id="botao-jogar-de-novo">Jogar de novo</button>
+                <p id="resultado-tempo" class="hidden"></p>
+                <div id="grupo-ranking" class="hidden">
+                    <label for="campo-nickname">Nickname</label>
+                    <input id="campo-nickname" type="text" maxlength="12" autocomplete="off">
+                </div>
+                <div id="botoes-resultado">
+                    <button id="botao-ranking" class="hidden" disabled>Ir ao ranking</button>
+                    <button id="botao-jogar-de-novo">Jogar de novo</button>
+                </div>
             </div>
         </div>
     </main>
