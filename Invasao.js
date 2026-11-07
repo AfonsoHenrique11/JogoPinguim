@@ -7,8 +7,8 @@ const LARGURA = 1024;                 // provisório (aprovado por enquanto)
 const ALTURA = 640;                   // provisório (aprovado por enquanto)
 const VELOCIDADE_JOGADOR = 140;       // px/s — provisório
 const TAMANHO_JOGADOR = 20;           // px — provisório
-const DIF_PADRAO = 2;                 // provisório: usado só se a URL não trouxer "dif"
-const PREC_PADRAO = 50;              // provisório: usado só se a URL não trouxer "prec"
+const DIF_PADRAO = 1;                 // provisório: usado só se a URL não trouxer "dif"
+const PREC_PADRAO = 100;              // provisório: usado só se a URL não trouxer "prec"
 const NOMES_DIFICULDADE = ['Fácil', 'Normal', 'Difícil', 'Impossível'];
 const COLUNAS_MAPA = 32;
 const LINHAS_MIN = 9;
@@ -366,14 +366,20 @@ function fecharPainel() {
     painelCofre.classList.add('hidden');
 }
 
-function tentarAbrirPainel() {
+// Cofre fechado mais próximo dentro do alcance de interação (ou null)
+function cofreAoAlcance() {
     let melhor = null, melhorDist = ALCANCE_INTERACAO;
     cofres.forEach(c => {
         if (c.aberto) return;
         const d = Math.hypot(c.x - jogador.x, c.y - jogador.y);
         if (d <= melhorDist) { melhor = c; melhorDist = d; }
     });
-    if (melhor) abrirPainel(melhor);
+    return melhor;
+}
+
+function tentarAbrirPainel() {
+    const cofre = cofreAoAlcance();
+    if (cofre) abrirPainel(cofre);
 }
 
 function confirmarCodigo() {
@@ -531,6 +537,32 @@ function renderizar() {
         jogador.x - TAMANHO_JOGADOR / 2,
         offsetY + jogador.y - TAMANHO_JOGADOR / 2,
         TAMANHO_JOGADOR, TAMANHO_JOGADOR, '#ffffff');
+
+    desenharIndicadorInteracao();
+}
+
+// Indício de que dá para abrir o cofre: um pequeno "L" sobre ele, enquanto o jogador está no alcance
+function desenharIndicadorInteracao() {
+    if (estadoJogo !== 'jogando' || painelAberto) return;
+    const cofre = cofreAoAlcance();
+    if (!cofre) return;
+    const lado = 22;
+    const x = cofre.x - lado / 2;
+    const y = offsetY + cofre.y - TILE / 2 - lado - 6;
+    ctx.save();
+    ctx.fillStyle = '#0f172a';
+    ctx.strokeStyle = '#38bdf8';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    if (ctx.roundRect) ctx.roundRect(x, y, lado, lado, 6); else ctx.rect(x, y, lado, lado);
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 15px Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('L', cofre.x, y + lado / 2 + 1);
+    ctx.restore();
 }
 
 // ---- Loop ----
