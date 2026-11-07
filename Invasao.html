@@ -8,18 +8,30 @@
 </head>
 <body>
     <main id="invasao">
-        <!-- DEBUG provisório (etapas 1 a 4): será removido quando o HUD estiver completo -->
+        <!-- DEBUG provisório (etapas 1 a 5): será removido quando o HUD estiver completo -->
         <p id="debug"></p>
 
         <div id="hud">
             <span>Alerta</span>
             <div id="barra-alerta"><div id="barra-alerta-nivel"></div></div>
         </div>
+        <div id="hud-missao">
+            <span id="hud-tempo">Tempo: 0:00</span>
+            <span id="hud-cofres">Cofres: 0/0</span>
+            <span id="hud-pendrive" class="hidden">Pendrive: sim</span>
+            <span id="hud-codigo" class="hidden"></span>
+        </div>
 
         <div id="palco">
             <canvas id="game" width="1024" height="640"></canvas>
 
-            <!-- Tela de resultados: por enquanto só a falha (etapa 4); será completada na etapa 6 -->
+            <!-- Painel numérico do cofre -->
+            <div id="painel-cofre" class="hidden">
+                <h3>Cofre</h3>
+                <div id="painel-digitos"><span></span><span></span><span></span><span></span></div>
+            </div>
+
+            <!-- Tela de resultados: por enquanto só falha e vitória simples (etapa 5); será completada na etapa 6 -->
             <div id="tela-resultado" class="hidden">
                 <h2 id="resultado-titulo">Missão falhou</h2>
                 <p id="resultado-pontuacao">Pontuação: 0</p>

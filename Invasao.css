@@ -20,7 +20,7 @@ body {
     display: none !important;
 }
 
-/* DEBUG provisório (etapas 1 a 4) */
+/* DEBUG provisório (etapas 1 a 5) */
 #debug {
     margin: 0 0 8px;
     font-size: 0.9rem;
@@ -109,4 +109,58 @@ body {
 #tela-resultado button:focus-visible {
     outline: 2px solid #7dd3fc;
     outline-offset: 4px;
+}
+
+/* HUD da missão: tempo, cofres, pendrive e código atual */
+#hud-missao {
+    display: flex;
+    align-items: baseline;
+    gap: 18px;
+    min-height: 1.6rem;
+    margin: 0 0 8px;
+    font-size: 0.9rem;
+    color: #38bdf8;
+}
+
+#hud-codigo {
+    font-size: 1.3rem;
+    font-weight: bold;
+    letter-spacing: 0.2em;
+    color: #fbbf24;
+}
+
+/* Painel numérico do cofre */
+#painel-cofre {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 18px 28px;
+    text-align: center;
+    background: linear-gradient(145deg, #0f172a, #172554);
+    border: 1px solid #38bdf8;
+    border-radius: 12px;
+    box-shadow: 0 0 25px rgba(2, 132, 199, 0.35);
+}
+
+#painel-cofre h3 {
+    margin: 0 0 12px;
+    color: #bae6fd;
+}
+
+#painel-digitos {
+    display: flex;
+    gap: 10px;
+}
+
+#painel-digitos span {
+    width: 44px;
+    height: 58px;
+    line-height: 58px;
+    font-family: monospace;
+    font-size: 2rem;
+    color: #ffffff;
+    background-color: #020617;
+    border: 1px solid #38bdf8;
+    border-radius: 8px;
 }

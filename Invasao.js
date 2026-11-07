@@ -1,4 +1,4 @@
-// ===== Invasao.js — Etapa 4 (detecção, HUD e falha) =====
+// ===== Invasao.js — Etapa 5 (cofres, pendrive e saída) =====
 // Depende de InvasaoMapas.js (carregado antes no HTML).
 
 // ---- Constantes ----
@@ -7,8 +7,8 @@ const LARGURA = 1024;                 // provisório (aprovado por enquanto)
 const ALTURA = 640;                   // provisório (aprovado por enquanto)
 const VELOCIDADE_JOGADOR = 140;       // px/s — provisório
 const TAMANHO_JOGADOR = 20;           // px — provisório
-const DIF_PADRAO = 0;                 // provisório: usado só se a URL não trouxer "dif"
-const PREC_PADRAO = 100;              // provisório: usado só se a URL não trouxer "prec"
+const DIF_PADRAO = 2;                 // provisório: usado só se a URL não trouxer "dif"
+const PREC_PADRAO = 50;              // provisório: usado só se a URL não trouxer "prec"
 const NOMES_DIFICULDADE = ['Fácil', 'Normal', 'Difícil', 'Impossível'];
 const COLUNAS_MAPA = 32;
 const LINHAS_MIN = 9;
@@ -31,10 +31,15 @@ const TEMPO_DETECCAO_MIN = [2, 1.5, 1, 0.5];      // s — disfarce péssimo (de
 const ESVAZIAMENTO_BARRA = [0.5, 0.35, 0.2, 0.1]; // fração/s — provisório
 const MULT_CAMERA = 1.5;                          // provisório: câmeras detectam 1,5x mais rápido
 
+// ---- Cofres ----
+const DIGITOS_CODIGO = 4;             // definido
+const TEMPO_CODIGO = 7;               // s — definido (código visível, sem pausar o jogo)
+const ALCANCE_INTERACAO = 48;         // px — provisório: distância máxima do centro do cofre para usar L
+
 // ---- Imagens (placeholders) ----
 // Vazio = tudo desenhado com formas coloridas. Para trocar por imagem, sem mexer na lógica:
 // IMAGENS_INVASAO.jogador = 'imgs/arquivo.png'
-// Nomes usados: parede, chao, inicio, saida, cofre, jogador, guarda, camera
+// Nomes usados: parede, chao, inicio, saida, cofre, cofre_aberto, jogador, guarda, camera
 const IMAGENS_INVASAO = {};
 const imagens = {};
 for (const nome in IMAGENS_INVASAO) {
@@ -166,11 +171,15 @@ const colunas = grade[0].length;
 const offsetY = (ALTURA - linhas * TILE) / 2;   // centraliza o mapa verticalmente no canvas
 
 const jogador = { x: 0, y: 0 };                 // centro, em coordenadas do mapa (px)
+const cofres = [];                              // { col, lin, x, y, aberto }
+let saida = null;                               // { col, lin }
 grade.forEach((l, lin) => l.forEach((c, col) => {
     if (c === 'P') {
         jogador.x = col * TILE + TILE / 2;
         jogador.y = lin * TILE + TILE / 2;
     }
+    if (c === 'S') cofres.push({ col, lin, x: col * TILE + TILE / 2, y: lin * TILE + TILE / 2, aberto: false });
+    if (c === 'E') saida = { col, lin };
 }));
 
 // ---- Guardas e câmeras (estado em coordenadas do mapa, px) ----
@@ -191,7 +200,22 @@ const cameras = mapa.cameras.map(c => {
 
 let tempoJogo = 0;   // segundos desde o início da invasão
 let deteccao = 0;   // 0 a 1 (barra de alerta)
-let estadoJogo = 'jogando';   // 'jogando' ou 'falhou' (a vitória entra na etapa 5)
+let estadoJogo = 'jogando';   // 'jogando', 'falhou' ou 'venceu'
+
+// Estado da missão
+let cofresAbertos = 0;
+let temPendrive = false;        // provisório: o pendrive é obtido ao abrir TODOS os cofres do mapa
+let codigoAtual = '';           // um código por vez; abre qualquer cofre ainda fechado
+let codigoVisivelAte = 0;       // tempoJogo até o qual o código fica visível
+let painelAberto = false;       // o jogo NÃO pausa com o painel aberto (provisório)
+let cofreAtivo = null;
+let digitado = '';
+
+function novoCodigo() {
+    codigoAtual = String(Math.floor(Math.random() * Math.pow(10, DIGITOS_CODIGO))).padStart(DIGITOS_CODIGO, '0');
+    codigoVisivelAte = tempoJogo + TEMPO_CODIGO;
+}
+novoCodigo();   // primeiro código, exibido no início da infiltração
 
 // Tempo para a barra encher com um guarda vendo o jogador: mín + (máx − mín) × precisão²
 const TEMPO_PARA_ENCHER = TEMPO_DETECCAO_MIN[dificuldade] +
@@ -222,7 +246,7 @@ function mover(dx, dy) {
 
 // ---- Entrada (só WASD) ----
 const teclas = {};
-window.addEventListener('keydown', e => { teclas[e.code] = true; });
+window.addEventListener('keydown', aoPressionar);
 window.addEventListener('keyup', e => { teclas[e.code] = false; });
 window.addEventListener('blur', () => { for (const k in teclas) teclas[k] = false; });
 
@@ -233,11 +257,19 @@ const ctx = canvas.getContext('2d');
 // HUD e tela de resultados
 const barraNivel = document.getElementById('barra-alerta-nivel');
 const telaResultado = document.getElementById('tela-resultado');
+const tituloResultado = document.getElementById('resultado-titulo');
+const pontuacaoResultado = document.getElementById('resultado-pontuacao');
+const hudTempo = document.getElementById('hud-tempo');
+const hudCofres = document.getElementById('hud-cofres');
+const hudPendrive = document.getElementById('hud-pendrive');
+const hudCodigo = document.getElementById('hud-codigo');
+const painelCofre = document.getElementById('painel-cofre');
+const digitosPainel = painelCofre.querySelectorAll('#painel-digitos span');
 document.getElementById('botao-jogar-de-novo').addEventListener('click', () => {
     location.href = 'principal.html';   // "jogar de novo" volta para a tela inicial (combinado)
 });
 
-// DEBUG provisório (etapas 1 a 4): será removido/substituído pelo HUD na etapa 4
+// DEBUG provisório (etapas 1 a 5): será removido/substituído pelo HUD na etapa 4
 document.getElementById('debug').textContent =
     'Dificuldade: ' + NOMES_DIFICULDADE[dificuldade] + ' | Precisão: ' + precisaoPct + '% | Mapa: ' + mapa.nome + avisoFallback +
     ' | Validação: ' + (problemas.length ? problemas.length + ' problema(s), ver console' : 'OK');
@@ -299,6 +331,102 @@ function atualizarCamera(c) {
     c.cone = calcularCone(c.x, c.y, c.angulo);
 }
 
+function formatarTempo(seg) {
+    const t = Math.floor(seg);
+    return Math.floor(t / 60) + ':' + String(t % 60).padStart(2, '0');
+}
+
+// Fim da missão. A pontuação da vitória entra na etapa 6; aqui só mostramos o tempo.
+function encerrar(resultado) {
+    estadoJogo = resultado;
+    painelAberto = false;
+    painelCofre.classList.add('hidden');
+    tituloResultado.textContent = resultado === 'venceu' ? 'Missão cumprida' : 'Missão falhou';
+    pontuacaoResultado.textContent = resultado === 'venceu' ? 'Tempo: ' + formatarTempo(tempoJogo) : 'Pontuação: 0';
+    telaResultado.classList.remove('hidden');   // falha = pontuação zero, sem botão de ranking
+}
+
+// ---- Painel numérico do cofre ----
+function atualizarPainel() {
+    digitosPainel.forEach((el, i) => { el.textContent = digitado[i] || ''; });
+}
+
+function abrirPainel(cofre) {
+    cofreAtivo = cofre;
+    digitado = '';
+    painelAberto = true;
+    painelCofre.classList.remove('hidden');
+    atualizarPainel();
+}
+
+function fecharPainel() {
+    painelAberto = false;
+    cofreAtivo = null;
+    digitado = '';
+    painelCofre.classList.add('hidden');
+}
+
+function tentarAbrirPainel() {
+    let melhor = null, melhorDist = ALCANCE_INTERACAO;
+    cofres.forEach(c => {
+        if (c.aberto) return;
+        const d = Math.hypot(c.x - jogador.x, c.y - jogador.y);
+        if (d <= melhorDist) { melhor = c; melhorDist = d; }
+    });
+    if (melhor) abrirPainel(melhor);
+}
+
+function confirmarCodigo() {
+    if (digitado !== codigoAtual) {   // código errado: só limpa o painel
+        digitado = '';
+        return;
+    }
+    cofreAtivo.aberto = true;
+    cofresAbertos++;
+    fecharPainel();
+    if (cofresAbertos === cofres.length) {
+        temPendrive = true;
+        codigoAtual = '';
+        hudPendrive.classList.remove('hidden');
+    } else {
+        novoCodigo();   // ao abrir um cofre, o próximo código aparece
+    }
+}
+
+function aoPressionar(e) {
+    teclas[e.code] = true;
+    if (estadoJogo !== 'jogando') return;
+    if (e.repeat && e.code !== 'Backspace') return;
+    if (painelAberto) {
+        if (e.key.length === 1 && e.key >= '0' && e.key <= '9') {
+            if (digitado.length < DIGITOS_CODIGO) digitado += e.key;
+        } else if (e.code === 'Backspace') {
+            digitado = digitado.slice(0, -1);
+        } else if (e.code === 'KeyL') {
+            confirmarCodigo();
+        } else if (e.code === 'Escape') {
+            fecharPainel();
+        }
+        if (painelAberto) atualizarPainel();
+        return;
+    }
+    if (e.code === 'KeyL') tentarAbrirPainel();
+}
+
+function atualizarMissao() {
+    if (estadoJogo !== 'jogando') return;
+    hudTempo.textContent = 'Tempo: ' + formatarTempo(tempoJogo);
+    hudCofres.textContent = 'Cofres: ' + cofresAbertos + '/' + cofres.length;
+    const mostrarCodigo = codigoAtual !== '' && tempoJogo < codigoVisivelAte;
+    hudCodigo.classList.toggle('hidden', !mostrarCodigo);
+    if (mostrarCodigo) hudCodigo.textContent = 'Código: ' + codigoAtual;
+    // Com o pendrive, chegar à saída vence a missão
+    if (temPendrive && saida &&
+        Math.floor(jogador.x / TILE) === saida.col && Math.floor(jogador.y / TILE) === saida.lin) {
+        encerrar('venceu');
+    }
+}
+
 function pontoNoPoligono(px, py, poly) {
     let dentro = false;
     for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
@@ -326,16 +454,14 @@ function atualizarDeteccao(dt) {
     barraNivel.style.width = (deteccao * 100) + '%';
     barraNivel.style.backgroundColor = 'hsl(' + Math.round(200 * (1 - deteccao)) + ', 85%, 55%)';   // azul → vermelho (provisório)
 
-    if (deteccao >= 1) {
-        estadoJogo = 'falhou';
-        telaResultado.classList.remove('hidden');   // pontuação zero; sem botão de ranking
-    }
+    if (deteccao >= 1) encerrar('falhou');
 }
 
 function atualizar(dt) {
     if (estadoJogo !== 'jogando') return;
     let dx = (teclas.KeyD ? 1 : 0) - (teclas.KeyA ? 1 : 0);
     let dy = (teclas.KeyS ? 1 : 0) - (teclas.KeyW ? 1 : 0);
+    if (painelAberto) { dx = 0; dy = 0; }   // com o painel aberto o jogador fica parado
     if (dx && dy) { dx *= Math.SQRT1_2; dy *= Math.SQRT1_2; }
     mover(dx * VELOCIDADE_JOGADOR * dt, dy * VELOCIDADE_JOGADOR * dt);
 
@@ -343,6 +469,7 @@ function atualizar(dt) {
     guardas.forEach(g => atualizarGuarda(g, dt));
     cameras.forEach(atualizarCamera);
     atualizarDeteccao(dt);
+    atualizarMissao();
 }
 
 function desenhar(nome, x, y, w, h, cor) {
@@ -368,7 +495,10 @@ function renderizar() {
                 desenhar('chao', x, y, TILE, TILE, '#0f172a');
                 if (c === 'P') desenhar('inicio', x, y, TILE, TILE, '#0369a1');
                 if (c === 'E') desenhar('saida', x, y, TILE, TILE, '#22c55e');
-                if (c === 'S') desenhar('cofre', x, y, TILE, TILE, '#f59e0b');
+                if (c === 'S') {
+                    const aberto = cofres.some(cf => cf.col === col && cf.lin === lin && cf.aberto);
+                    desenhar(aberto ? 'cofre_aberto' : 'cofre', x, y, TILE, TILE, aberto ? '#78350f' : '#f59e0b');
+                }
             }
         }
     }
