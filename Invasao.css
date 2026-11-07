@@ -1,56 +1,166 @@
 body {
-    background-color: #000000;
+    background: linear-gradient(135deg, #020617, #0f172a, #082f49);
     color: #ffffff;
     font-family: Arial, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0;
+    padding: 15px;
+    box-sizing: border-box;
 }
 
-#caixinha {
-    background-color: #000000;
-    padding: 20px;
-    border-radius: 8px;
-    text-align: center;
-    width: 440px;
+#invasao {
+    width: 1024px;
+    max-width: 100%;
 }
 
 .hidden {
     display: none !important;
 }
 
-button, select {
-    width: 100%;
-    padding: 12px;
-    margin-top: 15px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    border-radius: 6px;
-    border: none;
-}
-
-button {
-    background-color: #ffffff;
-    color: #020617;
-}
-
-select {
-    background-color: #000000;
-    color: #ffffff;
-    border: 1px solid #334155;
-}
-
-#game {
-    background-color: #787878;
-    margin-top: 10px;
-    border: 1px solid #1e293b;
-}
-
-#hud {
+/* DEBUG provisório (etapas 1 a 5) */
+#debug {
+    margin: 0 0 8px;
     font-size: 0.9rem;
     color: #38bdf8;
-    text-align: left;
+}
+
+/* HUD: barra de alerta/detecção (progresso da missão e informações do jogador: a definir) */
+#hud {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 8px;
+    font-size: 0.9rem;
+    color: #38bdf8;
+}
+
+#barra-alerta {
+    flex: 1;
+    height: 14px;
+    background-color: #0f172a;
+    border: 1px solid #38bdf8;
+    border-radius: 7px;
+    overflow: hidden;
+}
+
+#barra-alerta-nivel {
+    width: 0%;
+    height: 100%;
+    background-color: hsl(200, 85%, 55%);
+}
+
+#palco {
+    position: relative;
+}
+
+/* O canvas tem resolução interna 1024x640 (provisório); o CSS só escala a exibição */
+#game {
+    display: block;
+    width: 100%;
+    height: auto;
+    background-color: #020617;
+    border: 1px solid #38bdf8;
+    border-radius: 8px;
+    box-shadow: 0 0 25px rgba(2, 132, 199, 0.2);
+}
+
+#tela-resultado {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    background-color: rgba(2, 6, 23, 0.85);
+    border-radius: 8px;
+    text-align: center;
+}
+
+#tela-resultado h2,
+#tela-resultado p {
+    margin: 0;
+}
+
+#tela-resultado h2 {
+    color: #bae6fd;
+}
+
+#tela-resultado button {
+    padding: 12px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #ffffff;
+    background: linear-gradient(135deg, #0284c7, #0369a1);
+    border: 1px solid #38bdf8;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#tela-resultado button:hover {
+    background: linear-gradient(135deg, #0ea5e9, #0284c7);
+    box-shadow: 0 0 16px rgba(56, 189, 248, 0.65);
+}
+
+#tela-resultado button:focus-visible {
+    outline: 2px solid #7dd3fc;
+    outline-offset: 4px;
+}
+
+/* HUD da missão: tempo, cofres, pendrive e código atual */
+#hud-missao {
+    display: flex;
+    align-items: baseline;
+    gap: 18px;
+    min-height: 1.6rem;
+    margin: 0 0 8px;
+    font-size: 0.9rem;
+    color: #38bdf8;
+}
+
+#hud-codigo {
+    font-size: 1.3rem;
+    font-weight: bold;
+    letter-spacing: 0.2em;
+    color: #fbbf24;
+}
+
+/* Painel numérico do cofre */
+#painel-cofre {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 18px 28px;
+    text-align: center;
+    background: linear-gradient(145deg, #0f172a, #172554);
+    border: 1px solid #38bdf8;
+    border-radius: 12px;
+    box-shadow: 0 0 25px rgba(2, 132, 199, 0.35);
+}
+
+#painel-cofre h3 {
+    margin: 0 0 12px;
+    color: #bae6fd;
+}
+
+#painel-digitos {
+    display: flex;
+    gap: 10px;
+}
+
+#painel-digitos span {
+    width: 44px;
+    height: 58px;
+    line-height: 58px;
+    font-family: monospace;
+    font-size: 2rem;
+    color: #ffffff;
+    background-color: #020617;
+    border: 1px solid #38bdf8;
+    border-radius: 8px;
 }

@@ -17,3 +17,25 @@ botao.addEventListener('click', () => {
 }, 5000);
 })
 
+let acessorios = document.querySelectorAll('.acessorio');
+acessorios.forEach((acessorio) => {
+    acessorio.addEventListener('click', ()=>{
+    let destino = document.getElementById(acessorio.dataset.alvo);
+    if (destino.src === acessorio.src) 
+        destino.style.display = 'none';
+
+    else{
+        destino.src = acessorio.src;
+        destino.style.display = 'block';
+    }
+    })
+});
+let delet = document.querySelector('#lixo');
+let roupas = document.querySelectorAll('.vestimenta');
+
+delet.addEventListener('click', () => {
+    roupas.forEach((roupa) => {
+        roupa.src = '';
+        roupa.style.display = 'none';
+    });
+});

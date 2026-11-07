@@ -1,11 +1,156 @@
-.botaoInvasao {
-  display: inline-block;
-  padding: 10px 20px;
-  background-color: #007BFF;
-  color: white;
-  text-decoration: none;
-  border-radius: 5px;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
-#img1{
-  width: 200px;
+
+
+body {
+    background: linear-gradient(135deg, #020617, #0f172a, #082f49);
+    color: white;
+    font-family: Arial, sans-serif;
+
+    min-height: 100vh;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+
+    padding: 20px;
+}
+
+
+#img1 {
+    width: 200px;
+    max-width: 80%;
+    height: auto;
+
+    filter: drop-shadow(0 0 15px rgba(56, 189, 248, 0.4));
+
+    transition: transform 0.3s ease;
+}
+
+#img1:hover {
+    transform: scale(1.05);
+}
+
+
+#caixinha {
+    background: linear-gradient(145deg, #0f172a, #172554);
+
+    padding: 30px;
+
+    border: 1px solid #1e40af;
+    border-radius: 16px;
+
+    text-align: center;
+
+    width: 350px;
+    max-width: 100%;
+
+    box-shadow: 0 0 25px rgba(2, 132, 199, 0.2);
+}
+
+h2 {
+    font-size: clamp(18px, 4vw, 22px);
+    margin-bottom: 25px;
+    color: #bae6fd;
+}
+
+
+#inicio {
+    display: inline-block;
+
+    padding: 12px 20px;
+
+    background: linear-gradient(135deg, #0284c7, #0369a1);
+
+    color: white;
+
+    border: 1px solid #38bdf8;
+    border-radius: 8px;
+
+    font-size: 16px;
+    cursor: pointer;
+
+    transition: all 0.3s ease;
+}
+
+#inicio:hover {
+    background: linear-gradient(135deg, #0ea5e9, #0284c7);
+
+    box-shadow: 0 0 16px rgba(56, 189, 248, 0.65);
+
+    transform: translateY(-3px);
+}
+
+#inicio:active {
+    transform: scale(0.96);
+}
+
+#inicio:focus-visible {
+    outline: 2px solid #7dd3fc;
+    outline-offset: 4px;
+}
+
+
+@media (max-width: 768px) {
+
+    #img1 {
+        width: 180px;
+    }
+
+    #caixinha {
+        width: 320px;
+        padding: 25px;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    body {
+        padding: 15px;
+        gap: 15px;
+    }
+
+    #img1 {
+        width: 150px;
+    }
+
+    #caixinha {
+        width: 100%;
+        max-width: 350px;
+        padding: 22px;
+    }
+
+    h2 {
+        font-size: 19px;
+        margin-bottom: 18px;
+    }
+
+    #inicio {
+        width: 100%;
+    }
+
+}
+
+@media (max-width: 350px) {
+
+    #img1 {
+        width: 125px;
+    }
+
+    #caixinha {
+        padding: 18px;
+    }
+
+    h2 {
+        font-size: 17px;
+    }
+
 }

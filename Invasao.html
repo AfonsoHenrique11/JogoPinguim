@@ -7,25 +7,40 @@
     <link rel="stylesheet" href="Invasao.css">
 </head>
 <body>
+    <main id="invasao">
+        <!-- DEBUG provisório (etapas 1 a 5): será removido quando o HUD estiver completo -->
+        <p id="debug"></p>
 
-    <div id="caixinha">
-        <div id="tela-dificuldade">
-            <h2>Quanto cê acertou do disfarce</h2>
-            <select id="select-dificuldade">
-                <option value="100">Acertou Tudo</option>
-                <option value="66" selected>Acertou +ou-</option>
-                <option value="33">Acertou pouco</option>
-                <option value="0">Errou Tudo</option>
-            </select>
-            <button onclick="iniciarInvasao()">Iniciar Invasão</button>
+        <div id="hud">
+            <span>Alerta</span>
+            <div id="barra-alerta"><div id="barra-alerta-nivel"></div></div>
+        </div>
+        <div id="hud-missao">
+            <span id="hud-tempo">Tempo: 0:00</span>
+            <span id="hud-cofres">Cofres: 0/0</span>
+            <span id="hud-pendrive" class="hidden">Pendrive: sim</span>
+            <span id="hud-codigo" class="hidden"></span>
         </div>
 
-        <div id="tela-jogo" class="hidden">
-            <div id="hud">Alerta: <span id="texto-alerta">0%</span></div>
-            <canvas id="game" width="400" height="500"></canvas>
-        </div>
-    </div>
+        <div id="palco">
+            <canvas id="game" width="1024" height="640"></canvas>
 
+            <!-- Painel numérico do cofre -->
+            <div id="painel-cofre" class="hidden">
+                <h3>Cofre</h3>
+                <div id="painel-digitos"><span></span><span></span><span></span><span></span></div>
+            </div>
+
+            <!-- Tela de resultados: por enquanto só falha e vitória simples (etapa 5); será completada na etapa 6 -->
+            <div id="tela-resultado" class="hidden">
+                <h2 id="resultado-titulo">Missão falhou</h2>
+                <p id="resultado-pontuacao">Pontuação: 0</p>
+                <button id="botao-jogar-de-novo">Jogar de novo</button>
+            </div>
+        </div>
+    </main>
+
+    <script src="InvasaoMapas.js"></script>
     <script src="Invasao.js"></script>
 </body>
 </html>
