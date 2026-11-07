@@ -1,4 +1,4 @@
-// ===== Invasao.js — Etapa 5 (cofres, pendrive e saída) =====
+// ===== Invasao.js — Etapa 6 (pontuação e tela de resultados) =====
 // Depende de InvasaoMapas.js (carregado antes no HTML).
 
 // ---- Constantes ----
@@ -7,8 +7,8 @@ const LARGURA = 1024;                 // provisório (aprovado por enquanto)
 const ALTURA = 640;                   // provisório (aprovado por enquanto)
 const VELOCIDADE_JOGADOR = 140;       // px/s — provisório
 const TAMANHO_JOGADOR = 20;           // px — provisório
-const DIF_PADRAO = 2;                 // provisório: usado só se a URL não trouxer "dif"
-const PREC_PADRAO = 50;              // provisório: usado só se a URL não trouxer "prec"
+const DIF_PADRAO = 0;                 // provisório: usado só se a URL não trouxer "dif"
+const PREC_PADRAO = 100;              // provisório: usado só se a URL não trouxer "prec"
 const NOMES_DIFICULDADE = ['Fácil', 'Normal', 'Difícil', 'Impossível'];
 const COLUNAS_MAPA = 32;
 const LINHAS_MIN = 9;
@@ -35,6 +35,14 @@ const MULT_CAMERA = 1.5;                          // provisório: câmeras detec
 const DIGITOS_CODIGO = 4;             // definido
 const TEMPO_CODIGO = 7;               // s — definido (código visível, sem pausar o jogo)
 const ALCANCE_INTERACAO = 48;         // px — provisório: distância máxima do centro do cofre para usar L
+
+// ---- Pontuação e resultados ----
+const PONTUACAO_MAXIMA = 1000;                // provisório (escala de 0 a 1000)
+const PESO_DISFARCE = 0.35;                   // definido: disfarce 35%
+const PESO_TEMPO = 0.65;                      // definido: tempo 65%
+const TEMPO_EXTRA = [10, 15, 20, 25];         // s — definido: os pontos de tempo não caem até aqui
+const TEMPO_ZERO = [60, 120, 180, 240];       // s — definido: pontos de tempo chegam a 0 (1, 2, 3 e 4 min)
+const NICKNAME_MAX = 12;                      // caracteres (mínimo 1)
 
 // ---- Imagens (placeholders) ----
 // Vazio = tudo desenhado com formas coloridas. Para trocar por imagem, sem mexer na lógica:
@@ -210,6 +218,7 @@ let codigoVisivelAte = 0;       // tempoJogo até o qual o código fica visível
 let painelAberto = false;       // o jogo NÃO pausa com o painel aberto (provisório)
 let cofreAtivo = null;
 let digitado = '';
+let pontuacaoFinal = 0;
 
 function novoCodigo() {
     codigoAtual = String(Math.floor(Math.random() * Math.pow(10, DIGITOS_CODIGO))).padStart(DIGITOS_CODIGO, '0');
@@ -265,11 +274,18 @@ const hudPendrive = document.getElementById('hud-pendrive');
 const hudCodigo = document.getElementById('hud-codigo');
 const painelCofre = document.getElementById('painel-cofre');
 const digitosPainel = painelCofre.querySelectorAll('#painel-digitos span');
+const tempoResultado = document.getElementById('resultado-tempo');
+const grupoRanking = document.getElementById('grupo-ranking');
+const campoNickname = document.getElementById('campo-nickname');
+const botaoRanking = document.getElementById('botao-ranking');
 document.getElementById('botao-jogar-de-novo').addEventListener('click', () => {
     location.href = 'principal.html';   // "jogar de novo" volta para a tela inicial (combinado)
 });
+campoNickname.addEventListener('input', () => { botaoRanking.disabled = !nickValido(campoNickname.value); });
+campoNickname.addEventListener('keydown', e => { if (e.key === 'Enter') irParaRanking(); });
+botaoRanking.addEventListener('click', irParaRanking);
 
-// DEBUG provisório (etapas 1 a 5): será removido/substituído pelo HUD na etapa 4
+// DEBUG provisório (etapas 1 a 6): será removido/substituído pelo HUD na etapa 4
 document.getElementById('debug').textContent =
     'Dificuldade: ' + NOMES_DIFICULDADE[dificuldade] + ' | Precisão: ' + precisaoPct + '% | Mapa: ' + mapa.nome + avisoFallback +
     ' | Validação: ' + (problemas.length ? problemas.length + ' problema(s), ver console' : 'OK');
@@ -331,19 +347,49 @@ function atualizarCamera(c) {
     c.cone = calcularCone(c.x, c.y, c.angulo);
 }
 
+// Pontuação (0 a 1000): disfarce 35% (proporcional à precisão) + tempo 65%.
+// Os pontos de tempo ficam cheios até TEMPO_EXTRA e caem linearmente (provisório) até 0 em TEMPO_ZERO.
+function calcularPontuacao(tempo) {
+    const extra = TEMPO_EXTRA[dificuldade], zero = TEMPO_ZERO[dificuldade];
+    const fatorTempo = Math.max(0, Math.min(1, 1 - (tempo - extra) / (zero - extra)));
+    const pontosDisfarce = PONTUACAO_MAXIMA * PESO_DISFARCE * precisao;
+    const pontosTempo = PONTUACAO_MAXIMA * PESO_TEMPO * fatorTempo;
+    return { disfarce: pontosDisfarce, tempo: pontosTempo, total: Math.round(pontosDisfarce + pontosTempo) };
+}
+
+function nickValido(texto) {
+    const n = texto.trim();
+    return n.length >= 1 && n.length <= NICKNAME_MAX;
+}
+
+// Combinado com o ranking: ranking.html?nick=...&pontos=...&dif=...&id=...
+function irParaRanking() {
+    const nick = campoNickname.value.trim();
+    if (estadoJogo !== 'venceu' || !nickValido(nick)) return;
+    location.href = 'ranking.html?nick=' + encodeURIComponent(nick) + '&pontos=' + pontuacaoFinal + '&dif=' + dificuldade + '&id=' + Date.now();   // id evita registrar a mesma partida duas vezes
+}
+
 function formatarTempo(seg) {
     const t = Math.floor(seg);
     return Math.floor(t / 60) + ':' + String(t % 60).padStart(2, '0');
 }
 
-// Fim da missão. A pontuação da vitória entra na etapa 6; aqui só mostramos o tempo.
+// Fim da missão: falha = pontuação 0, só "jogar de novo"; vitória = pontuação, nickname e "ir ao ranking"
 function encerrar(resultado) {
     estadoJogo = resultado;
     painelAberto = false;
     painelCofre.classList.add('hidden');
-    tituloResultado.textContent = resultado === 'venceu' ? 'Missão cumprida' : 'Missão falhou';
-    pontuacaoResultado.textContent = resultado === 'venceu' ? 'Tempo: ' + formatarTempo(tempoJogo) : 'Pontuação: 0';
-    telaResultado.classList.remove('hidden');   // falha = pontuação zero, sem botão de ranking
+    const venceu = resultado === 'venceu';
+    pontuacaoFinal = venceu ? calcularPontuacao(tempoJogo).total : 0;
+    tituloResultado.textContent = venceu ? 'Missão cumprida' : 'Missão falhou';
+    pontuacaoResultado.textContent = 'Pontuação: ' + pontuacaoFinal;
+    tempoResultado.textContent = 'Tempo: ' + formatarTempo(tempoJogo);
+    tempoResultado.classList.toggle('hidden', !venceu);
+    grupoRanking.classList.toggle('hidden', !venceu);
+    botaoRanking.classList.toggle('hidden', !venceu);
+    botaoRanking.disabled = !nickValido(campoNickname.value);   // começa desabilitado: nickname vazio
+    telaResultado.classList.remove('hidden');
+    if (venceu) campoNickname.focus();
 }
 
 // ---- Painel numérico do cofre ----
@@ -366,14 +412,20 @@ function fecharPainel() {
     painelCofre.classList.add('hidden');
 }
 
-function tentarAbrirPainel() {
+// Cofre fechado mais próximo dentro do alcance de interação (ou null)
+function cofreAoAlcance() {
     let melhor = null, melhorDist = ALCANCE_INTERACAO;
     cofres.forEach(c => {
         if (c.aberto) return;
         const d = Math.hypot(c.x - jogador.x, c.y - jogador.y);
         if (d <= melhorDist) { melhor = c; melhorDist = d; }
     });
-    if (melhor) abrirPainel(melhor);
+    return melhor;
+}
+
+function tentarAbrirPainel() {
+    const cofre = cofreAoAlcance();
+    if (cofre) abrirPainel(cofre);
 }
 
 function confirmarCodigo() {
@@ -531,6 +583,32 @@ function renderizar() {
         jogador.x - TAMANHO_JOGADOR / 2,
         offsetY + jogador.y - TAMANHO_JOGADOR / 2,
         TAMANHO_JOGADOR, TAMANHO_JOGADOR, '#ffffff');
+
+    desenharIndicadorInteracao();
+}
+
+// Indício de que dá para abrir o cofre: um pequeno "L" sobre ele, enquanto o jogador está no alcance
+function desenharIndicadorInteracao() {
+    if (estadoJogo !== 'jogando' || painelAberto) return;
+    const cofre = cofreAoAlcance();
+    if (!cofre) return;
+    const lado = 22;
+    const x = cofre.x - lado / 2;
+    const y = offsetY + cofre.y - TILE / 2 - lado - 6;
+    ctx.save();
+    ctx.fillStyle = '#0f172a';
+    ctx.strokeStyle = '#38bdf8';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    if (ctx.roundRect) ctx.roundRect(x, y, lado, lado, 6); else ctx.rect(x, y, lado, lado);
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 15px Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('L', cofre.x, y + lado / 2 + 1);
+    ctx.restore();
 }
 
 // ---- Loop ----

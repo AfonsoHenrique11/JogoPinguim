@@ -20,7 +20,7 @@ body {
     display: none !important;
 }
 
-/* DEBUG provisório (etapas 1 a 5) */
+/* DEBUG provisório (etapas 1 a 6) */
 #debug {
     margin: 0 0 8px;
     font-size: 0.9rem;
@@ -163,4 +163,42 @@ body {
     background-color: #020617;
     border: 1px solid #38bdf8;
     border-radius: 8px;
+}
+
+/* Tela de resultados: nickname e botões */
+#grupo-ranking {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#grupo-ranking label {
+    color: #bae6fd;
+}
+
+#campo-nickname {
+    width: 180px;
+    padding: 10px 12px;
+    font-size: 1rem;
+    color: #ffffff;
+    background-color: #0f172a;
+    border: 1px solid #38bdf8;
+    border-radius: 8px;
+}
+
+#campo-nickname:focus-visible {
+    outline: 2px solid #7dd3fc;
+    outline-offset: 2px;
+}
+
+#botoes-resultado {
+    display: flex;
+    gap: 12px;
+    margin-top: 6px;
+}
+
+#tela-resultado button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    box-shadow: none;
 }
