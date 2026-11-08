@@ -31,17 +31,17 @@
         });
         document.querySelector('#normal').addEventListener('click', () => {
             document.querySelector("#dificuldade").style.display = "none";
-            sessionStorage.setItem('dificuldade', 1);
+            localStorage.setItem('dificuldade', 1);
             location.href = "disfarcando.html";
         });
         document.querySelector('#dificil').addEventListener('click', () => {
             document.querySelector("#dificuldade").style.display = "none";
-            sessionStorage.setItem('dificuldade', 2);
+            localStorage.setItem('dificuldade', 2);
             location.href = "disfarcando.html";
         });
         document.querySelector('#impossivel').addEventListener('click', () => {
             document.querySelector("#dificuldade").style.display = "none";
-            sessionStorage.setItem('dificuldade', 3);
+            localStorage.setItem('dificuldade', 3);
             location.href = "disfarcando.html";
         });
         </script>
