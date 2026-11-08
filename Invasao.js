@@ -56,20 +56,32 @@ for (const nome in IMAGENS_INVASAO) {
     img.src = IMAGENS_INVASAO[nome];
 }
 
-// ---- Parâmetros vindos da URL (ex.: Invasao.html?dif=2&prec=85) ----
-function lerNumero(p, nome, padrao, ehValido) {
-    const bruto = p.get(nome);
-    const valor = Number(bruto);
-    if (bruto === null || bruto.trim() === '' || !ehValido(valor)) {
-        console.warn('Parâmetro "' + nome + '" ausente ou inválido; usando padrão provisório: ' + padrao);
-        return padrao;
+const CHAVE_DIF = 'dificuldade';
+const CHAVE_PREC = 'precisao';
+
+function lerParametro(chave, padrao, ehValido) {
+    let bruto = null;
+    try {
+        bruto = localStorage.getItem(chave);
+    } catch (e) {
+        console.warn('localStorage indisponível (' + e.name + ')');
     }
-    return valor;
+    if (bruto !== null && String(bruto).trim() !== '') {
+        const valor = Number(bruto);
+        if (ehValido(valor)) return { valor, origem: 'localStorage' };
+        console.warn('Valor inválido em "' + chave + '": ' + bruto);
+    }
+    console.warn('"' + chave + '" não encontrado; usando padrão provisório: ' + padrao);
+    return { valor: padrao, origem: 'padrão provisório' };
 }
-const params = new URLSearchParams(location.search);
-const dificuldade = lerNumero(params, 'dif', DIF_PADRAO, v => Number.isInteger(v) && v >= 0 && v <= 3);
-const precisaoPct = lerNumero(params, 'prec', PREC_PADRAO, v => Number.isFinite(v) && v >= 0 && v <= 100);
-const precisao = precisaoPct / 100;   // 0 a 1, usado nas fórmulas das próximas etapas
+
+const lidoDif = lerParametro(CHAVE_DIF, DIF_PADRAO, v => Number.isInteger(v) && v >= 0 && v <= 3);
+const lidoPrec = lerParametro(CHAVE_PREC, PREC_PADRAO, v => Number.isFinite(v) && v >= 0 && v <= 100);
+const dificuldade = lidoDif.valor;
+const precisaoPct = lidoPrec.valor;
+const origemDif = lidoDif.origem;
+const origemPrec = lidoPrec.origem;
+const precisao = precisaoPct / 100;   // 0 a 1, usado nas fórmulas   // 0 a 1, usado nas fórmulas   // 0 a 1, usado nas fórmulas das próximas etapas
 
 // ---- Validador de mapas (só avisa no console; não corrige nada) ----
 function validarMapa(m, indice) {
@@ -287,7 +299,7 @@ botaoRanking.addEventListener('click', irParaRanking);
 
 // DEBUG provisório (etapas 1 a 6): será removido/substituído pelo HUD na etapa 4
 document.getElementById('debug').textContent =
-    'Dificuldade: ' + NOMES_DIFICULDADE[dificuldade] + ' | Precisão: ' + precisaoPct + '% | Mapa: ' + mapa.nome + avisoFallback +
+    'Dificuldade: ' + NOMES_DIFICULDADE[dificuldade] + ' (' + origemDif + ') | Precisão: ' + precisaoPct + '% (' + origemPrec + ') | Mapa: ' + mapa.nome + avisoFallback +
     ' | Validação: ' + (problemas.length ? problemas.length + ' problema(s), ver console' : 'OK');
 
 function normalizarAngulo(a) {
