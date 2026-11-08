@@ -56,8 +56,13 @@ for (const nome in IMAGENS_INVASAO) {
     img.src = IMAGENS_INVASAO[nome];
 }
 
-const CHAVE_DIF = 'dificuldade';
-const CHAVE_PREC = 'precisao';
+// ---- Dificuldade e precisão do disfarce ----
+// Vêm do localStorage, gravados pelas páginas anteriores (combinado do grupo):
+//   pinguinsEspioes.dificuldade -> inteiro de 0 a 3 (0 Fácil, 1 Normal, 2 Difícil, 3 Impossível)
+//   pinguinsEspioes.precisao    -> porcentagem de acerto do disfarce, de 0 a 100
+// Sem valor válido, usa o padrão provisório. Os valores não são apagados depois de lidos (F5 mantém a partida).
+const CHAVE_DIF = 'pinguinsEspioes.dificuldade';
+const CHAVE_PREC = 'pinguinsEspioes.precisao';
 
 function lerParametro(chave, padrao, ehValido) {
     let bruto = null;
@@ -374,11 +379,20 @@ function nickValido(texto) {
     return n.length >= 1 && n.length <= NICKNAME_MAX;
 }
 
-// Combinado com o ranking: ranking.html?nick=...&pontos=...&dif=...&id=...
+// Passa a partida ao ranking por localStorage (combinado do grupo):
+//   pinguinsEspioes.partida -> JSON { nick, pontos, dif, id }; o ranking lê, registra e apaga a chave.
+const CHAVE_PARTIDA = 'pinguinsEspioes.partida';
 function irParaRanking() {
     const nick = campoNickname.value.trim();
     if (estadoJogo !== 'venceu' || !nickValido(nick)) return;
-    location.href = 'ranking.html?nick=' + encodeURIComponent(nick) + '&pontos=' + pontuacaoFinal + '&dif=' + dificuldade + '&id=' + Date.now();   // id evita registrar a mesma partida duas vezes
+    try {
+        localStorage.setItem(CHAVE_PARTIDA, JSON.stringify({
+            nick, pontos: pontuacaoFinal, dif: dificuldade, id: String(Date.now())   // id evita registrar a mesma partida duas vezes
+        }));
+    } catch (e) {
+        console.warn('Não foi possível gravar a partida para o ranking (' + e.name + ')');
+    }
+    location.href = 'ranking.html';
 }
 
 function formatarTempo(seg) {
