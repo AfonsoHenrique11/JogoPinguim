@@ -154,3 +154,48 @@ h2 {
     }
 
 }
+
+#dificuldade {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+#dificuldade h3 {
+    color: #c7e0ee;
+    text-align: center;
+}
+
+#dificuldade button {
+    padding: 8px 16px;
+    background-color: #0284c7;
+    color: white;
+    border: 1px solid #38bdf8;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#dificuldade #facil:hover {
+    background: linear-gradient(135deg, #0ebb02, #0fb644);
+    box-shadow: 0 0 16px rgba(1, 200, 77, 0.65);
+    transform: translateY(-3px);
+}
+
+#dificuldade #normal:hover {
+    background: linear-gradient(135deg, #c4c40c, #e9e10d);
+    box-shadow: 0 0 16px rgba(212, 228, 30, 0.65);
+    transform: translateY(-3px);
+}
+
+#dificuldade #dificil:hover {
+    background: linear-gradient(135deg, #8c3604, #e35214);
+    box-shadow: 0 0 16px rgba(249, 115, 22, 0.65);
+    transform: translateY(-3px);
+}
+
+#dificuldade #impossivel:hover {
+    background: linear-gradient(135deg, #1a0a07, #f12809);
+    box-shadow: 0 0 16px rgba(93, 5, 2, 0.65);
+    transform: translateY(-3px);
+}
