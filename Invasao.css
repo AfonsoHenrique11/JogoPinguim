@@ -168,27 +168,84 @@ body {
     box-shadow: 0 0 25px rgba(2, 132, 199, 0.35);
 }
 
-#painel-cofre h3 {
-    margin: 0 0 12px;
-    color: #bae6fd;
+
+/* ===== PAINEL TECNOLÓGICO DOS COFRES ===== */
+
+#painel-cofre {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    padding: 22px 30px;
+    text-align: center;
+
+    background: linear-gradient(145deg, #020617, #0c2340, #172554);
+    border: 2px solid #38bdf8;
+    border-radius: 16px;
+
+    box-shadow:
+        0 0 15px rgba(56, 189, 248, 0.35),
+        0 0 35px rgba(2, 132, 199, 0.2);
 }
+
+
+
+#painel-cofre h3 {
+    margin: 0 0 16px;
+    color: #7dd3fc;
+    font-size: 1.3rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+
+    text-shadow:
+        0 0 5px #38bdf8,
+        0 0 10px #38bdf8,
+        0 0 20px #0284c7;
+}
+
+
+#painel-cofre h3::before {
+    content: "🔒";
+    display: block;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    filter: drop-shadow(0 0 8px #38bdf8);
+}
+
+
 
 #painel-digitos {
     display: flex;
+    justify-content: center;
     gap: 10px;
 }
 
+
 #painel-digitos span {
-    width: 44px;
-    height: 58px;
-    line-height: 58px;
+    display: block;
+    width: 48px;
+    height: 62px;
+    line-height: 62px;
+
     font-family: monospace;
     font-size: 2rem;
-    color: #ffffff;
-    background-color: #020617;
+    font-weight: bold;
+    color: #bae6fd;
+
+    background: linear-gradient(180deg, #0f172a, #020617);
     border: 1px solid #38bdf8;
-    border-radius: 8px;
+    border-radius: 9px;
+
+    box-shadow:
+        inset 0 0 10px rgba(56, 189, 248, 0.12),
+        0 0 8px rgba(56, 189, 248, 0.15);
+
+    text-shadow:
+        0 0 5px #38bdf8,
+        0 0 12px #0284c7;
 }
+
 
 /* Tela de resultados: nickname e botões */
 #grupo-ranking {
