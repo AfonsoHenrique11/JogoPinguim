@@ -1,4 +1,14 @@
 
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    min-height: 100%;
+    background: linear-gradient(135deg, #020617, #0f172a, #082f49);
+}
+
 body {
     background: linear-gradient(135deg, #020617, #0f172a, #082f49);
     color: #ffffff;
@@ -6,9 +16,10 @@ body {
     margin: 0;
     min-height: 100vh;
     padding: 20px;
-    box-sizing: border-box;
     text-align: center;
 }
+
+
 
 #inicio,
 #alvo,
@@ -23,11 +34,16 @@ body {
     box-shadow: 0 0 20px rgba(2, 132, 199, 0.2);
 }
 
+
 #alvoimg {
+    display: block;
     width: 500px;
     max-width: 100%;
+    height: auto;
+    margin: auto;
     border-radius: 12px;
 }
+
 
 #pinguim-container {
     margin: 60px auto 20px;
@@ -40,8 +56,10 @@ body {
 #pinguim {
     width: 100%;
     display: block;
+    position: relative;
     z-index: 1;
 }
+
 
 .vestimenta {
     display: none;
@@ -49,22 +67,16 @@ body {
     width: 100%;
     height: auto;
     top: 0;
-    left: 0S
+    left: 0;
 }
+
+/* ELEMENTOS ESCONDIDOS */
 
 #alvo,
 #disfarce {
     display: none;
 }
 
-#alvoimg {
-    display: block;
-    width: 500px;
-    max-width: 100%;
-    height: auto;
-    margin: auto;
-    border-radius: 12px;
-}
 
 .acessorio {
     width: 40px;
@@ -87,14 +99,16 @@ body {
     left: -15px;
     z-index: 2;
 }
-#cabelo-escolhido{
+
+#cabelo-escolhido {
     position: absolute;
-    top: 0px;
+    top: 0;
     left: 25px;
     width: 250px;
     z-index: 4;
 }
-#colar-escolhido{
+
+#colar-escolhido {
     position: absolute;
     top: 145px;
     left: 55px;
@@ -102,13 +116,15 @@ body {
     height: 100px;
     z-index: 5;
 }
-#oculos-escolhidos{
+
+#oculos-escolhidos {
     position: absolute;
     top: 85px;
     left: 65px;
     width: 170px;
     z-index: 3;
 }
+
 
 button {
     background: linear-gradient(135deg, #0284c7, #0369a1);
@@ -138,22 +154,6 @@ button:focus-visible {
     outline-offset: 4px;
 }
 
-@media (max-width: 480px) {
-    #pinguim-container {
-        width: 260px;
-        height: 350px;
-    }
-
-    #chapeu-escolhido,
-    #camisa-escolhida {
-        width: 210px;
-        left: 25px;
-    }
-
-    #camisa-escolhida {
-        top: 125px;
-    }
-}
 
 @media (max-width: 480px) {
     body {
@@ -166,7 +166,6 @@ button:focus-visible {
     #acessorios {
         width: 100%;
         padding: 15px;
-        box-sizing: border-box;
     }
 
     #pinguim-container {
@@ -187,6 +186,11 @@ button:focus-visible {
         top: 36.25%;
     }
 
+    #cabelo-escolhido {
+        width: 83.33%;
+        left: 8.33%;
+    }
+
     #alvoimg {
         width: 100%;
     }
@@ -197,6 +201,7 @@ button:focus-visible {
     }
 }
 
+
 @media (min-width: 481px) and (max-width: 768px) {
     #inicio,
     #alvo,
@@ -205,5 +210,3 @@ button:focus-visible {
         width: 90%;
     }
 }
-
-
