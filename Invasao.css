@@ -227,3 +227,121 @@ body {
     cursor: not-allowed;
     box-shadow: none;
 }
+
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    #invasao {
+        width: 100%;
+    }
+
+    #hud-missao {
+        flex-wrap: wrap;
+        gap: 10px;
+        font-size: 0.85rem;
+    }
+
+    #game {
+        max-width: 100%;
+        height: auto;
+    }
+
+    #painel-cofre {
+        max-width: calc(100% - 24px);
+        box-sizing: border-box;
+        padding: 14px 18px;
+    }
+
+    #grupo-ranking,
+    #botoes-resultado {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+/* Celulares */
+@media (max-width: 480px) {
+    body {
+        padding: 6px;
+        align-items: flex-start;
+    }
+
+    #debug {
+        font-size: 0.75rem;
+    }
+
+    #hud {
+        gap: 7px;
+        padding: 8px;
+        font-size: 0.8rem;
+    }
+
+    #barra-alerta {
+        height: 12px;
+    }
+
+    #hud-missao {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 7px;
+        font-size: 0.75rem;
+    }
+
+    #hud-missao span {
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+
+    #hud-codigo {
+        font-size: 1rem;
+    }
+
+    #painel-cofre {
+        width: max-content;
+        max-width: calc(100% - 16px);
+        padding: 10px;
+    }
+
+    #painel-digitos {
+        gap: 5px;
+    }
+
+    #painel-digitos span {
+        width: 32px;
+        height: 42px;
+        line-height: 42px;
+        font-size: 1.4rem;
+    }
+
+    #tela-resultado {
+        padding: 10px;
+        box-sizing: border-box;
+        gap: 8px;
+        overflow-y: auto;
+    }
+
+    #tela-resultado h2 {
+        font-size: 1.2rem;
+    }
+
+    #grupo-ranking {
+        gap: 6px;
+    }
+
+    #campo-nickname {
+        width: 150px;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    #botoes-resultado {
+        gap: 7px;
+    }
+
+    #tela-resultado button {
+        padding: 9px 12px;
+        font-size: 0.85rem;
+    }
+}
