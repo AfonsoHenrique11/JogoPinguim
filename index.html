@@ -27,6 +27,7 @@
 
         document.querySelector('#facil').addEventListener('click', () => {
             document.querySelector("#dificuldade").style.display = "none";
+            localStorage.setItem('dificuldade', 0);
             location.href = "disfarcando.html";
         });
         document.querySelector('#normal').addEventListener('click', () => {

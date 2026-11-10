@@ -5,14 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pinguim Espião: Invasão</title>
     <link rel="stylesheet" href="Invasao.css">
-     <link rel="shortcut icon" href="imgs/Pinguim Espião_ Logo Gamer Neon.png">
-</head>
 </head>
 <body>
     <main id="invasao">
-        <!-- DEBUG provisório (etapas 1 a 6): será removido quando o HUD estiver completo -->
-        <p id="debug"></p>
-
         <div id="hud">
             <span>Alerta</span>
             <div id="barra-alerta"><div id="barra-alerta-nivel"></div></div>
@@ -27,13 +22,13 @@
         <div id="palco">
             <canvas id="game" width="1024" height="640"></canvas>
 
-            <!-- Painel numérico do cofre -->
+            <!--Painel cofre-->
             <div id="painel-cofre" class="hidden">
                 <h3>Cofre</h3>
                 <div id="painel-digitos"><span></span><span></span><span></span><span></span></div>
             </div>
 
-            <!-- Tela de resultados: falha (pontuação 0, só "jogar de novo") ou vitória (pontuação, nickname e ranking) -->
+            <!--Tela de resultado-->
             <div id="tela-resultado" class="hidden">
                 <h2 id="resultado-titulo">Missão falhou</h2>
                 <p id="resultado-pontuacao">Pontuação: 0</p>

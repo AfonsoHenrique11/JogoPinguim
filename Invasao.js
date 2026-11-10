@@ -1,68 +1,58 @@
-// ===== Invasao.js — Etapa 6 (pontuação e tela de resultados) =====
-// Depende de InvasaoMapas.js (carregado antes no HTML).
+let TILE = 32;
+let LARGURA = 1024;                 
+let ALTURA = 640;                   
+let VELOCIDADE_JOGADOR = 140;       
+let TAMANHO_JOGADOR = 20;           
+let DIF_PADRAO = 0;                 // se não tiver o valor
+let PREC_PADRAO = 100;              // se não tiver o valor
+let COLUNAS_MAPA = 32;
+let LINHAS_MIN = 9;
+let LINHAS_MAX = 19;
+let GUARDAS_E_CAMERAS = [2, 4, 6, 8];
 
-// ---- Constantes ----
-const TILE = 32;
-const LARGURA = 1024;                 // provisório (aprovado por enquanto)
-const ALTURA = 640;                   // provisório (aprovado por enquanto)
-const VELOCIDADE_JOGADOR = 140;       // px/s — provisório
-const TAMANHO_JOGADOR = 20;           // px — provisório
-const DIF_PADRAO = 0;                 // provisório: usado só se a URL não trouxer "dif"
-const PREC_PADRAO = 100;              // provisório: usado só se a URL não trouxer "prec"
-const NOMES_DIFICULDADE = ['Fácil', 'Normal', 'Difícil', 'Impossível'];
-const COLUNAS_MAPA = 32;
-const LINHAS_MIN = 9;
-const LINHAS_MAX = 19;
-const GUARDAS_E_CAMERAS = [2, 4, 6, 8];   // por dificuldade (mesma quantidade de guardas e de câmeras)
+//guardas e câmeras
+let VELOCIDADE_GUARDA = 100;        
+let VELOCIDADE_GIRO_GUARDA = 4;     
+let ALCANCE_VISAO = 160;            
+let ANGULO_VISAO = 60;              
+let VARREDURA_CAMERA = 90;          
+let CICLO_CAMERA = 4;               
+let RAIOS_CONE = 40;                
+let PASSO_RAIO = 2;                 
 
-// ---- Vigias (guardas e câmeras) ----
-const VELOCIDADE_GUARDA = 100;        // px/s — definido (igual em todas as dificuldades)
-const VELOCIDADE_GIRO_GUARDA = 4;     // rad/s — provisório (giro suave do guarda ao mudar de rumo)
-const ALCANCE_VISAO = 160;            // px — provisório (guardas e câmeras)
-const ANGULO_VISAO = 60;              // graus — provisório (abertura total do cone)
-const VARREDURA_CAMERA = 90;          // graus — provisório (45° para cada lado da direção central)
-const CICLO_CAMERA = 4;               // s — provisório (ida e volta completa)
-const RAIOS_CONE = 40;                // provisório: raios por cone (precisão do corte pelas paredes)
-const PASSO_RAIO = 2;                 // px — provisório: passo de cada raio
+//Detecção
+let TEMPO_DETECCAO_MAX = [8, 6, 4, 2.5];        
+let TEMPO_DETECCAO_MIN = [2, 1.5, 1, 0.5];      
+let ESVAZIAMENTO_BARRA = [0.5, 0.35, 0.2, 0.1]; 
+let MULT_CAMERA = 1.5;                          
 
-// ---- Detecção (valores por dificuldade, índice 0 a 3) ----
-const TEMPO_DETECCAO_MAX = [8, 6, 4, 2.5];        // s — disfarce perfeito (definido)
-const TEMPO_DETECCAO_MIN = [2, 1.5, 1, 0.5];      // s — disfarce péssimo (definido)
-const ESVAZIAMENTO_BARRA = [0.5, 0.35, 0.2, 0.1]; // fração/s — provisório
-const MULT_CAMERA = 1.5;                          // provisório: câmeras detectam 1,5x mais rápido
+//Cofres
+let DIGITOS_CODIGO = 4;
+let TEMPO_CODIGO = 7;               
+let ALCANCE_INTERACAO = 48;         
 
-// ---- Cofres ----
-const DIGITOS_CODIGO = 4;             // definido
-const TEMPO_CODIGO = 7;               // s — definido (código visível, sem pausar o jogo)
-const ALCANCE_INTERACAO = 48;         // px — provisório: distância máxima do centro do cofre para usar L
+//Pontuação
+let PONTUACAO_MAXIMA = 1000;                
+let PESO_DISFARCE = 0.35;
+let PESO_TEMPO = 0.65;
+let TEMPO_EXTRA = [20, 25, 30, 35];         
+let TEMPO_ZERO = [60, 120, 180, 240];       
+let NICKNAME_MAX = 12;                      
 
-// ---- Pontuação e resultados ----
-const PONTUACAO_MAXIMA = 1000;                // provisório (escala de 0 a 1000)
-const PESO_DISFARCE = 0.35;                   // definido: disfarce 35%
-const PESO_TEMPO = 0.65;                      // definido: tempo 65%
-const TEMPO_EXTRA = [20, 25, 30, 35];         // s — definido: os pontos de tempo não caem até aqui
-const TEMPO_ZERO = [60, 120, 180, 240];       // s — definido: pontos de tempo chegam a 0 (1, 2, 3 e 4 min)
-const NICKNAME_MAX = 12;                      // caracteres (mínimo 1)
-
-// ---- Imagens (placeholders) ----
-// Vazio = tudo desenhado com formas coloridas. Para trocar por imagem, sem mexer na lógica:
-// IMAGENS_INVASAO.jogador = 'imgs/arquivo.png'
-// Nomes usados: parede, chao, inicio, saida, cofre, cofre_aberto, jogador, guarda, camera
-const IMAGENS_INVASAO = {};
-const imagens = {};
-for (const nome in IMAGENS_INVASAO) {
-    const img = new Image();
+// ---- Imagens ----
+// Vazio = formas coloridas. Para usar imagens (sem mexer na lógica), preencha por nome, por exemplo
+// jogador: 'imgs/arquivo.png'. Nomes: parede, chao, inicio, saida, cofre, cofre_aberto, jogador, guarda, camera
+let IMAGENS_INVASAO = {};
+let imagens = {};
+for (let nome in IMAGENS_INVASAO) {
+    let img = new Image();
     img.onload = () => { imagens[nome] = img; };
     img.src = IMAGENS_INVASAO[nome];
 }
 
-// ---- Dificuldade e precisão do disfarce ----
-// Vêm do localStorage, gravados pelas páginas anteriores (combinado do grupo):
-//   pinguinsEspioes.dificuldade -> inteiro de 0 a 3 (0 Fácil, 1 Normal, 2 Difícil, 3 Impossível)
-//   pinguinsEspioes.precisao    -> porcentagem de acerto do disfarce, de 0 a 100
-// Sem valor válido, usa o padrão provisório. Os valores não são apagados depois de lidos (F5 mantém a partida).
-const CHAVE_DIF = 'pinguinsEspioes.dificuldade';
-const CHAVE_PREC = 'pinguinsEspioes.precisao';
+//Ler bagulhos do Afonso
+let CHAVE_DIF = 'dificuldade';
+let CHAVE_PREC = 'precisao';
 
 function lerParametro(chave, padrao, ehValido) {
     let bruto = null;
@@ -72,29 +62,25 @@ function lerParametro(chave, padrao, ehValido) {
         console.warn('localStorage indisponível (' + e.name + ')');
     }
     if (bruto !== null && String(bruto).trim() !== '') {
-        const valor = Number(bruto);
-        if (ehValido(valor)) return { valor, origem: 'localStorage' };
+        let valor = Number(bruto);
+        if (ehValido(valor)) return valor;
         console.warn('Valor inválido em "' + chave + '": ' + bruto);
     }
     console.warn('"' + chave + '" não encontrado; usando padrão provisório: ' + padrao);
-    return { valor: padrao, origem: 'padrão provisório' };
+    return padrao;
 }
 
-const lidoDif = lerParametro(CHAVE_DIF, DIF_PADRAO, v => Number.isInteger(v) && v >= 0 && v <= 3);
-const lidoPrec = lerParametro(CHAVE_PREC, PREC_PADRAO, v => Number.isFinite(v) && v >= 0 && v <= 100);
-const dificuldade = lidoDif.valor;
-const precisaoPct = lidoPrec.valor;
-const origemDif = lidoDif.origem;
-const origemPrec = lidoPrec.origem;
-const precisao = precisaoPct / 100;   // 0 a 1, usado nas fórmulas   // 0 a 1, usado nas fórmulas   // 0 a 1, usado nas fórmulas das próximas etapas
+let dificuldade = lerParametro(CHAVE_DIF, DIF_PADRAO, v => Number.isInteger(v) && v >= 0 && v <= 3);
+let precisaoPct = lerParametro(CHAVE_PREC, PREC_PADRAO, v => Number.isFinite(v) && v >= 0 && v <= 100);
+let precisao = precisaoPct / 100;
 
-// ---- Validador de mapas (só avisa no console; não corrige nada) ----
+//Criador de mapas
 function validarMapa(m, indice) {
-    const erros = [];
+    let erros = [];
     if (!m || !Array.isArray(m.grade) || m.grade.length === 0) return ['mapa sem grade'];
-    const g = m.grade;
-    const celula = (c, l) => (g[l] !== undefined ? g[l][c] : undefined);
-    const dentro = (c, l) => celula(c, l) !== undefined;
+    let g = m.grade;
+    let celula = (c, l) => (g[l] !== undefined ? g[l][c] : undefined);
+    let dentro = (c, l) => celula(c, l) !== undefined;
 
     if (g.length < LINHAS_MIN || g.length > LINHAS_MAX) {
         erros.push('número de linhas fora de ' + LINHAS_MIN + ' a ' + LINHAS_MAX + ': ' + g.length);
@@ -106,10 +92,10 @@ function validarMapa(m, indice) {
     });
 
     let inicio = null;
-    const saidas = [], cofres = [];
+    let saidas = [], cofres = [];
     g.forEach((l, lin) => {
         for (let col = 0; col < l.length; col++) {
-            const c = l[col];
+            let c = l[col];
             if ('#.PES'.indexOf(c) === -1) erros.push('caractere inválido "' + c + '" em ' + col + ',' + lin);
             if (c === 'P') { if (inicio) erros.push('mais de um P'); inicio = [col, lin]; }
             if (c === 'E') saidas.push([col, lin]);
@@ -120,14 +106,13 @@ function validarMapa(m, indice) {
     if (saidas.length !== 1) erros.push('esperado exatamente 1 saída (E), encontrado ' + saidas.length);
     if (cofres.length === 0) erros.push('falta ao menos um cofre (S)');
 
-    // Alcançabilidade a partir do início
     if (inicio) {
-        const visto = new Set([inicio[0] + ',' + inicio[1]]);
-        const fila = [inicio];
+        let visto = new Set([inicio[0] + ',' + inicio[1]]);
+        let fila = [inicio];
         while (fila.length) {
-            const [c, l] = fila.shift();
+            let [c, l] = fila.shift();
             [[1, 0], [-1, 0], [0, 1], [0, -1]].forEach(([dc, dl]) => {
-                const nc = c + dc, nl = l + dl, k = nc + ',' + nl;
+                let nc = c + dc, nl = l + dl, k = nc + ',' + nl;
                 if (dentro(nc, nl) && celula(nc, nl) !== '#' && !visto.has(k)) {
                     visto.add(k);
                     fila.push([nc, nl]);
@@ -138,10 +123,9 @@ function validarMapa(m, indice) {
         cofres.forEach(([c, l]) => { if (!visto.has(c + ',' + l)) erros.push('cofre inalcançável em ' + c + ',' + l); });
     }
 
-    const livre = (c, l) => Number.isInteger(c) && Number.isInteger(l) && dentro(c, l) && celula(c, l) !== '#';
+    let livre = (c, l) => Number.isInteger(c) && Number.isInteger(l) && dentro(c, l) && celula(c, l) !== '#';
 
-    // Guardas
-    const guardas = m.guardas || [];
+    let guardas = m.guardas || [];
     if (guardas.length !== GUARDAS_E_CAMERAS[indice]) {
         erros.push('esperado ' + GUARDAS_E_CAMERAS[indice] + ' guardas, encontrado ' + guardas.length);
     }
@@ -150,13 +134,13 @@ function validarMapa(m, indice) {
         rota.forEach(([c, l], k) => {
             if (!livre(c, l)) erros.push('guarda ' + i + ': ponto ' + k + ' (' + c + ',' + l + ') fora do mapa ou em parede');
         });
-        // Rota em linha reta entre pontos consecutivos (e do último ao primeiro) não deve atravessar paredes
+
         for (let k = 0; k < rota.length; k++) {
-            const [c1, l1] = rota[k], [c2, l2] = rota[(k + 1) % rota.length];
+            let [c1, l1] = rota[k], [c2, l2] = rota[(k + 1) % rota.length];
             if (!livre(c1, l1) || !livre(c2, l2)) continue;
-            const passos = Math.ceil(Math.hypot(c2 - c1, l2 - l1) * 4) + 1;
+            let passos = Math.ceil(Math.hypot(c2 - c1, l2 - l1) * 4) + 1;
             for (let s = 0; s <= passos; s++) {
-                const t = s / passos;
+                let t = s / passos;
                 if (!livre(Math.round(c1 + (c2 - c1) * t), Math.round(l1 + (l2 - l1) * t))) {
                     erros.push('guarda ' + i + ': trecho ' + k + ' (' + c1 + ',' + l1 + ' → ' + c2 + ',' + l2 + ') atravessa parede');
                     break;
@@ -165,8 +149,7 @@ function validarMapa(m, indice) {
         }
     });
 
-    // Câmeras
-    const cameras = m.cameras || [];
+    let cameras = m.cameras || [];
     if (cameras.length !== GUARDAS_E_CAMERAS[indice]) {
         erros.push('esperado ' + GUARDAS_E_CAMERAS[indice] + ' câmeras, encontrado ' + cameras.length);
     }
@@ -178,26 +161,18 @@ function validarMapa(m, indice) {
     return erros;
 }
 
-// ---- Escolha e carregamento do mapa ----
-let indiceMapa = dificuldade;
-let avisoFallback = '';
-if (!MAPAS[indiceMapa]) {
-    console.warn('Mapa da dificuldade ' + NOMES_DIFICULDADE[dificuldade] + ' ainda não existe; usando o Fácil (provisório).');
-    indiceMapa = 0;
-    avisoFallback = ' (provisório: mapa Fácil)';
-}
-const mapa = MAPAS[indiceMapa];
-const problemas = validarMapa(mapa, indiceMapa);
-problemas.forEach(p => console.warn('Mapa "' + mapa.nome + '": ' + p));
+//Mapa
+let mapa = MAPAS[dificuldade];
+validarMapa(mapa, dificuldade).forEach(p => console.warn('Mapa "' + mapa.nome + '": ' + p));
 
-const grade = mapa.grade.map(l => l.split(''));
-const linhas = grade.length;
-const colunas = grade[0].length;
-const offsetY = (ALTURA - linhas * TILE) / 2;   // centraliza o mapa verticalmente no canvas
+let grade = mapa.grade.map(l => l.split(''));
+let linhas = grade.length;
+let colunas = grade[0].length;
+let offsetY = (ALTURA - linhas * TILE) / 2;   //centraliza o mapa
 
-const jogador = { x: 0, y: 0 };                 // centro, em coordenadas do mapa (px)
-const cofres = [];                              // { col, lin, x, y, aberto }
-let saida = null;                               // { col, lin }
+let jogador = { x: 0, y: 0 };                 
+let cofres = [];                              
+let saida = null;                              
 grade.forEach((l, lin) => l.forEach((c, col) => {
     if (c === 'P') {
         jogador.x = col * TILE + TILE / 2;
@@ -207,32 +182,31 @@ grade.forEach((l, lin) => l.forEach((c, col) => {
     if (c === 'E') saida = { col, lin };
 }));
 
-// ---- Guardas e câmeras (estado em coordenadas do mapa, px) ----
-const centroTile = (col, lin) => ({ x: col * TILE + TILE / 2, y: lin * TILE + TILE / 2 });
+//Guardas e câmeras
+let centroTile = (col, lin) => ({ x: col * TILE + TILE / 2, y: lin * TILE + TILE / 2 });
 
-const guardas = mapa.guardas.map(rota => {
-    const pontos = rota.map(([c, l]) => centroTile(c, l));
-    const g = { pontos, x: pontos[0].x, y: pontos[0].y, alvo: 1, angulo: 0, cone: [] };
+let guardas = mapa.guardas.map(rota => {
+    let pontos = rota.map(([c, l]) => centroTile(c, l));
+    let g = { pontos, x: pontos[0].x, y: pontos[0].y, alvo: 1, angulo: 0, cone: [] };
     g.angulo = Math.atan2(pontos[1].y - g.y, pontos[1].x - g.x);
     return g;
 });
 
-const cameras = mapa.cameras.map(c => {
-    const p = centroTile(c.col, c.lin);
-    const centro = c.direcao * Math.PI / 180;
+let cameras = mapa.cameras.map(c => {
+    let p = centroTile(c.col, c.lin);
+    let centro = c.direcao * Math.PI / 180;
     return { x: p.x, y: p.y, centro, angulo: centro, cone: [] };
 });
 
-let tempoJogo = 0;   // segundos desde o início da invasão
-let deteccao = 0;   // 0 a 1 (barra de alerta)
-let estadoJogo = 'jogando';   // 'jogando', 'falhou' ou 'venceu'
+let tempoJogo = 0;   
+let deteccao = 0;   
+let estadoJogo = 'jogando';   
 
-// Estado da missão
 let cofresAbertos = 0;
-let temPendrive = false;        // provisório: o pendrive é obtido ao abrir TODOS os cofres do mapa
-let codigoAtual = '';           // um código por vez; abre qualquer cofre ainda fechado
-let codigoVisivelAte = 0;       // tempoJogo até o qual o código fica visível
-let painelAberto = false;       // o jogo NÃO pausa com o painel aberto (provisório)
+let temPendrive = false;        
+let codigoAtual = '';           
+let codigoVisivelAte = 0;       
+let painelAberto = false;       // o jogo pausa com o painel abrido?
 let cofreAtivo = null;
 let digitado = '';
 let pontuacaoFinal = 0;
@@ -241,10 +215,10 @@ function novoCodigo() {
     codigoAtual = String(Math.floor(Math.random() * Math.pow(10, DIGITOS_CODIGO))).padStart(DIGITOS_CODIGO, '0');
     codigoVisivelAte = tempoJogo + TEMPO_CODIGO;
 }
-novoCodigo();   // primeiro código, exibido no início da infiltração
+novoCodigo();
 
-// Tempo para a barra encher com um guarda vendo o jogador: mín + (máx − mín) × precisão²
-const TEMPO_PARA_ENCHER = TEMPO_DETECCAO_MIN[dificuldade] +
+// Tempo para a barra encher
+let TEMPO_PARA_ENCHER = TEMPO_DETECCAO_MIN[dificuldade] +
     (TEMPO_DETECCAO_MAX[dificuldade] - TEMPO_DETECCAO_MIN[dificuldade]) * precisao * precisao;
 
 function ehParede(col, lin) {
@@ -253,9 +227,9 @@ function ehParede(col, lin) {
 }
 
 function colide(x, y) {
-    const m = TAMANHO_JOGADOR / 2;
-    const c0 = Math.floor((x - m) / TILE), c1 = Math.floor((x + m - 0.001) / TILE);
-    const l0 = Math.floor((y - m) / TILE), l1 = Math.floor((y + m - 0.001) / TILE);
+    let m = TAMANHO_JOGADOR / 2;
+    let c0 = Math.floor((x - m) / TILE), c1 = Math.floor((x + m - 0.001) / TILE);
+    let l0 = Math.floor((y - m) / TILE), l1 = Math.floor((y + m - 0.001) / TILE);
     for (let l = l0; l <= l1; l++) {
         for (let c = c0; c <= c1; c++) {
             if (ehParede(c, l)) return true;
@@ -264,48 +238,43 @@ function colide(x, y) {
     return false;
 }
 
-// Move um eixo por vez: ao bater numa parede, o jogador desliza no outro eixo
+//Mexe o pinto
 function mover(dx, dy) {
     if (dx && !colide(jogador.x + dx, jogador.y)) jogador.x += dx;
     if (dy && !colide(jogador.x, jogador.y + dy)) jogador.y += dy;
 }
 
-// ---- Entrada (WASD e setas movem; L interage) ----
-const teclas = {};
+//Tecla pra movimento
+let teclas = {};
 window.addEventListener('keydown', aoPressionar);
 window.addEventListener('keyup', e => { teclas[e.code] = false; });
-window.addEventListener('blur', () => { for (const k in teclas) teclas[k] = false; });
+window.addEventListener('blur', () => { for (let k in teclas) teclas[k] = false; });
 
-// ---- Canvas ----
-const canvas = document.getElementById('game');
-const ctx = canvas.getContext('2d');
+//Telas
+let canvas = document.getElementById('game');
+let ctx = canvas.getContext('2d');
 
-// HUD e tela de resultados
-const barraNivel = document.getElementById('barra-alerta-nivel');
-const telaResultado = document.getElementById('tela-resultado');
-const tituloResultado = document.getElementById('resultado-titulo');
-const pontuacaoResultado = document.getElementById('resultado-pontuacao');
-const hudTempo = document.getElementById('hud-tempo');
-const hudCofres = document.getElementById('hud-cofres');
-const hudPendrive = document.getElementById('hud-pendrive');
-const hudCodigo = document.getElementById('hud-codigo');
-const painelCofre = document.getElementById('painel-cofre');
-const digitosPainel = painelCofre.querySelectorAll('#painel-digitos span');
-const tempoResultado = document.getElementById('resultado-tempo');
-const grupoRanking = document.getElementById('grupo-ranking');
-const campoNickname = document.getElementById('campo-nickname');
-const botaoRanking = document.getElementById('botao-ranking');
+//Info pro jogador
+let barraNivel = document.getElementById('barra-alerta-nivel');
+let telaResultado = document.getElementById('tela-resultado');
+let tituloResultado = document.getElementById('resultado-titulo');
+let pontuacaoResultado = document.getElementById('resultado-pontuacao');
+let hudTempo = document.getElementById('hud-tempo');
+let hudCofres = document.getElementById('hud-cofres');
+let hudPendrive = document.getElementById('hud-pendrive');
+let hudCodigo = document.getElementById('hud-codigo');
+let painelCofre = document.getElementById('painel-cofre');
+let digitosPainel = painelCofre.querySelectorAll('#painel-digitos span');
+let tempoResultado = document.getElementById('resultado-tempo');
+let grupoRanking = document.getElementById('grupo-ranking');
+let campoNickname = document.getElementById('campo-nickname');
+let botaoRanking = document.getElementById('botao-ranking');
 document.getElementById('botao-jogar-de-novo').addEventListener('click', () => {
-    location.href = 'principal.html';   // "jogar de novo" volta para a tela inicial (combinado)
+    location.href = 'principal.html';
 });
 campoNickname.addEventListener('input', () => { botaoRanking.disabled = !nickValido(campoNickname.value); });
 campoNickname.addEventListener('keydown', e => { if (e.key === 'Enter') irParaRanking(); });
 botaoRanking.addEventListener('click', irParaRanking);
-
-// DEBUG provisório (etapas 1 a 6): será removido/substituído pelo HUD na etapa 4
-document.getElementById('debug').textContent =
-    'Dificuldade: ' + NOMES_DIFICULDADE[dificuldade] + ' (' + origemDif + ') | Precisão: ' + precisaoPct + '% (' + origemPrec + ') | Mapa: ' + mapa.nome + avisoFallback +
-    ' | Validação: ' + (problemas.length ? problemas.length + ' problema(s), ver console' : 'OK');
 
 function normalizarAngulo(a) {
     while (a > Math.PI) a -= 2 * Math.PI;
@@ -317,14 +286,13 @@ function paredeEmPx(px, py) {
     return ehParede(Math.floor(px / TILE), Math.floor(py / TILE));
 }
 
-// Cone de visão: leque de raios que param nas paredes ou no alcance máximo.
-// Devolve o polígono [origem, ponto do raio 0, ..., ponto do último raio] (coordenadas do mapa).
+//Pros cara nao ter xray
 function calcularCone(x, y, angulo) {
-    const pontos = [{ x, y }];
-    const meio = (ANGULO_VISAO * Math.PI / 180) / 2;
+    let pontos = [{ x, y }];
+    let meio = (ANGULO_VISAO * Math.PI / 180) / 2;
     for (let i = 0; i <= RAIOS_CONE; i++) {
-        const a = angulo - meio + (2 * meio) * i / RAIOS_CONE;
-        const dx = Math.cos(a), dy = Math.sin(a);
+        let a = angulo - meio + (2 * meio) * i / RAIOS_CONE;
+        let dx = Math.cos(a), dy = Math.sin(a);
         let d = 0;
         while (d + PASSO_RAIO <= ALCANCE_VISAO && !paredeEmPx(x + dx * (d + PASSO_RAIO), y + dy * (d + PASSO_RAIO))) {
             d += PASSO_RAIO;
@@ -335,11 +303,10 @@ function calcularCone(x, y, angulo) {
 }
 
 function atualizarGuarda(g, dt) {
-    // Anda em linha reta até o próximo ponto da rota; ao chegar, segue para o seguinte (em ciclo)
-    const alvo = g.pontos[g.alvo];
-    const dx = alvo.x - g.x, dy = alvo.y - g.y;
-    const dist = Math.hypot(dx, dy);
-    const passo = VELOCIDADE_GUARDA * dt;
+    let alvo = g.pontos[g.alvo];
+    let dx = alvo.x - g.x, dy = alvo.y - g.y;
+    let dist = Math.hypot(dx, dy);
+    let passo = VELOCIDADE_GUARDA * dt;
     if (dist <= passo) {
         g.x = alvo.x;
         g.y = alvo.y;
@@ -348,47 +315,38 @@ function atualizarGuarda(g, dt) {
         g.x += dx / dist * passo;
         g.y += dy / dist * passo;
     }
-    // Olha na direção do próximo ponto, com giro suave
-    const prox = g.pontos[g.alvo];
-    const desejado = Math.atan2(prox.y - g.y, prox.x - g.x);
-    const diff = normalizarAngulo(desejado - g.angulo);
-    const maxGiro = VELOCIDADE_GIRO_GUARDA * dt;
+    //gira
+    let prox = g.pontos[g.alvo];
+    let desejado = Math.atan2(prox.y - g.y, prox.x - g.x);
+    let diff = normalizarAngulo(desejado - g.angulo);
+    let maxGiro = VELOCIDADE_GIRO_GUARDA * dt;
     g.angulo = normalizarAngulo(g.angulo + Math.max(-maxGiro, Math.min(maxGiro, diff)));
     g.cone = calcularCone(g.x, g.y, g.angulo);
 }
 
 function atualizarCamera(c) {
-    // Varredura senoidal: desacelera nas pontas e passa mais rápido pelo centro
-    const amplitude = (VARREDURA_CAMERA * Math.PI / 180) / 2;
+    let amplitude = (VARREDURA_CAMERA * Math.PI / 180) / 2;
     c.angulo = c.centro + amplitude * Math.sin(2 * Math.PI * tempoJogo / CICLO_CAMERA);
     c.cone = calcularCone(c.x, c.y, c.angulo);
 }
 
-// Pontuação (0 a 1000): disfarce 35% (proporcional à precisão) + tempo 65%.
-// Os pontos de tempo ficam cheios até TEMPO_EXTRA e caem linearmente (provisório) até 0 em TEMPO_ZERO.
 function calcularPontuacao(tempo) {
-    const extra = TEMPO_EXTRA[dificuldade], zero = TEMPO_ZERO[dificuldade];
-    const fatorTempo = Math.max(0, Math.min(1, 1 - (tempo - extra) / (zero - extra)));
-    const pontosDisfarce = PONTUACAO_MAXIMA * PESO_DISFARCE * precisao;
-    const pontosTempo = PONTUACAO_MAXIMA * PESO_TEMPO * fatorTempo;
-    return { disfarce: pontosDisfarce, tempo: pontosTempo, total: Math.round(pontosDisfarce + pontosTempo) };
+    let extra = TEMPO_EXTRA[dificuldade], zero = TEMPO_ZERO[dificuldade];
+    let fatorTempo = Math.max(0, Math.min(1, 1 - (tempo - extra) / (zero - extra)));
+    return Math.round(PONTUACAO_MAXIMA * (PESO_DISFARCE * precisao + PESO_TEMPO * fatorTempo));
 }
 
 function nickValido(texto) {
-    const n = texto.trim();
+    let n = texto.trim();
     return n.length >= 1 && n.length <= NICKNAME_MAX;
 }
 
-// Passa a partida ao ranking por localStorage (combinado do grupo):
-//   pinguinsEspioes.partida -> JSON { nick, pontos, dif, id }; o ranking lê, registra e apaga a chave.
-const CHAVE_PARTIDA = 'pinguinsEspioes.partida';
+let CHAVE_PARTIDA = 'pinguinsEspioes.partida';
 function irParaRanking() {
-    const nick = campoNickname.value.trim();
+    let nick = campoNickname.value.trim();
     if (estadoJogo !== 'venceu' || !nickValido(nick)) return;
     try {
-        localStorage.setItem(CHAVE_PARTIDA, JSON.stringify({
-            nick, pontos: pontuacaoFinal, dif: dificuldade, id: String(Date.now())   // id evita registrar a mesma partida duas vezes
-        }));
+        localStorage.setItem(CHAVE_PARTIDA, JSON.stringify({ nick, pontos: pontuacaoFinal, dif: dificuldade }));
     } catch (e) {
         console.warn('Não foi possível gravar a partida para o ranking (' + e.name + ')');
     }
@@ -396,29 +354,29 @@ function irParaRanking() {
 }
 
 function formatarTempo(seg) {
-    const t = Math.floor(seg);
+    let t = Math.floor(seg);
     return Math.floor(t / 60) + ':' + String(t % 60).padStart(2, '0');
 }
 
-// Fim da missão: falha = pontuação 0, só "jogar de novo"; vitória = pontuação, nickname e "ir ao ranking"
+//Resultado
 function encerrar(resultado) {
     estadoJogo = resultado;
     painelAberto = false;
     painelCofre.classList.add('hidden');
-    const venceu = resultado === 'venceu';
-    pontuacaoFinal = venceu ? calcularPontuacao(tempoJogo).total : 0;
+    let venceu = resultado === 'venceu';
+    pontuacaoFinal = venceu ? calcularPontuacao(tempoJogo) : 0;
     tituloResultado.textContent = venceu ? 'Missão cumprida' : 'Missão falhou';
     pontuacaoResultado.textContent = 'Pontuação: ' + pontuacaoFinal;
     tempoResultado.textContent = 'Tempo: ' + formatarTempo(tempoJogo);
     tempoResultado.classList.toggle('hidden', !venceu);
     grupoRanking.classList.toggle('hidden', !venceu);
     botaoRanking.classList.toggle('hidden', !venceu);
-    botaoRanking.disabled = !nickValido(campoNickname.value);   // começa desabilitado: nickname vazio
+    botaoRanking.disabled = !nickValido(campoNickname.value);
     telaResultado.classList.remove('hidden');
     if (venceu) campoNickname.focus();
 }
 
-// ---- Painel numérico do cofre ----
+//Painel cofre
 function atualizarPainel() {
     digitosPainel.forEach((el, i) => { el.textContent = digitado[i] || ''; });
 }
@@ -438,24 +396,23 @@ function fecharPainel() {
     painelCofre.classList.add('hidden');
 }
 
-// Cofre fechado mais próximo dentro do alcance de interação (ou null)
 function cofreAoAlcance() {
     let melhor = null, melhorDist = ALCANCE_INTERACAO;
     cofres.forEach(c => {
         if (c.aberto) return;
-        const d = Math.hypot(c.x - jogador.x, c.y - jogador.y);
+        let d = Math.hypot(c.x - jogador.x, c.y - jogador.y);
         if (d <= melhorDist) { melhor = c; melhorDist = d; }
     });
     return melhor;
 }
 
 function tentarAbrirPainel() {
-    const cofre = cofreAoAlcance();
+    let cofre = cofreAoAlcance();
     if (cofre) abrirPainel(cofre);
 }
 
 function confirmarCodigo() {
-    if (digitado !== codigoAtual) {   // código errado: só limpa o painel
+    if (digitado !== codigoAtual) {
         digitado = '';
         return;
     }
@@ -467,14 +424,14 @@ function confirmarCodigo() {
         codigoAtual = '';
         hudPendrive.classList.remove('hidden');
     } else {
-        novoCodigo();   // ao abrir um cofre, o próximo código aparece
+        novoCodigo();
     }
 }
 
 function aoPressionar(e) {
     teclas[e.code] = true;
     if (estadoJogo !== 'jogando') return;
-    if (e.code.startsWith('Arrow')) e.preventDefault();   // setas não rolam a página durante a missão
+    if (e.code.startsWith('Arrow')) e.preventDefault();
     if (e.repeat && e.code !== 'Backspace') return;
     if (painelAberto) {
         if (e.key.length === 1 && e.key >= '0' && e.key <= '9') {
@@ -496,10 +453,10 @@ function atualizarMissao() {
     if (estadoJogo !== 'jogando') return;
     hudTempo.textContent = 'Tempo: ' + formatarTempo(tempoJogo);
     hudCofres.textContent = 'Cofres: ' + cofresAbertos + '/' + cofres.length;
-    const mostrarCodigo = codigoAtual !== '' && tempoJogo < codigoVisivelAte;
+    let mostrarCodigo = codigoAtual !== '' && tempoJogo < codigoVisivelAte;
     hudCodigo.classList.toggle('hidden', !mostrarCodigo);
     if (mostrarCodigo) hudCodigo.textContent = 'Código: ' + codigoAtual;
-    // Com o pendrive, chegar à saída vence a missão
+
     if (temPendrive && saida &&
         Math.floor(jogador.x / TILE) === saida.col && Math.floor(jogador.y / TILE) === saida.lin) {
         encerrar('venceu');
@@ -509,16 +466,14 @@ function atualizarMissao() {
 function pontoNoPoligono(px, py, poly) {
     let dentro = false;
     for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
-        const xi = poly[i].x, yi = poly[i].y, xj = poly[j].x, yj = poly[j].y;
+        let xi = poly[i].x, yi = poly[i].y, xj = poly[j].x, yj = poly[j].y;
         if ((yi > py) !== (yj > py) && px < (xj - xi) * (py - yi) / (yj - yi) + xi) dentro = !dentro;
     }
     return dentro;
 }
 
 function atualizarDeteccao(dt) {
-    // O cone já é cortado pelas paredes, então estar dentro dele = ser visto.
-    // Se vários vigias veem o jogador, vale o mais rápido.
-    let taxa = 0;   // fração da barra por segundo
+    let taxa = 0;
     guardas.forEach(g => {
         if (pontoNoPoligono(jogador.x, jogador.y, g.cone)) taxa = Math.max(taxa, 1 / TEMPO_PARA_ENCHER);
     });
@@ -531,20 +486,20 @@ function atualizarDeteccao(dt) {
     deteccao = Math.max(0, Math.min(1, deteccao));
 
     barraNivel.style.width = (deteccao * 100) + '%';
-    barraNivel.style.backgroundColor = 'hsl(' + Math.round(200 * (1 - deteccao)) + ', 85%, 55%)';   // azul → vermelho (provisório)
+    barraNivel.style.backgroundColor = 'hsl(' + Math.round(200 * (1 - deteccao)) + ', 85%, 55%)';
 
     if (deteccao >= 1) encerrar('falhou');
 }
 
 function atualizar(dt) {
     if (estadoJogo !== 'jogando') return;
-    const direita = teclas.KeyD || teclas.ArrowRight;
-    const esquerda = teclas.KeyA || teclas.ArrowLeft;
-    const baixo = teclas.KeyS || teclas.ArrowDown;
-    const cima = teclas.KeyW || teclas.ArrowUp;
+    let direita = teclas.KeyD || teclas.ArrowRight;
+    let esquerda = teclas.KeyA || teclas.ArrowLeft;
+    let baixo = teclas.KeyS || teclas.ArrowDown;
+    let cima = teclas.KeyW || teclas.ArrowUp;
     let dx = (direita ? 1 : 0) - (esquerda ? 1 : 0);
     let dy = (baixo ? 1 : 0) - (cima ? 1 : 0);
-    if (painelAberto) { dx = 0; dy = 0; }   // com o painel aberto o jogador fica parado
+    if (painelAberto) { dx = 0; dy = 0; }
     if (dx && dy) { dx *= Math.SQRT1_2; dy *= Math.SQRT1_2; }
     mover(dx * VELOCIDADE_JOGADOR * dt, dy * VELOCIDADE_JOGADOR * dt);
 
@@ -556,7 +511,7 @@ function atualizar(dt) {
 }
 
 function desenhar(nome, x, y, w, h, cor) {
-    const img = imagens[nome];
+    let img = imagens[nome];
     if (img) {
         ctx.drawImage(img, x, y, w, h);
     } else {
@@ -570,8 +525,8 @@ function renderizar() {
 
     for (let lin = 0; lin < linhas; lin++) {
         for (let col = 0; col < colunas; col++) {
-            const c = grade[lin][col];
-            const x = col * TILE, y = offsetY + lin * TILE;
+            let c = grade[lin][col];
+            let x = col * TILE, y = offsetY + lin * TILE;
             if (c === '#') {
                 desenhar('parede', x, y, TILE, TILE, '#475569');
             } else {
@@ -579,14 +534,13 @@ function renderizar() {
                 if (c === 'P') desenhar('inicio', x, y, TILE, TILE, '#0369a1');
                 if (c === 'E') desenhar('saida', x, y, TILE, TILE, '#22c55e');
                 if (c === 'S') {
-                    const aberto = cofres.some(cf => cf.col === col && cf.lin === lin && cf.aberto);
+                    let aberto = cofres.some(cf => cf.col === col && cf.lin === lin && cf.aberto);
                     desenhar(aberto ? 'cofre_aberto' : 'cofre', x, y, TILE, TILE, aberto ? '#78350f' : '#f59e0b');
                 }
             }
         }
     }
 
-    // Cones de visão (semitransparentes)
     function desenharCone(cone, cor) {
         if (cone.length < 3) return;
         ctx.fillStyle = cor;
@@ -599,7 +553,6 @@ function renderizar() {
     guardas.forEach(g => desenharCone(g.cone, 'rgba(239, 68, 68, 0.25)'));
     cameras.forEach(c => desenharCone(c.cone, 'rgba(249, 115, 22, 0.25)'));
 
-    // Vigias (placeholders)
     guardas.forEach(g => desenhar('guarda', g.x - 10, offsetY + g.y - 10, 20, 20, '#ef4444'));
     cameras.forEach(c => {
         desenhar('camera', c.x - 8, offsetY + c.y - 8, 16, 16, '#f97316');
@@ -618,14 +571,13 @@ function renderizar() {
     desenharIndicadorInteracao();
 }
 
-// Indício de que dá para abrir o cofre: um pequeno "L" sobre ele, enquanto o jogador está no alcance
 function desenharIndicadorInteracao() {
     if (estadoJogo !== 'jogando' || painelAberto) return;
-    const cofre = cofreAoAlcance();
+    let cofre = cofreAoAlcance();
     if (!cofre) return;
-    const lado = 22;
-    const x = cofre.x - lado / 2;
-    const y = offsetY + cofre.y - TILE / 2 - lado - 6;
+    let lado = 22;
+    let x = cofre.x - lado / 2;
+    let y = offsetY + cofre.y - TILE / 2 - lado - 6;
     ctx.save();
     ctx.fillStyle = '#0f172a';
     ctx.strokeStyle = '#38bdf8';
@@ -642,10 +594,10 @@ function desenharIndicadorInteracao() {
     ctx.restore();
 }
 
-// ---- Loop ----
+//Loop
 let ultimo = performance.now();
 function loop(agora) {
-    const dt = Math.min((agora - ultimo) / 1000, 0.05);   // limita o passo para não atravessar paredes
+    let dt = Math.min((agora - ultimo) / 1000, 0.05);
     ultimo = agora;
     atualizar(dt);
     renderizar();
