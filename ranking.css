@@ -1,3 +1,10 @@
+
+/* CONFIGURAÇÕES GERAIS */
+
+* {
+    box-sizing: border-box;
+}
+
 body {
     background: linear-gradient(135deg, #020617, #0f172a, #082f49);
     color: #ffffff;
@@ -8,8 +15,9 @@ body {
     min-height: 100vh;
     margin: 0;
     padding: 15px;
-    box-sizing: border-box;
 }
+
+/* PAINEL PRINCIPAL */
 
 #ranking {
     background: linear-gradient(145deg, #0f172a, #172554);
@@ -19,7 +27,6 @@ body {
     padding: 24px;
     width: 1200px;
     max-width: 100%;
-    box-sizing: border-box;
     text-align: center;
 }
 
@@ -27,18 +34,23 @@ body {
     display: none !important;
 }
 
+/* TÍTULO */
+
 h1 {
     margin: 0 0 20px;
     color: #bae6fd;
 }
 
-/* Hub: as 4 tabelas lado a lado, numa única linha */
+/* ORGANIZAÇÃO DOS PAINÉIS */
+
 #paineis {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 12px;
     margin-bottom: 22px;
 }
+
+/* PAINÉIS INDIVIDUAIS */
 
 .painel {
     padding: 12px 12px 8px;
@@ -47,7 +59,8 @@ h1 {
     border-radius: 12px;
 }
 
-/* Painel da dificuldade da partida que acabou de ser registrada */
+/* DESTAQUE DA DIFICULDADE ATUAL */
+
 .painel.atual {
     border-color: #38bdf8;
     box-shadow: 0 0 16px rgba(56, 189, 248, 0.45);
@@ -58,6 +71,8 @@ h1 {
     font-size: 1.15rem;
     color: #bae6fd;
 }
+
+/* TABELAS */
 
 table {
     width: 100%;
@@ -77,24 +92,29 @@ th {
     white-space: nowrap;
 }
 
-/* A coluna de pontos nunca quebra; nicknames muito largos é que quebram de linha */
 td:last-child {
     white-space: nowrap;
 }
 
-th:first-child, td:first-child {
+th:first-child,
+td:first-child {
     width: 28px;
     text-align: center;
 }
 
-th:last-child, td:last-child {
+th:last-child,
+td:last-child {
     text-align: right;
 }
+
+/* DESTAQUE DO JOGADOR */
 
 tr.destaque td {
     background-color: rgba(56, 189, 248, 0.2);
     font-weight: bold;
 }
+
+/* MENSAGENS */
 
 .vazio {
     margin: 18px 0;
@@ -107,6 +127,8 @@ tr.destaque td {
     font-size: 0.85rem;
     color: #fbbf24;
 }
+
+/* BOTÃO */
 
 .botao {
     display: inline-block;
@@ -132,7 +154,7 @@ tr.destaque td {
     outline-offset: 4px;
 }
 
-/* Janelas mais estreitas: continua em 4 colunas, só mais compacto */
+
 @media (max-width: 1100px) {
     #ranking {
         padding: 14px;
@@ -149,5 +171,62 @@ tr.destaque td {
     th, td {
         padding: 5px 3px;
         font-size: 0.85rem;
+    }
+}
+
+
+@media (max-width: 768px) {
+    body {
+        align-items: flex-start;
+        padding: 10px;
+    }
+
+    #ranking {
+        padding: 16px;
+    }
+
+    #paineis {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .painel h2 {
+        font-size: 1rem;
+    }
+
+    th, td {
+        font-size: 0.8rem;
+    }
+}
+
+
+@media (max-width: 480px) {
+    #ranking {
+        padding: 12px;
+    }
+
+    #paineis {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .painel {
+        padding: 12px;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    th, td {
+        padding: 7px 4px;
+        font-size: 0.8rem;
+    }
+
+    .botao {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+        text-align: center;
     }
 }
