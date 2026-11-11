@@ -20,9 +20,12 @@
             <button id="dificil">Difícil</button>
             <button id="impossivel">Impossível</button>
         </div>
+
+        <button id="ranking">Ranking</button>
         <script>
         document.querySelector('#inicio').addEventListener('click', () => {
             document.querySelector("#dificuldade").style.display = "block";
+            doucment.querySelector('#ranking').style.display = "none";
         });
 
 
@@ -45,6 +48,10 @@
             document.querySelector("#dificuldade").style.display = "none";
             localStorage.setItem('dificuldade', 3);
             location.href = "disfarcando.html";
+        });
+
+        document.querySelector('#ranking').addEventListener('click', () => {
+            location.href = "ranking.html";
         });
         </script>
     </body>
