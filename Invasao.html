@@ -8,9 +8,6 @@
 </head>
 <body>
     <main id="invasao">
-        <!-- DEBUG provisório (etapas 1 a 6): será removido quando o HUD estiver completo -->
-        <p id="debug"></p>
-
         <div id="hud">
             <span>Alerta</span>
             <div id="barra-alerta"><div id="barra-alerta-nivel"></div></div>
@@ -25,14 +22,14 @@
         <div id="palco">
             <canvas id="game" width="1024" height="640"></canvas>
 
-            <!-- Painel numérico do cofre -->
+            <!-- Painel do cofre -->
             <div id="painel-cofre" class="hidden">
                 <h3>Cofre</h3>
                 <div id="painel-digitos"><span></span><span></span><span></span><span></span></div>
             </div>
 
-            <!-- Tela de resultados: falha (pontuação 0, só "jogar de novo") ou vitória (pontuação, nickname e ranking) -->
-            <div id="tela-resultado" class="hidden">
+            <!-- Resultados -->
+            <div id="tela-resultado" class="tela-sobreposta hidden">
                 <h2 id="resultado-titulo">Missão falhou</h2>
                 <p id="resultado-pontuacao">Pontuação: 0</p>
                 <p id="resultado-tempo" class="hidden"></p>
@@ -44,6 +41,15 @@
                     <button id="botao-ranking" class="hidden" disabled>Ir ao ranking</button>
                     <button id="botao-jogar-de-novo">Jogar de novo</button>
                 </div>
+            </div>
+
+            <!-- Intro -->
+            <div id="tela-intro" class="tela-sobreposta">
+                <h2 id="intro-titulo"></h2>
+                <p id="intro-info"></p>
+                <p id="intro-missao"></p>
+                <p id="intro-dica">O código do cofre aparece por poucos segundos. Memorize!</p>
+                <button id="botao-comecar">Começar</button>
             </div>
         </div>
     </main>

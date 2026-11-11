@@ -1,156 +1,570 @@
+
+/* =====================================
+   JOGO PINGUIM - TEMA ANTÁRTIDA
+   CSS PRINCIPAL
+===================================== */
+
+:root {
+    --azul: #38bdf8;
+    --azul-escuro: #075985;
+    --azul-profundo: #0c4a6e;
+    --gelo: #e0f2fe;
+    --branco: #ffffff;
+
+    --verde: #22c55e;
+    --amarelo: #facc15;
+    --laranja: #f97316;
+    --rosa: #ec4899;
+
+    --texto: #123047;
+    --sombra: rgba(7, 89, 133, 0.22);
+}
+
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+html {
+    min-height: 100%;
+}
 
 body {
-    background: linear-gradient(135deg, #020617, #0f172a, #082f49);
-    color: white;
-    font-family: Arial, sans-serif;
+    position: relative;
+    isolation: isolate;
 
     min-height: 100vh;
     width: 100%;
+
+    padding: 20px;
+    overflow-x: hidden;
 
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 20px;
+    gap: 22px;
 
-    padding: 20px;
+    font-family: 'Trebuchet MS', Arial, sans-serif;
+    color: var(--texto);
+
+    background: linear-gradient(
+        180deg,
+        #38bdf8 0%,
+        #7dd3fc 30%,
+        #dff6ff 68%,
+        #a5d8f5 100%
+    );
 }
 
 
+body > * {
+    position: relative;
+    z-index: 1;
+}
+
+
+body::before {
+    content: "";
+
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+
+    pointer-events: none;
+
+    background:
+        radial-gradient(
+            ellipse at 50% 75%,
+            rgba(255, 255, 255, 0.85),
+            transparent 55%
+        ),
+
+        linear-gradient(
+            145deg,
+            transparent 49%,
+            #ffffff 49.5%
+        ) 0% 100% / 22% 42% no-repeat,
+
+        linear-gradient(
+            215deg,
+            transparent 49%,
+            #dbeafe 49.5%
+        ) 18% 100% / 27% 48% no-repeat,
+
+        linear-gradient(
+            145deg,
+            transparent 49%,
+            #bfdbfe 49.5%
+        ) 76% 100% / 29% 43% no-repeat,
+
+        linear-gradient(
+            215deg,
+            transparent 49%,
+            #ffffff 49.5%
+        ) 100% 100% / 23% 38% no-repeat,
+
+        linear-gradient(
+            180deg,
+            transparent 66%,
+            #e0f2fe 67%,
+            #bae6fd 82%,
+            #60a5fa 100%
+        );
+
+    background-repeat: no-repeat;
+
+    animation: geleirasMovimento 18s ease-in-out infinite alternate;
+}
+
+
+body::after {
+    content: "";
+
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+
+    pointer-events: none;
+    opacity: 0.85;
+
+    background-image:
+        radial-gradient(
+            3px 3px at 30px 40px,
+            white 99%,
+            transparent
+        ),
+
+        radial-gradient(
+            2px 2px at 100px 150px,
+            white 99%,
+            transparent
+        ),
+
+        radial-gradient(
+            4px 4px at 190px 80px,
+            white 99%,
+            transparent
+        ),
+
+        radial-gradient(
+            2px 2px at 250px 230px,
+            white 99%,
+            transparent
+        ),
+
+        radial-gradient(
+            3px 3px at 330px 120px,
+            white 99%,
+            transparent
+        );
+
+    background-size:
+        260px 300px,
+        320px 380px,
+        400px 420px,
+        480px 460px,
+        540px 500px;
+
+    background-repeat: repeat;
+
+    animation: neveCaindo 10s linear infinite;
+}
+
 #img1 {
+    display: block;
+
     width: 200px;
     max-width: 80%;
     height: auto;
 
-    filter: drop-shadow(0 0 15px rgba(56, 189, 248, 0.4));
+    filter: drop-shadow(
+        0 10px 12px rgba(7, 89, 133, 0.3)
+    );
 
-    transition: transform 0.3s ease;
+    animation:
+        pinguimEntrada 0.9s ease both,
+        pinguimFlutuar 3s ease-in-out 0.9s infinite;
+
+    transition: filter 0.3s ease;
 }
 
 #img1:hover {
-    transform: scale(1.05);
+    filter: drop-shadow(
+        0 0 20px rgba(255, 255, 255, 0.95)
+    );
 }
+
 
 
 #caixinha {
-    background: linear-gradient(145deg, #0f172a, #172554);
+    width: 380px;
+    max-width: 100%;
 
-    padding: 30px;
-
-    border: 1px solid #1e40af;
-    border-radius: 16px;
+    padding: 32px;
 
     text-align: center;
 
-    width: 350px;
-    max-width: 100%;
+    background: linear-gradient(
+        145deg,
+        rgba(255, 255, 255, 0.97),
+        rgba(186, 230, 253, 0.94)
+    );
 
-    box-shadow: 0 0 25px rgba(2, 132, 199, 0.2);
+    border: 3px solid rgba(255, 255, 255, 0.95);
+    border-radius: 25px;
+
+    box-shadow:
+        0 12px 30px var(--sombra),
+        inset 0 3px 8px rgba(255, 255, 255, 0.9);
+
+    animation: painelEntrada 0.8s ease both;
 }
 
-h2 {
-    font-size: clamp(18px, 4vw, 22px);
+#caixinha h2 {
+    color: var(--azul-escuro);
+
+    font-size: clamp(19px, 4vw, 24px);
+    line-height: 1.4;
+
     margin-bottom: 25px;
-    color: #bae6fd;
+
+    text-shadow: 0 2px 0 white;
 }
 
 
 #inicio {
     display: inline-block;
 
-    padding: 12px 20px;
-
-    background: linear-gradient(135deg, #0284c7, #0369a1);
+    width: auto;
+    padding: 14px 30px;
 
     color: white;
+    font-family: inherit;
+    font-size: 17px;
+    font-weight: bold;
 
-    border: 1px solid #38bdf8;
-    border-radius: 8px;
-
-    font-size: 16px;
     cursor: pointer;
 
-    transition: all 0.3s ease;
+    background: linear-gradient(
+        135deg,
+        #0ea5e9,
+        #2563eb
+    );
+
+    border: 3px solid white;
+    border-radius: 14px;
+
+    box-shadow:
+        0 6px 0 #075985,
+        0 9px 16px rgba(7, 89, 133, 0.2);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        filter 0.25s ease;
 }
 
 #inicio:hover {
-    background: linear-gradient(135deg, #0ea5e9, #0284c7);
+    transform: translateY(-4px) scale(1.04);
 
-    box-shadow: 0 0 16px rgba(56, 189, 248, 0.65);
+    filter: brightness(1.1);
 
-    transform: translateY(-3px);
+    box-shadow:
+        0 10px 0 #075985,
+        0 14px 22px rgba(7, 89, 133, 0.3);
 }
 
 #inicio:active {
-    transform: scale(0.96);
+    transform: translateY(3px);
+
+    box-shadow:
+        0 2px 0 #075985;
 }
 
-#inicio:focus-visible {
-    outline: 2px solid #7dd3fc;
+#dificuldade {
+    display: none;
+
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+
+    width: 380px;
+    max-width: 100%;
+
+    padding: 25px;
+
+    text-align: center;
+
+    background: linear-gradient(
+        145deg,
+        rgba(255, 255, 255, 0.97),
+        rgba(186, 230, 253, 0.94)
+    );
+
+    border: 3px solid white;
+    border-radius: 24px;
+
+    box-shadow:
+        0 12px 30px var(--sombra),
+        inset 0 3px 8px rgba(255, 255, 255, 0.8);
+
+    animation: painelEntrada 0.45s ease both;
+}
+
+
+#dificuldade[style*="display: block"] {
+    display: flex !important;
+}
+
+#dificuldade h3 {
+    color: var(--azul-escuro);
+
+    font-size: 21px;
+
+    margin-bottom: 8px;
+}
+
+
+#dificuldade button {
+    width: 100%;
+
+    padding: 13px 18px;
+
+    color: white;
+
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    border: 3px solid rgba(255, 255, 255, 0.95);
+    border-radius: 13px;
+
+    box-shadow:
+        0 5px 0 rgba(7, 89, 133, 0.25);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        filter 0.25s ease;
+}
+
+
+#dificuldade button:hover {
+    transform: translateY(-4px) scale(1.03);
+
+    filter: brightness(1.1);
+
+    box-shadow:
+        0 8px 0 rgba(7, 89, 133, 0.25),
+        0 10px 15px rgba(7, 89, 133, 0.15);
+}
+
+
+
+#dificuldade button:active {
+    transform: translateY(2px);
+
+    box-shadow:
+        0 2px 0 rgba(7, 89, 133, 0.25);
+}
+
+
+
+#dificuldade #facil {
+    background: linear-gradient(
+        135deg,
+        #22c55e,
+        #16a34a
+    );
+}
+
+
+
+#dificuldade #normal {
+    color: #493600;
+
+    background: linear-gradient(
+        135deg,
+        #facc15,
+        #f59e0b
+    );
+}
+
+
+#dificuldade #dificil {
+    background: linear-gradient(
+        135deg,
+        #fb923c,
+        #ea580c
+    );
+}
+
+
+
+#dificuldade #impossivel {
+    background: linear-gradient(
+        135deg,
+        #f472b6,
+        #db2777
+    );
+}
+
+
+
+button:focus-visible {
+    outline: 4px solid var(--amarelo);
     outline-offset: 4px;
 }
 
 
-@media (max-width: 768px) {
-
-    #img1 {
-        width: 180px;
+@keyframes geleirasMovimento {
+    from {
+        background-position:
+            0% 100%,
+            0% 100%,
+            18% 100%,
+            76% 100%,
+            100% 100%,
+            0 0;
     }
 
-    #caixinha {
-        width: 320px;
-        padding: 25px;
+    to {
+        background-position:
+            0% 100%,
+            3% 100%,
+            16% 100%,
+            73% 100%,
+            97% 100%,
+            0 0;
+    }
+}
+
+@keyframes neveCaindo {
+    from {
+        background-position:
+            0 0,
+            0 0,
+            0 0,
+            0 0,
+            0 0;
     }
 
+    to {
+        background-position:
+            0 300px,
+            0 380px,
+            0 420px,
+            0 460px,
+            0 500px;
+    }
+}
+
+@keyframes painelEntrada {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes pinguimEntrada {
+    from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes pinguimFlutuar {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
 }
 
 
-@media (max-width: 600px) {
 
+@media (max-width: 768px) {
+    #img1 {
+        width: 175px;
+    }
+
+    #caixinha,
+    #dificuldade {
+        width: 340px;
+    }
+}
+
+@media (max-width: 600px) {
     body {
         padding: 15px;
-        gap: 15px;
+        gap: 16px;
     }
 
     #img1 {
-        width: 150px;
+        width: 145px;
     }
 
-    #caixinha {
+    #caixinha,
+    #dificuldade {
         width: 100%;
-        max-width: 350px;
-        padding: 22px;
-    }
+        max-width: 360px;
 
-    h2 {
-        font-size: 19px;
-        margin-bottom: 18px;
+        padding: 22px;
     }
 
     #inicio {
         width: 100%;
     }
 
+    #dificuldade button {
+        padding: 14px;
+    }
 }
 
+
 @media (max-width: 350px) {
+    body {
+        padding: 10px;
+    }
 
     #img1 {
-        width: 125px;
+        width: 120px;
     }
 
-    #caixinha {
-        padding: 18px;
+    #caixinha,
+    #dificuldade {
+        padding: 17px;
     }
 
-    h2 {
-        font-size: 17px;
+    #dificuldade h3 {
+        font-size: 18px;
     }
+}
 
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
+    }
 }

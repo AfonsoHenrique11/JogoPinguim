@@ -1,13 +1,12 @@
-// ===== InvasaoMapas.js — dados dos mapas (um por dificuldade) =====
-// Índice em MAPAS = dificuldade: 0 Fácil, 1 Normal, 2 Difícil, 3 Impossível.
-// Grade: # parede, . chão, P início, E saída, S cofre.
-// Coordenadas "coluna,linha", a partir de 0 (canto superior esquerdo).
-// Guardas: cada rota é uma lista de pontos [coluna, linha], percorrida em ciclo.
-// Câmeras: posição + direção central em graus (0 = leste, 90 = sul, 180 = oeste, 270 = norte).
-
 const MAPAS = [
     {
         nome: 'Base Subaquática dos Peixes',
+        tema: {
+            fundo1: '#19c3e6', fundo2: '#0b64b8', destaque: '#ffd23f',
+            chao: '#8fefe6', chao2: '#7fe3ee', parede: '#1565c0', paredeFace: '#0b3c85',
+            cofre: '#ffc928', saida: '#52e07a', inicio: '#ff7eb6',
+            coneGuarda: '#ff3250', coneCamera: '#ffe01e', corGuarda: '#ff5d73'
+        },
         grade: [
             '################################',
             '#......#........#.......#......#',
@@ -30,6 +29,12 @@ const MAPAS = [
     },
     {
         nome: 'Docas Geladas das Focas',
+        tema: {
+            fundo1: '#9be3ff', fundo2: '#3f8cff', destaque: '#ff9f1c',
+            chao: '#eaf7ff', chao2: '#d6eefc', parede: '#6f9bd1', paredeFace: '#3b5f99',
+            cofre: '#ff9f1c', saida: '#2ec4b6', inicio: '#ffd166',
+            coneGuarda: '#ff2850', coneCamera: '#ff8c00', corGuarda: '#ef476f'
+        },
         grade: [
             '################################',
             '#........#........#.....S.#....#',
@@ -62,6 +67,12 @@ const MAPAS = [
     },
     {
         nome: 'Fábrica dos Ursos-Polares',
+        tema: {
+            fundo1: '#ffb347', fundo2: '#e8431f', destaque: '#ffe066',
+            chao: '#ffe0a8', chao2: '#ffd18a', parede: '#4f5d75', paredeFace: '#2d3142',
+            cofre: '#3a86ff', saida: '#2ecc71', inicio: '#a855f7',
+            coneGuarda: '#be0046', coneCamera: '#1e5aff', corGuarda: '#e63946'
+        },
         grade: [
             '################################',
             '#.......#.......#.......#......#',
@@ -102,6 +113,12 @@ const MAPAS = [
     },
     {
         nome: 'Quartel-General Humano',
+        tema: {
+            fundo1: '#a35cff', fundo2: '#2a1073', destaque: '#ffe14d',
+            chao: '#5a3fb0', chao2: '#4e34a0', parede: '#1d0f4a', paredeFace: '#0e0626',
+            cofre: '#ffe14d', saida: '#3bff9d', inicio: '#ff4fa3',
+            coneGuarda: '#ff3c64', coneCamera: '#00e5ff', corGuarda: '#ff3d71'
+        },
         grade: [
             '################################',
             '#.............................E#',

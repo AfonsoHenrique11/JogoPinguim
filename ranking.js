@@ -1,14 +1,10 @@
-// ===== ranking.js — ranking local (localStorage) =====
-// Entrada (vinda da invasão): ranking.html?nick=Ana&pontos=675&dif=1&id=<partida>
-// Sem parâmetros, só mostra os rankings (por exemplo, a partir de um botão da tela inicial).
+const CHAVE_RANKING = 'pinguinsEspioes.ranking';
+const CHAVE_PARTIDA = 'pinguinsEspioes.partida';
+const MAX_ENTRADAS = 10;
+const NICKNAME_MAX = 12;
+const PONTUACAO_MAXIMA = 1000;
 
-const CHAVE_RANKING = 'pinguinsEspioes.ranking';             // provisório
-const CHAVE_ULTIMA_PARTIDA = 'pinguinsEspioes.ultimaPartida'; // evita registrar a mesma partida duas vezes (F5)
-const MAX_ENTRADAS = 10;           // por dificuldade
-const NICKNAME_MAX = 12;           // igual ao da invasão
-const PONTUACAO_MAXIMA = 1000;     // mesma escala da invasão (provisório)
-
-// ---- Armazenamento ----
+// Armazenamento
 let armazenamentoOk = true;
 
 function lerBruto(chave) {
@@ -39,40 +35,38 @@ function lerDados() {
     return dados;
 }
 
-// ---- Dados da partida na URL ----
-const params = new URLSearchParams(location.search);
-
+// Partida da invasão
 function lerPartida() {
-    if (!params.has('nick') && !params.has('pontos')) return null;
-    const nick = (params.get('nick') || '').trim();
-    const pontos = params.get('pontos') || '';
-    const dif = params.get('dif') || '';
-    const id = params.get('id') || '';
-    const ok = nick.length >= 1 && nick.length <= NICKNAME_MAX &&
-        /^\d{1,4}$/.test(pontos) && Number(pontos) <= PONTUACAO_MAXIMA &&
-        /^[0-3]$/.test(dif) && (id === '' || /^[\w.-]{1,40}$/.test(id));
+    const bruto = lerBruto(CHAVE_PARTIDA);
+    if (bruto === null) return null;
+    try { localStorage.removeItem(CHAVE_PARTIDA); } catch (e) { armazenamentoOk = false; }
+
+    let p;
+    try { p = JSON.parse(bruto); } catch (e) { p = null; }
+    const nick = p && typeof p.nick === 'string' ? p.nick.trim() : '';
+    const ok = p && nick.length >= 1 && nick.length <= NICKNAME_MAX &&
+        Number.isInteger(p.pontos) && p.pontos >= 0 && p.pontos <= PONTUACAO_MAXIMA &&
+        Number.isInteger(p.dif) && p.dif >= 0 && p.dif <= 3;
     if (!ok) {
-        console.warn('Dados da partida inválidos na URL; nada foi registrado.');
+        console.warn('Dados da partida inválidos; nada foi registrado.');
         return null;
     }
-    return { nick, pontos: Number(pontos), dif: Number(dif), id: id || nick + '|' + pontos + '|' + dif };
+    return { nick, pontos: p.pontos, dif: p.dif };
 }
 
-// Registra a partida (se ainda não foi registrada) e devolve { dif, entrada, foraDoTop }
+// Registra a partida
 function registrar(partida, dados) {
-    if (lerBruto(CHAVE_ULTIMA_PARTIDA) === partida.id) return { dif: partida.dif, entrada: null, foraDoTop: false };
     const entrada = { nick: partida.nick, pontos: partida.pontos };
     const lista = dados[partida.dif];
     lista.push(entrada);
-    lista.sort((a, b) => b.pontos - a.pontos);   // ordenação estável: empates mantêm a ordem de chegada
+    lista.sort((a, b) => b.pontos - a.pontos);
     const dentro = lista.indexOf(entrada) < MAX_ENTRADAS;
     dados[partida.dif] = lista.slice(0, MAX_ENTRADAS);
     gravar(CHAVE_RANKING, JSON.stringify(dados));
-    gravar(CHAVE_ULTIMA_PARTIDA, partida.id);
     return { dif: partida.dif, entrada: dentro ? entrada : null, foraDoTop: !dentro, pontos: partida.pontos };
 }
 
-// ---- Tela: hub com os 4 rankings visíveis ao mesmo tempo ----
+// Tela
 const NOMES_DIFICULDADE = ['Fácil', 'Normal', 'Difícil', 'Impossível'];
 const paineis = document.getElementById('paineis');
 const avisoArmazenamento = document.getElementById('aviso-armazenamento');
@@ -84,12 +78,12 @@ const resultado = partida ? registrar(partida, dados) : null;
 function criar(tag, classe, texto) {
     const el = document.createElement(tag);
     if (classe) el.className = classe;
-    if (texto !== undefined) el.textContent = texto;   // textContent: o nickname vem da URL, nunca como HTML
+    if (texto !== undefined) el.textContent = texto;
     return el;
 }
 
 function criarPainel(dif) {
-    const painel = criar('section', 'painel');
+    const painel = criar('section', 'painel dif-' + dif);
     if (resultado && resultado.dif === dif) painel.classList.add('atual');
     painel.appendChild(criar('h2', '', NOMES_DIFICULDADE[dif]));
 
@@ -123,9 +117,4 @@ for (let dif = 0; dif < 4; dif++) paineis.appendChild(criarPainel(dif));
 if (!armazenamentoOk) {
     avisoArmazenamento.textContent = 'Não foi possível salvar o ranking neste navegador.';
     avisoArmazenamento.classList.remove('hidden');
-}
-
-// Limpa a URL para que atualizar a página não repita nada (se o navegador permitir; o id da partida já protege)
-if (partida) {
-    try { history.replaceState(null, '', location.pathname); } catch (e) { /* ignorado */ }
 }

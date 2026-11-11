@@ -3,7 +3,11 @@
     <head>
     <title>Quiz Pinguinistico</title>
     <link rel="stylesheet" href="principal.css">
+<<<<<<< HEAD
     <link rel="shortcut icon" href="imgs/favicon.png">
+=======
+    <link rel="shortcut icon" href="imgs/Pinguim Espião_ Logo Gamer Neon.png">
+>>>>>>> 721e502428a19b38eeb846d6c314d4cf806e2f68
 </head>
     <body>
         <img src="imgs/pinguim.png" alt="" id="img1">
@@ -12,6 +16,7 @@
             <button id="inicio">Vamos Lá!</button>  
         </div>
 
+<<<<<<< HEAD
         <script>
         // PROVISÓRIO: aperta "i" pra abri a invasão
         document.addEventListener('keydown', (e) => {
@@ -20,3 +25,41 @@
         </script>
     </body>
 </html>
+=======
+        <div id="dificuldade">
+            <h3>Escolha a dificuldade:</h3>
+            <button id="facil">Fácil</button>
+            <button id="normal">Normal</button>
+            <button id="dificil">Difícil</button>
+            <button id="impossivel">Impossível</button>
+        </div>
+        <script>
+        document.querySelector('#inicio').addEventListener('click', () => {
+            document.querySelector("#dificuldade").style.display = "block";
+        });
+
+
+        document.querySelector('#facil').addEventListener('click', () => {
+            document.querySelector("#dificuldade").style.display = "none";
+            localStorage.setItem('dificuldade', 0);
+            location.href = "disfarcando.html";
+        });
+        document.querySelector('#normal').addEventListener('click', () => {
+            document.querySelector("#dificuldade").style.display = "none";
+            localStorage.setItem('dificuldade', 1);
+            location.href = "disfarcando.html";
+        });
+        document.querySelector('#dificil').addEventListener('click', () => {
+            document.querySelector("#dificuldade").style.display = "none";
+            localStorage.setItem('dificuldade', 2);
+            location.href = "disfarcando.html";
+        });
+        document.querySelector('#impossivel').addEventListener('click', () => {
+            document.querySelector("#dificuldade").style.display = "none";
+            localStorage.setItem('dificuldade', 3);
+            location.href = "disfarcando.html";
+        });
+        </script>
+    </body>
+</html> 
+>>>>>>> 721e502428a19b38eeb846d6c314d4cf806e2f68
