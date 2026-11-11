@@ -279,7 +279,7 @@ const botaoRanking = document.getElementById('botao-ranking');
 const telaIntro = document.getElementById('tela-intro');
 const botaoComecar = document.getElementById('botao-comecar');
 document.getElementById('botao-jogar-de-novo').addEventListener('click', () => {
-    location.href = 'principal.html';
+    location.href = 'index.html';
 });
 campoNickname.addEventListener('input', () => { botaoRanking.disabled = !nickValido(campoNickname.value); });
 campoNickname.addEventListener('keydown', e => { if (e.key === 'Enter') irParaRanking(); });
