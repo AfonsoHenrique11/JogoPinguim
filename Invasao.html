@@ -5,12 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pinguim Espião: Invasão</title>
     <link rel="stylesheet" href="Invasao.css">
-</head>
+    <link rel="shortcut icon" href="imgs/Jogo Pinguim_ Aventura Gelada.png">
+    </head>
 <body>
     <main id="invasao">
         <div id="hud">
             <span>Alerta</span>
             <div id="barra-alerta"><div id="barra-alerta-nivel"></div></div>
+            <button id="botao-pausa">Pausar</button>
         </div>
         <div id="hud-missao">
             <span id="hud-tempo">Tempo: 0:00</span>
@@ -26,6 +28,14 @@
             <div id="painel-cofre" class="hidden">
                 <h3>Cofre</h3>
                 <div id="painel-digitos"><span></span><span></span><span></span><span></span></div>
+            </div>
+
+            <div id="tela-pausa" class="tela-sobreposta hidden">
+                <h2>Jogo Pausado</h2>
+                <div id="botoes-pausa">
+                    <button id="botao-retomar">Retomar</button>
+                    <button id="botao-desistir">Desistir</button>
+                </div>
             </div>
 
             <!-- Resultados -->

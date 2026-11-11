@@ -278,12 +278,43 @@ const campoNickname = document.getElementById('campo-nickname');
 const botaoRanking = document.getElementById('botao-ranking');
 const telaIntro = document.getElementById('tela-intro');
 const botaoComecar = document.getElementById('botao-comecar');
+const botaoPausa = document.getElementById('botao-pausa');
+const telaPausa = document.getElementById('tela-pausa');
+const botaoRetomar = document.getElementById('botao-retomar');
+const botaoDesistir = document.getElementById('botao-desistir');
 document.getElementById('botao-jogar-de-novo').addEventListener('click', () => {
-    location.href = 'principal.html';
+    location.href = 'index.html';
 });
+botaoPausa.addEventListener('click', pausarJogo);
+botaoRetomar.addEventListener('click', retomarJogo);
+botaoDesistir.addEventListener('click', desistirJogo);
 campoNickname.addEventListener('input', () => { botaoRanking.disabled = !nickValido(campoNickname.value); });
 campoNickname.addEventListener('keydown', e => { if (e.key === 'Enter') irParaRanking(); });
 botaoRanking.addEventListener('click', irParaRanking);
+
+function iniciarMissao() {
+    if (estadoJogo !== 'intro') return;
+    estadoJogo = 'jogando';
+    telaIntro.classList.add('hidden');
+    ultimo = performance.now(); // Evita salto de tempo ao começar
+}
+
+function pausarJogo() {
+    if (estadoJogo !== 'jogando') return;
+    estadoJogo = 'pausado';
+    telaPausa.classList.remove('hidden');
+}
+
+function retomarJogo() {
+    if (estadoJogo !== 'pausado') return;
+    estadoJogo = 'jogando';
+    telaPausa.classList.add('hidden');
+    ultimo = performance.now(); // Evita salto de tempo ao retomar
+}
+
+function desistirJogo() {
+    location.href = 'index.html';
+}
 
 function normalizarAngulo(a) {
     while (a > Math.PI) a -= 2 * Math.PI;
@@ -391,6 +422,7 @@ function formatarTempo(seg) {
 function encerrar(resultado) {
     estadoJogo = resultado;
     painelAberto = false;
+    telaPausa.classList.add('hidden');
     painelCofre.classList.add('hidden');
     const venceu = resultado === 'venceu';
     pontuacaoFinal = venceu ? calcularPontuacao(tempoJogo) : 0;
@@ -461,6 +493,16 @@ function confirmarCodigo() {
 function aoPressionar(e) {
     teclas[e.code] = true;
     if (estadoJogo === 'intro' && e.code === 'KeyL') iniciarMissao();
+    if (e.code === 'Escape') {
+        if (painelAberto) {
+            fecharPainel();
+        } else if (estadoJogo === 'jogando') {
+            pausarJogo();
+        } else if (estadoJogo === 'pausado') {
+            retomarJogo();
+        }
+        return;
+    }
     if (estadoJogo !== 'jogando') return;
     if (e.code.startsWith('Arrow')) e.preventDefault();
     if (e.repeat && e.code !== 'Backspace') return;
@@ -469,7 +511,7 @@ function aoPressionar(e) {
             if (digitado.length < DIGITOS_CODIGO) digitado += e.key;
         } else if (e.code === 'Backspace') {
             digitado = digitado.slice(0, -1);
-        } else if (e.code === 'KeyL') {
+        } else if (e.code === 'Enter') {
             confirmarCodigo();
         } else if (e.code === 'Escape') {
             fecharPainel();
@@ -477,7 +519,7 @@ function aoPressionar(e) {
         if (painelAberto) atualizarPainel();
         return;
     }
-    if (e.code === 'KeyL') tentarAbrirPainel();
+    if (e.code === 'Enter') tentarAbrirPainel();
 }
 
 function atualizarMissao() {
@@ -762,7 +804,7 @@ function desenharIndicadorInteracao() {
     ctx.font = 'bold 16px Arial';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText('L', cofre.x, y + lado / 2 + 1);
+    ctx.fillText('Enter', cofre.x, y + lado / 2 + 1);
     ctx.restore();
 }
 
