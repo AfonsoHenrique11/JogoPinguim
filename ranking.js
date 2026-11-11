@@ -1,10 +1,10 @@
 const CHAVE_RANKING = 'pinguinsEspioes.ranking';
 const CHAVE_PARTIDA = 'pinguinsEspioes.partida';
-const MAX_ENTRADAS = 10;           
-const NICKNAME_MAX = 12;           
-const PONTUACAO_MAXIMA = 1000;     
+const MAX_ENTRADAS = 10;
+const NICKNAME_MAX = 12;
+const PONTUACAO_MAXIMA = 1000;
 
-//Localstoraje
+// Armazenamento
 let armazenamentoOk = true;
 
 function lerBruto(chave) {
@@ -35,7 +35,7 @@ function lerDados() {
     return dados;
 }
 
-//Dado da Partida
+// Partida da invasão
 function lerPartida() {
     const bruto = lerBruto(CHAVE_PARTIDA);
     if (bruto === null) return null;
@@ -54,6 +54,7 @@ function lerPartida() {
     return { nick, pontos: p.pontos, dif: p.dif };
 }
 
+// Registra a partida
 function registrar(partida, dados) {
     const entrada = { nick: partida.nick, pontos: partida.pontos };
     const lista = dados[partida.dif];
@@ -65,7 +66,7 @@ function registrar(partida, dados) {
     return { dif: partida.dif, entrada: dentro ? entrada : null, foraDoTop: !dentro, pontos: partida.pontos };
 }
 
-//Tela
+// Tela
 const NOMES_DIFICULDADE = ['Fácil', 'Normal', 'Difícil', 'Impossível'];
 const paineis = document.getElementById('paineis');
 const avisoArmazenamento = document.getElementById('aviso-armazenamento');
@@ -82,7 +83,7 @@ function criar(tag, classe, texto) {
 }
 
 function criarPainel(dif) {
-    const painel = criar('section', 'painel');
+    const painel = criar('section', 'painel dif-' + dif);
     if (resultado && resultado.dif === dif) painel.classList.add('atual');
     painel.appendChild(criar('h2', '', NOMES_DIFICULDADE[dif]));
 
