@@ -1,76 +1,347 @@
 
+/* =====================================
+   JOGO PINGUIM - FASE DO DISFARCE
+   TEMA ANTÁRTIDA
+===================================== */
+
+
+:root {
+    --azul: #38bdf8;
+    --azul-escuro: #075985;
+    --azul-profundo: #0c4a6e;
+    --gelo: #e0f2fe;
+    --branco: #ffffff;
+    --texto: #123047;
+
+    --verde: #22c55e;
+    --amarelo: #facc15;
+    --rosa: #ec4899;
+
+    --sombra: rgba(7, 89, 133, 0.22);
+}
+
 
 * {
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
 }
 
 html {
     min-height: 100%;
-    background: linear-gradient(135deg, #020617, #0f172a, #082f49);
+    background: #bae6fd;
 }
 
 body {
-    background: linear-gradient(135deg, #020617, #0f172a, #082f49);
-    color: #ffffff;
-    font-family: Arial, sans-serif;
-    margin: 0;
+    position: relative;
+    isolation: isolate;
+
     min-height: 100vh;
+    width: 100%;
+
     padding: 20px;
+    overflow-x: hidden;
+
     text-align: center;
+    font-family: 'Trebuchet MS', Arial, sans-serif;
+
+    color: var(--texto);
+
+    background: linear-gradient(
+        180deg,
+        #38bdf8 0%,
+        #7dd3fc 35%,
+        #dff6ff 70%,
+        #a5d8f5 100%
+    );
 }
 
+
+body > * {
+    position: relative;
+    z-index: 1;
+}
+
+
+body::before {
+    content: "";
+
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+
+    pointer-events: none;
+
+    background:
+        radial-gradient(
+            ellipse at 50% 80%,
+            rgba(255, 255, 255, 0.9),
+            transparent 55%
+        ),
+
+        linear-gradient(
+            145deg,
+            transparent 49%,
+            #ffffff 49.5%
+        ) 0% 100% / 22% 42% no-repeat,
+
+        linear-gradient(
+            215deg,
+            transparent 49%,
+            #dbeafe 49.5%
+        ) 18% 100% / 27% 48% no-repeat,
+
+        linear-gradient(
+            145deg,
+            transparent 49%,
+            #bfdbfe 49.5%
+        ) 76% 100% / 29% 43% no-repeat,
+
+        linear-gradient(
+            215deg,
+            transparent 49%,
+            #ffffff 49.5%
+        ) 100% 100% / 23% 38% no-repeat,
+
+        linear-gradient(
+            180deg,
+            transparent 66%,
+            #e0f2fe 67%,
+            #bae6fd 82%,
+            #60a5fa 100%
+        );
+
+    background-repeat: no-repeat;
+
+    animation: geleirasMovimento 18s ease-in-out infinite alternate;
+}
+
+body::after {
+    content: "";
+
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+
+    pointer-events: none;
+    opacity: 0.8;
+
+    background-image:
+        radial-gradient(3px 3px at 30px 40px, white 99%, transparent),
+        radial-gradient(2px 2px at 100px 150px, white 99%, transparent),
+        radial-gradient(4px 4px at 190px 80px, white 99%, transparent),
+        radial-gradient(2px 2px at 250px 230px, white 99%, transparent),
+        radial-gradient(3px 3px at 330px 120px, white 99%, transparent);
+
+    background-size:
+        260px 300px,
+        320px 380px,
+        400px 420px,
+        480px 460px,
+        540px 500px;
+
+    background-repeat: repeat;
+
+    animation: neveCaindo 10s linear infinite;
+}
 
 
 #inicio,
 #alvo,
 #disfarce,
 #acessorios {
-    background: linear-gradient(145deg, #0f172a, #172554);
-    border: 1px solid #1e40af;
-    border-radius: 16px;
-    padding: 20px;
-    margin: 20px auto;
+    width: 100%;
     max-width: 600px;
-    box-shadow: 0 0 20px rgba(2, 132, 199, 0.2);
+
+    padding: 22px;
+    margin: 20px auto;
+
+    text-align: center;
+
+    background: linear-gradient(
+        145deg,
+        rgba(255, 255, 255, 0.97),
+        rgba(186, 230, 253, 0.94)
+    );
+
+    color: var(--texto);
+
+    border: 3px solid rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+
+    box-shadow:
+        0 12px 30px var(--sombra),
+        inset 0 3px 8px rgba(255, 255, 255, 0.85);
+
+    animation: painelEntrada 0.6s ease both;
+}
+
+
+#inicio h1,
+#inicio h2,
+#alvo h1,
+#alvo h2,
+#disfarce h1,
+#disfarce h2,
+#acessorios h1,
+#acessorios h2 {
+    color: var(--azul-escuro);
+    margin-bottom: 15px;
+}
+
+/* TEXTOS */
+
+#inicio p,
+#alvo p,
+#disfarce p,
+#acessorios p {
+    line-height: 1.5;
 }
 
 
 #alvoimg {
     display: block;
+
     width: 500px;
     max-width: 100%;
     height: auto;
-    margin: auto;
-    border-radius: 12px;
+
+    margin: 15px auto;
+
+    border: 4px solid white;
+    border-radius: 16px;
+
+    box-shadow:
+        0 8px 20px rgba(7, 89, 133, 0.2);
+
+    transition: transform 0.3s ease;
+}
+
+#alvoimg:hover {
+    transform: scale(1.02);
 }
 
 
 #pinguim-container {
-    margin: 60px auto 20px;
     position: relative;
+
     width: 300px;
     height: 400px;
+
     max-width: 100%;
+
+    margin: 60px auto 20px;
+
+    isolation: isolate;
 }
 
+/* IMAGEM PRINCIPAL DO PINGUIM */
+
 #pinguim {
-    width: 100%;
-    display: block;
     position: relative;
     z-index: 1;
+
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+
+    filter: drop-shadow(
+        0 8px 10px rgba(7, 89, 133, 0.2)
+    );
 }
 
 
 .vestimenta {
     display: none;
+
     position: absolute;
+
     width: 100%;
     height: auto;
+
     top: 0;
     left: 0;
 }
+ 
+.acessorio {
+    width: 40px;
+    height: 40px;
+}
 
-/* ELEMENTOS ESCONDIDOS */
+/* CHAPÉU */
+
+#chapeu-escolhido {
+    position: absolute;
+
+    top: -12.5%;
+    left: 8.33%;
+
+    width: 83.33%;
+    height: auto;
+
+    z-index: 6;
+}
+
+/* CAMISA */
+
+#camisa-escolhida {
+    position: absolute;
+
+    top: 18.75%;
+    left: -5%;
+
+    width: 110%;
+    height: 62.5%;
+
+    z-index: 2;
+}
+
+/* CABELO */
+
+#cabelo-escolhido {
+    position: absolute;
+
+    top: 0;
+    left: 8.33%;
+
+    width: 83.33%;
+    height: auto;
+
+    z-index: 4;
+}
+
+/* COLAR */
+
+#colar-escolhido {
+    position: absolute;
+
+    top: 36.25%;
+    left: 18.33%;
+
+    width: 63.33%;
+    height: 25%;
+
+    z-index: 5;
+}
+
+/* ÓCULOS */
+
+#oculos-escolhidos {
+    position: absolute;
+
+    top: 21.25%;
+    left: 21.67%;
+
+    width: 56.67%;
+    height: auto;
+
+    z-index: 3;
+}
+
+
 
 #alvo,
 #disfarce {
@@ -78,80 +349,140 @@ body {
 }
 
 
-.acessorio {
-    width: 40px;
-    height: 40px;
-}
-
-#chapeu-escolhido {
-    position: absolute;
-    top: -50px;
-    left: 25px;
-    width: 250px;
-    z-index: 6;
-}
-
-#camisa-escolhida {
-    position: absolute;
-    top: 75px;
-    width: 110%;
-    height: 250px;
-    left: -15px;
-    z-index: 2;
-}
-
-#cabelo-escolhido {
-    position: absolute;
-    top: 0;
-    left: 25px;
-    width: 250px;
-    z-index: 4;
-}
-
-#colar-escolhido {
-    position: absolute;
-    top: 145px;
-    left: 55px;
-    width: 190px;
-    height: 100px;
-    z-index: 5;
-}
-
-#oculos-escolhidos {
-    position: absolute;
-    top: 85px;
-    left: 65px;
-    width: 170px;
-    z-index: 3;
-}
-
 
 button {
-    background: linear-gradient(135deg, #0284c7, #0369a1);
-    color: #ffffff;
-    border: 1px solid #38bdf8;
-    border-radius: 8px;
     padding: 12px 20px;
     margin: 6px;
+
+    color: white;
+
+    font-family: inherit;
     font-size: 16px;
+    font-weight: bold;
+
     cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 0 8px rgba(56, 189, 248, 0.25);
+
+    background: linear-gradient(
+        135deg,
+        #0ea5e9,
+        #2563eb
+    );
+
+    border: 2px solid white;
+    border-radius: 12px;
+
+    box-shadow:
+        0 5px 0 #075985,
+        0 8px 14px rgba(7, 89, 133, 0.2);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        filter 0.25s ease;
 }
+
+/* EFEITO AO PASSAR O MOUSE */
 
 button:hover {
-    background: linear-gradient(135deg, #0ea5e9, #0284c7);
-    box-shadow: 0 0 16px rgba(56, 189, 248, 0.65);
-    transform: translateY(-3px);
+    transform: translateY(-4px);
+
+    filter: brightness(1.12);
+
+    box-shadow:
+        0 8px 0 #075985,
+        0 12px 18px rgba(7, 89, 133, 0.25);
 }
+
+/* EFEITO AO CLICAR */
 
 button:active {
-    transform: scale(0.96);
+    transform: translateY(2px);
+
+    box-shadow:
+        0 2px 0 #075985;
 }
 
+/* ACESSIBILIDADE */
+
 button:focus-visible {
-    outline: 2px solid #7dd3fc;
+    outline: 4px solid var(--amarelo);
     outline-offset: 4px;
+}
+
+
+
+@keyframes geleirasMovimento {
+    from {
+        background-position:
+            0% 100%,
+            0% 100%,
+            18% 100%,
+            76% 100%,
+            100% 100%,
+            0 0;
+    }
+
+    to {
+        background-position:
+            0% 100%,
+            3% 100%,
+            16% 100%,
+            73% 100%,
+            97% 100%,
+            0 0;
+    }
+}
+
+@keyframes neveCaindo {
+    from {
+        background-position:
+            0 0,
+            0 0,
+            0 0,
+            0 0,
+            0 0;
+    }
+
+    to {
+        background-position:
+            0 300px,
+            0 380px,
+            0 420px,
+            0 460px,
+            0 500px;
+    }
+}
+
+@keyframes painelEntrada {
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+@media (max-width: 768px) {
+    body {
+        padding: 15px;
+    }
+
+    #inicio,
+    #alvo,
+    #disfarce,
+    #acessorios {
+        width: 90%;
+    }
+
+    #pinguim-container {
+        width: min(300px, 75vw);
+        height: auto;
+        aspect-ratio: 3 / 4;
+    }
 }
 
 
@@ -166,29 +497,15 @@ button:focus-visible {
     #acessorios {
         width: 100%;
         padding: 15px;
+        margin: 12px auto;
     }
 
     #pinguim-container {
         width: min(260px, 85vw);
         height: auto;
         aspect-ratio: 3 / 4;
-    }
 
-    #chapeu-escolhido {
-        width: 83.33%;
-        left: 8.33%;
-        top: -12.5%;
-    }
-
-    #camisa-escolhida {
-        width: 83.33%;
-        left: 8.33%;
-        top: 36.25%;
-    }
-
-    #cabelo-escolhido {
-        width: 83.33%;
-        left: 8.33%;
+        margin: 45px auto 20px;
     }
 
     #alvoimg {
@@ -197,16 +514,37 @@ button:focus-visible {
 
     button {
         max-width: 100%;
+        padding: 11px 15px;
         font-size: 15px;
     }
 }
 
 
-@media (min-width: 481px) and (max-width: 768px) {
+@media (max-width: 350px) {
+    #pinguim-container {
+        width: 230px;
+    }
+
     #inicio,
     #alvo,
     #disfarce,
     #acessorios {
-        width: 90%;
+        padding: 12px;
+    }
+
+    button {
+        font-size: 14px;
+        padding: 10px 12px;
+    }
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
     }
 }
