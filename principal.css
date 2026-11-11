@@ -409,8 +409,8 @@ body::after {
 #dificuldade #impossivel {
     background: linear-gradient(
         135deg,
-        #f472b6,
-        #db2777
+        #e70e0e,
+        #1d0101
     );
 }
 
@@ -421,7 +421,30 @@ button:focus-visible {
     outline-offset: 4px;
 }
 
+#ranking {
+    background:linear-gradient(yellow, rgb(255, 174, 0));
+    width: 120px;
+    height: 50px;
+    padding: 8px 10px;
+    cursor: pointer;
+    border: 3px solid rgba(255, 255, 255, 0.95);
+    border-radius: 10px;
+    box-shadow:
+        0 4px 0 rgb(255, 136, 0);
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        filter 0.25s ease;
+}
 
+#ranking:hover {
+    transform: translateY(-4px) scale(1.03);
+    filter: brightness(1.1);
+    box-shadow:
+        0 6px 0 rgba(255, 136, 0),
+        0 8px 15px rgba(255, 136, 100);
+
+}
 @keyframes geleirasMovimento {
     from {
         background-position:
