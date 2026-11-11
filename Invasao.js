@@ -511,7 +511,7 @@ function aoPressionar(e) {
             if (digitado.length < DIGITOS_CODIGO) digitado += e.key;
         } else if (e.code === 'Backspace') {
             digitado = digitado.slice(0, -1);
-        } else if (e.code === 'KeyL') {
+        } else if (e.code === 'Enter') {
             confirmarCodigo();
         } else if (e.code === 'Escape') {
             fecharPainel();
@@ -519,7 +519,7 @@ function aoPressionar(e) {
         if (painelAberto) atualizarPainel();
         return;
     }
-    if (e.code === 'KeyL') tentarAbrirPainel();
+    if (e.code === 'Enter') tentarAbrirPainel();
 }
 
 function atualizarMissao() {
@@ -804,7 +804,7 @@ function desenharIndicadorInteracao() {
     ctx.font = 'bold 16px Arial';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText('L', cofre.x, y + lado / 2 + 1);
+    ctx.fillText('Enter', cofre.x, y + lado / 2 + 1);
     ctx.restore();
 }
 
