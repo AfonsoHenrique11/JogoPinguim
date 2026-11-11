@@ -1,13 +1,25 @@
+
+/* =====================================
+   JOGO PINGUIM - FASE DA INVASÃO 
+   TEMA ANTÁRTIDA
+===================================== */
+
 :root {
-    --fundo-1: #19c3e6;
-    --fundo-2: #0b64b8;
+    --fundo-1: #dff6ff;
+    --fundo-2: #5ba9d6;
     --destaque: #ffd23f;
     --contorno: #1b1b3a;
     --papel: #fff7e0;
 }
 
 body {
-    background: linear-gradient(135deg, var(--fundo-1), var(--fundo-2));
+    background: linear-gradient(
+    135deg,
+    #e0f7ff,
+    #8ed5f2,
+    #287db5,
+    #123d68
+);
     color: #ffffff;
     font-family: 'Trebuchet MS', 'Segoe UI', Arial, sans-serif;
     display: flex;
@@ -103,6 +115,13 @@ body {
     border: 4px solid var(--contorno);
     border-radius: 18px;
     box-shadow: 0 6px 0 var(--contorno);
+}
+
+#painel-cofre::before {
+    content: "🔒";
+    display: block;
+    font-size: 2.5rem;
+    margin-bottom: 8px;
 }
 
 #painel-cofre h3 {
@@ -245,4 +264,84 @@ body {
 
 #botao-comecar {
     margin-top: 10px;
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    #hud,
+    #hud-missao {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    #barra-alerta {
+        min-width: 100px;
+    }
+
+    #painel-cofre {
+        width: min(90%, 350px);
+        padding: 15px;
+    }
+
+    .tela-sobreposta {
+        padding: 12px;
+    }
+
+    .tela-sobreposta h2 {
+        font-size: 2rem;
+    }
+
+    .tela-sobreposta p {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    #hud > span,
+    #hud-missao > span {
+        font-size: 0.85rem;
+        padding: 4px 9px;
+    }
+
+    #hud-codigo {
+        font-size: 1rem;
+    }
+
+    #painel-digitos {
+        justify-content: center;
+        gap: 5px;
+    }
+
+    #painel-digitos span {
+        width: 38px;
+        height: 50px;
+        line-height: 50px;
+        font-size: 1.7rem;
+    }
+
+    #grupo-ranking,
+    #botoes-resultado {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    #campo-nickname {
+        max-width: 100%;
+    }
+
+    .tela-sobreposta h2 {
+        font-size: 1.5rem;
+    }
+
+    .tela-sobreposta button {
+        padding: 10px 15px;
+        font-size: 0.9rem;
+    }
+
+    #tela-intro {
+        padding: 0 12px;
+    }
 }
