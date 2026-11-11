@@ -1,10 +1,25 @@
+/* JOGO PINGUIM - FASE RANKING.CSS 
+   DEFINITIVO*/
+
 :root {
+    --fundo-1: #dff6ff;
+    --fundo-2: #5ba9d6;
+    --destaque: #ffd23f;
     --contorno: #1b1b3a;
-    --papel: #fff7e0;
+    --papel: #f0fbff;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    min-height: 100%;
+    background: linear-gradient(135deg, #e0f7ff, #8ed5f2, #287db5, #123d68);
 }
 
 body {
-    background: linear-gradient(135deg, #ff6ec7, #7b61ff 55%, #27c1ff);
+    background: linear-gradient(135deg, #e0f7ff, #8ed5f2, #287db5, #123d68);
     color: var(--contorno);
     font-family: 'Trebuchet MS', 'Segoe UI', Arial, sans-serif;
     display: flex;
@@ -13,18 +28,16 @@ body {
     min-height: 100vh;
     margin: 0;
     padding: 15px;
-    box-sizing: border-box;
 }
 
 #ranking {
-    background-color: var(--papel);
+    background: linear-gradient(145deg, #ffffff, #e5f7ff);
     border: 4px solid var(--contorno);
     border-radius: 24px;
     box-shadow: 0 8px 0 var(--contorno), 0 20px 40px rgba(0, 0, 0, 0.25);
     padding: 24px;
     width: 1200px;
     max-width: 100%;
-    box-sizing: border-box;
     text-align: center;
 }
 
@@ -35,11 +48,10 @@ body {
 h1 {
     margin: 0 0 20px;
     font-size: 2.4rem;
-    color: #ff4d6d;
-    text-shadow: 0 4px 0 var(--contorno);
+    color: #087db8;
+    text-shadow: 0 3px 0 #b8eaff;
 }
 
-/* Quatro tabelas lado a lado */
 #paineis {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -49,7 +61,7 @@ h1 {
 
 .painel {
     --cor: #14b8d4;
-    background-color: #ffffff;
+    background: #ffffff;
     border: 3px solid var(--contorno);
     border-radius: 16px;
     box-shadow: 0 5px 0 var(--contorno);
@@ -58,10 +70,8 @@ h1 {
 
 .dif-0 { --cor: #14b8d4; }
 .dif-1 { --cor: #3a8dff; }
-.dif-2 { --cor: #ff7a2f; }
+.dif-2 { --cor: #ff9b35; }
 .dif-3 { --cor: #8b4dff; }
-
-/* Painel da partida atual */
 .painel.atual {
     outline: 4px solid #ffe066;
     outline-offset: 2px;
@@ -72,7 +82,7 @@ h1 {
     padding: 10px;
     font-size: 1.2rem;
     color: #ffffff;
-    background-color: var(--cor);
+    background: var(--cor);
     text-shadow: 0 2px 0 rgba(0, 0, 0, 0.3);
     border-bottom: 3px solid var(--contorno);
 }
@@ -96,27 +106,37 @@ th {
 }
 
 tbody tr:nth-child(even) {
-    background-color: #f3f0ff;
+    background-color: #eaf7ff;
 }
 
-th:first-child, td:first-child {
+th:first-child,
+td:first-child {
     width: 28px;
     text-align: center;
     font-weight: 800;
 }
 
-th:last-child, td:last-child {
+th:last-child,
+td:last-child {
     text-align: right;
     white-space: nowrap;
     font-weight: 800;
 }
 
-tbody tr:nth-child(1) td:first-child { color: #e0a000; }
-tbody tr:nth-child(2) td:first-child { color: #8a93a6; }
-tbody tr:nth-child(3) td:first-child { color: #c46a2b; }
+tbody tr:nth-child(1) td:first-child {
+    color: #e0a000;
+}
+
+tbody tr:nth-child(2) td:first-child {
+    color: #8a93a6;
+}
+
+tbody tr:nth-child(3) td:first-child {
+    color: #c46a2b;
+}
 
 tr.destaque td {
-    background-color: #ffe066;
+    background-color: #ffe99a;
 }
 
 .vazio {
@@ -129,7 +149,7 @@ tr.destaque td {
     margin: 4px 10px 10px;
     font-size: 0.85rem;
     font-weight: 800;
-    color: #d6336c;
+    color: #087db8;
 }
 
 .botao {
@@ -139,14 +159,15 @@ tr.destaque td {
     font-weight: 800;
     color: #ffffff;
     text-decoration: none;
-    background-color: #ff7b2c;
+    background: linear-gradient(135deg, #0284c7, #0369a1);
     border: 3px solid var(--contorno);
     border-radius: 14px;
     box-shadow: 0 5px 0 var(--contorno);
-    transition: transform 0.1s ease, box-shadow 0.1s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .botao:hover {
+    background: linear-gradient(135deg, #0ea5e9, #0284c7);
     transform: translateY(-2px);
     box-shadow: 0 7px 0 var(--contorno);
 }
@@ -157,11 +178,10 @@ tr.destaque td {
 }
 
 .botao:focus-visible {
-    outline: 3px solid #7b61ff;
+    outline: 3px solid #7dd3fc;
     outline-offset: 3px;
 }
 
-/* Janelas estreitas */
 @media (max-width: 1100px) {
     #ranking {
         padding: 14px;
@@ -174,5 +194,102 @@ tr.destaque td {
     th, td {
         padding: 5px 3px;
         font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 768px) {
+    #paineis {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 8px;
+    }
+
+    #ranking {
+        padding: 12px 8px;
+        border-radius: 16px;
+    }
+
+    #paineis {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    h1 {
+        font-size: 1.7rem;
+    }
+
+    .painel h2 {
+        font-size: 1.1rem;
+    }
+
+    th, td {
+        padding: 7px;
+        font-size: 0.9rem;
+    }
+
+    .botao {
+        max-width: 100%;
+        padding: 11px 18px;
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 350px) {
+    #ranking {
+        padding: 10px 5px;
+    }
+
+    h1 {
+        font-size: 1.45rem;
+    }
+
+    th, td {
+        font-size: 0.8rem;
+    }
+}
+
+/* Respeita preferência por menos movimento */
+@media (prefers-reduced-motion: reduce) {
+    .botao {
+        transition: none;
+    }
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 10;
+    background-image:
+        radial-gradient(white 2px, transparent 3px),
+        radial-gradient(white 1.5px, transparent 2.5px),
+        radial-gradient(#dff6ff 2px, transparent 3px);
+    background-size: 100px 100px, 150px 150px, 200px 200px;
+    background-position: 0 0, 40px 60px, 100px 30px;
+    animation: neve-caindo 10s linear infinite;
+}
+
+@keyframes neve-caindo {
+    from {
+        background-position: 0 0, 40px 60px, 100px 30px;
+    }
+
+    to {
+        background-position: 0 500px, 40px 560px, 100px 530px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body::before {
+        animation: none;
     }
 }
