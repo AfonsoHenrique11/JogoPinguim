@@ -3,18 +3,20 @@ botao.addEventListener('click', () => {
     setTimeout(() => {
     document.getElementById("alvo").style.display = "block";
 }, 1000);
+
     setTimeout(() => {
     document.getElementById("alvo").style.display = "none";
-}, 5000);
+},  5000-localStorage.getItem('dificuldade')*1000+1000);
+
     setTimeout(() => {
     document.getElementById("disfarce").style.display = "block";
-}, 5000);
+}, 5000-localStorage.getItem('dificuldade')*1000+1000);
     setTimeout(() => {
     document.getElementById("verAlvo").style.display = "none";
-}, 5000);
+}, 5000-localStorage.getItem('dificuldade')*1000+1000);
     setTimeout(() => {
     document.getElementById("atencao").style.display = "none";
-}, 5000);
+}, 5000-localStorage.getItem('dificuldade')*1000+1000);
 })
 
 let acessorios = document.querySelectorAll('.acessorio');
