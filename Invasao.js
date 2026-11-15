@@ -189,24 +189,6 @@ grade.forEach((l, lin) => l.forEach((c, col) => {
     if (c === 'S') cofres.push({ col, lin, x: col * TILE + TILE / 2, y: lin * TILE + TILE / 2, aberto: false });
     if (c === 'E') saida = { col, lin };
 }));
-oPinguimBotaOvo()
-function oPinguimBotaOvo() {
-    window.addEventListener('keydown', (e) => {
-
-        if (e.code === 'Space' || e.key === 'e' || e.key === 'E') {
-            const ovo = document.createElement('img');
-            ovo.src = 'imgs/ovo.png';
-            ovo.style.position = 'absolute';
-            ovo.style.left = jogador.x + 452 +'px';
-            ovo.style.top = jogador.y + 364 + 'px';
-            ovo.style.width = 25 + 'px';
-            ovo.style.height = 30 + 'px';
-            ovo.style.transform = 'translate(-50%, -50%)';
-            document.body.appendChild(ovo);
-
-        }
-    });
-}
 
 // Guardas e câmeras
 const centroTile = (col, lin) => ({ x: col * TILE + TILE / 2, y: lin * TILE + TILE / 2 });
@@ -223,7 +205,7 @@ const cameras = mapa.cameras.map(c => {
     const centro = c.direcao * Math.PI / 180;
     return { x: p.x, y: p.y, centro, angulo: centro, cone: [] };
 });
-
+console.log("Posição inicial do pinguim -> X:", jogador.x, "Y:", jogador.y);
 let tempoJogo = 0;
 let deteccao = 0;
 let estadoJogo = 'intro';
@@ -279,6 +261,7 @@ window.addEventListener('blur', () => { for (const k in teclas) teclas[k] = fals
 // Canvas
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
+const palco = document.getElementById('palco');
 
 // HUD e telas
 const barraNivel = document.getElementById('barra-alerta-nivel');
@@ -509,6 +492,23 @@ function confirmarCodigo() {
     }
 }
 
+function oPinguimBotaOvo(e) {
+    window.addEventListener('keydown', (e) => {
+    if (e.code === 'Space' || e.key === 'e' || e.key === 'E') {
+        const ovo = document.createElement('img');
+        ovo.src = 'imgs/ovo.png';
+        ovo.style.position = 'absolute';
+        ovo.style.left = jogador.x + 'px';
+        ovo.style.top = (jogador.y + offsetY) + 'px';
+        ovo.style.width = '25px';
+        ovo.style.height = '30px';
+        ovo.style.transform = 'translate(-50%, -50%)';
+        ovo.style.zIndex = '99999';
+        palco.appendChild(ovo);
+    }
+})
+}
+oPinguimBotaOvo();
 function aoPressionar(e) {
     teclas[e.code] = true;
     if (estadoJogo === 'intro' && (e.code === 'KeyL' || e.code === 'Enter')) {
