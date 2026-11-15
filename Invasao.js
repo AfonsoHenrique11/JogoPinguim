@@ -492,7 +492,7 @@ function confirmarCodigo() {
 
 function aoPressionar(e) {
     teclas[e.code] = true;
-    if (estadoJogo === 'intro' && e.code === 'KeyL') {
+    if (estadoJogo === 'intro' && (e.code === 'KeyL' || e.code === 'Enter')) {
         iniciarMissao();
         return;
     }
@@ -789,7 +789,7 @@ function renderizar() {
     desenharIndicadorInteracao();
 }
 
-// "L" sobre o cofre ao alcance
+// "L" ou "Enter" sobre o cofre ao alcance
 function desenharIndicadorInteracao() {
     if (estadoJogo !== 'jogando' || painelAberto) return;
     const cofre = cofreAoAlcance();
@@ -807,7 +807,7 @@ function desenharIndicadorInteracao() {
     ctx.font = 'bold 16px Arial';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText('L', cofre.x, y + lado / 2 + 1);
+    ctx.fillText('Enter/L', cofre.x, y + lado / 2 + 1);
     ctx.restore();
 }
 
