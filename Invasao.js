@@ -181,6 +181,7 @@ const jogador = { x: 0, y: 0 };
 const cofres = [];
 let saida = null;
 grade.forEach((l, lin) => l.forEach((c, col) => {
+    
     if (c === 'P') {
         jogador.x = col * TILE + TILE / 2;
         jogador.y = lin * TILE + TILE / 2;
@@ -188,6 +189,24 @@ grade.forEach((l, lin) => l.forEach((c, col) => {
     if (c === 'S') cofres.push({ col, lin, x: col * TILE + TILE / 2, y: lin * TILE + TILE / 2, aberto: false });
     if (c === 'E') saida = { col, lin };
 }));
+oPinguimBotaOvo()
+function oPinguimBotaOvo() {
+    window.addEventListener('keydown', (e) => {
+
+        if (e.code === 'Space' || e.key === 'e' || e.key === 'E') {
+            const ovo = document.createElement('img');
+            ovo.src = 'imgs/ovo.png';
+            ovo.style.position = 'absolute';
+            ovo.style.left = jogador.x + 452 +'px';
+            ovo.style.top = jogador.y + 364 + 'px';
+            ovo.style.width = 25 + 'px';
+            ovo.style.height = 30 + 'px';
+            ovo.style.transform = 'translate(-50%, -50%)';
+            document.body.appendChild(ovo);
+
+        }
+    });
+}
 
 // Guardas e câmeras
 const centroTile = (col, lin) => ({ x: col * TILE + TILE / 2, y: lin * TILE + TILE / 2 });
