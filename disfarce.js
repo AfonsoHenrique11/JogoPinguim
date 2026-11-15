@@ -46,7 +46,9 @@ let chapeus = [
 ];
 let camisas = [
     'imgs/blusa_preta.png',
-    'imgs/blusa_vermelha.png'
+    'imgs/blusa_vermelha.png',
+    'imgs/blusa_verde.png',
+    'imgs/blusa_azul.png'
 ];
 let colares = [
     'imgs/colar_dourado.png',
