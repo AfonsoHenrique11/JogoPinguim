@@ -522,7 +522,7 @@ function aoPressionar(e) {
         if (painelAberto) atualizarPainel();
         return;
     }
-    if (e.code === 'KeyL') tentarAbrirPainel();
+    if (e.code === 'KeyL' || e.code === 'Enter') tentarAbrirPainel();
 }
 
 function atualizarMissao() {
