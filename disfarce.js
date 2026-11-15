@@ -56,7 +56,9 @@ let colares = [
 ];
 let oculos = [
     'imgs/oculos_escuros.png',
-    'imgs/oculos_redondos.png'
+    'imgs/oculos_redondos.png',
+    'imgs/oculos_coracao.png',
+    'imgs/oculos_rosa.png'
 ];
 let cabelos = [
     'imgs/peruca_castanha.png',
