@@ -42,7 +42,8 @@ delet.addEventListener('click', () => {
 
 let chapeus = [
     'imgs/cartola.png',
-    'imgs/chapeu_palha.png'
+    'imgs/chapeu_palha.png',
+    ''
 ];
 let camisas = [
     'imgs/blusa_preta.png',
@@ -52,17 +53,22 @@ let camisas = [
 ];
 let colares = [
     'imgs/colar_dourado.png',
-    'imgs/colar_perolas.png'
+    'imgs/colar_perolas.png',
+    ''
 ];
 let oculos = [
     'imgs/oculos_escuros.png',
     'imgs/oculos_redondos.png',
     'imgs/oculos_coracao.png',
-    'imgs/oculos_rosa.png'
+    'imgs/oculos_rosa.png',
+    ''
 ];
 let cabelos = [
     'imgs/peruca_castanha.png',
-    'imgs/peruca_loira.png'
+    'imgs/peruca_loira.png',
+    'imgs/peruca_preta.png',
+    'imgs/peruca_curta.png',
+    ''
 ];
 
 function sortear(lista) {
