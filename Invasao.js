@@ -794,12 +794,12 @@ function desenharIndicadorInteracao() {
     if (estadoJogo !== 'jogando' || painelAberto) return;
     const cofre = cofreAoAlcance();
     if (!cofre) return;
-    const lado = 24;
+    const lado = 38;
     const x = cofre.x - lado / 2;
     const y = offsetY + cofre.y - TILE / 2 - lado - 6;
     ctx.save();
     ctx.beginPath();
-    ctx.roundRect(x, y, lado, lado, 7);
+    ctx.roundRect(x-20, y, lado*2, lado, 6);
     ctx.fillStyle = '#ffe066';
     ctx.fill();
     contorno(3);
