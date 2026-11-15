@@ -20,6 +20,7 @@ botao.addEventListener('click', () => {
 let acessorios = document.querySelectorAll('.acessorio');
 acessorios.forEach((acessorio) => {
     acessorio.addEventListener('click', ()=>{
+    if (!acessorio.dataset.alvo) return;
     let destino = document.getElementById(acessorio.dataset.alvo);
     if (destino.src === acessorio.src) 
         destino.style.display = 'none';
@@ -86,35 +87,44 @@ document.getElementById('camisa-alvo').src = sortear(camisas);
 document.getElementById('oculos-alvo').src = sortear(oculos);
 document.getElementById('cabelo-alvo').src = sortear(cabelos);
 
+function precisao(){
 let acertou = 0;
 let hatPin = document.getElementById('chapeu-escolhido');
 let hatPap = document.getElementById('chapeu-alvo');
-if (hatPin.getAttribute('src') === hatPap.getAttribute('src')) {
+if (hatPin.src === hatPap.src) {
     acertou++;
 }
 
 let colPin = document.getElementById('colar-escolhido');
 let colPap = document.getElementById('colar-alvo');
-if (colPin.getAttribute('src') === colPap.getAttribute('src')) {
+if (colPin.src === colPap.src) {
     acertou++;
 }
 
 let hairPin = document.getElementById('cabelo-escolhido');
 let hairPap = document.getElementById('cabelo-alvo');
-if (hairPin.getAttribute('src') === hairPap.getAttribute('src')) {
+if (hairPin.src === hairPap.src) {
     acertou++;
 }
 
-let glassPin = document.getElementById('oculos-escolhido');
+let glassPin = document.getElementById('oculos-escolhidos');
 let glassPap = document.getElementById('oculos-alvo');
-if (glassPin.getAttribute('src') === glassPap.getAttribute('src')) {
+if (glassPin.src === glassPap.src) {
     acertou++;
 }
 
 let camPin = document.getElementById('camisa-escolhida');
 let camPap = document.getElementById('camisa-alvo');
-if (camPin.getAttribute('src') === camPap.getAttribute('src')) {
+if (camPin.src === camPap.src) {
     acertou++;
 }
 
-localStorage.setItem('precisao', acertou);
+let porcentagem = (acertou / 5) * 100;
+localStorage.setItem('precisao', porcentagem);
+}
+
+let finalizar = document.querySelector('#finalizar');
+    finalizar.addEventListener('click', () => {
+    precisao();
+    location.href = "Invasao.html";
+});
