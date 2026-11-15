@@ -50,8 +50,8 @@ for (const nome in IMAGENS_INVASAO) {
 }
 
 // Dificuldade (0 a 3) e precisão (0 a 100), gravadas no localStorage pelas páginas anteriores
-const CHAVE_DIF = 'pinguinsEspioes.dificuldade';
-const CHAVE_PREC = 'pinguinsEspioes.precisao';
+const CHAVE_DIF = 'dificuldade';
+const CHAVE_PREC = 'precisao';
 
 function lerParametro(chave, padrao, ehValido) {
     let bruto = null;
@@ -296,7 +296,7 @@ function iniciarMissao() {
     if (estadoJogo !== 'intro') return;
     estadoJogo = 'jogando';
     telaIntro.classList.add('hidden');
-    ultimo = performance.now(); // Evita salto de tempo ao começar
+    ultimo = performance.now();
 }
 
 function pausarJogo() {
@@ -309,7 +309,7 @@ function retomarJogo() {
     if (estadoJogo !== 'pausado') return;
     estadoJogo = 'jogando';
     telaPausa.classList.add('hidden');
-    ultimo = performance.now(); // Evita salto de tempo ao retomar
+    ultimo = performance.now();
 }
 
 function desistirJogo() {
@@ -492,7 +492,10 @@ function confirmarCodigo() {
 
 function aoPressionar(e) {
     teclas[e.code] = true;
-    if (estadoJogo === 'intro' && e.code === 'KeyL') iniciarMissao();
+    if (estadoJogo === 'intro' && e.code === 'KeyL') {
+        iniciarMissao();
+        return;
+    }
     if (e.code === 'Escape') {
         if (painelAberto) {
             fecharPainel();
@@ -511,7 +514,7 @@ function aoPressionar(e) {
             if (digitado.length < DIGITOS_CODIGO) digitado += e.key;
         } else if (e.code === 'Backspace') {
             digitado = digitado.slice(0, -1);
-        } else if (e.code === 'Enter') {
+        } else if (e.code === 'Enter' || e.code === 'KeyL') {
             confirmarCodigo();
         } else if (e.code === 'Escape') {
             fecharPainel();
@@ -519,7 +522,7 @@ function aoPressionar(e) {
         if (painelAberto) atualizarPainel();
         return;
     }
-    if (e.code === 'Enter') tentarAbrirPainel();
+    if (e.code === 'KeyL') tentarAbrirPainel();
 }
 
 function atualizarMissao() {
@@ -804,7 +807,7 @@ function desenharIndicadorInteracao() {
     ctx.font = 'bold 16px Arial';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText('Enter', cofre.x, y + lado / 2 + 1);
+    ctx.fillText('L', cofre.x, y + lado / 2 + 1);
     ctx.restore();
 }
 
