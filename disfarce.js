@@ -43,6 +43,8 @@ delet.addEventListener('click', () => {
 let chapeus = [
     'imgs/cartola.png',
     'imgs/chapeu_palha.png',
+    'imgs/boina.png',
+    'imgs/cowboy.png',
     ''
 ];
 let camisas = [
