@@ -56,6 +56,8 @@ let camisas = [
 let colares = [
     'imgs/colar_dourado.png',
     'imgs/colar_perolas.png',
+    'imgs/colar_diamante.png',
+    'imgs/colar_praia.png',
     ''
 ];
 let oculos = [

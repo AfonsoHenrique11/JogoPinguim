@@ -296,7 +296,7 @@ body::after {
     width: 83.33%;
     height: auto;
 
-    z-index: 4;
+    z-index: 3;
 }
 
 #colar-escolhido {
@@ -320,7 +320,7 @@ body::after {
     width: 56.67%;
     height: auto;
 
-    z-index: 3;
+    z-index: 4;
 }
 
 
@@ -361,7 +361,7 @@ img[src=""] {
 #camisa-alvo {
     position: absolute;
 
-    top: 137px;
+    top: 130px;
     left: 45px;
 
     width: 83%;
@@ -379,7 +379,7 @@ img[src=""] {
     width: 70%;
     height: auto;
 
-    z-index: 4;
+    z-index: 3;
 }
 
 #colar-alvo {
@@ -403,7 +403,7 @@ img[src=""] {
     width: 56.67%;
     height: auto;
 
-    z-index: 3;
+    z-index: 4;
 }
 
 
