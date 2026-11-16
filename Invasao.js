@@ -22,8 +22,8 @@ const RAIOS_CONE = 40;
 const PASSO_RAIO = 2;
 
 // Detecção (um valor por dificuldade)
-const TEMPO_DETECCAO_MAX = [8, 6, 4, 3];
-const TEMPO_DETECCAO_MIN = [2, 1.5, 1, 0.5];
+const TEMPO_DETECCAO_MAX = [8, 6, 4, 3.4];
+const TEMPO_DETECCAO_MIN = [2, 1.5, 1, 0.8];
 const ESVAZIAMENTO_BARRA = [0.5, 0.35, 0.2, 0.1];
 const MULT_CAMERA = 1.5;
 
