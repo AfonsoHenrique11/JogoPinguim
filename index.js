@@ -1,30 +1,22 @@
-document.querySelector('#inicio').addEventListener('click', () => {
-            document.querySelector("#dificuldade").style.display = "block";
-            document.querySelector('#ranking').style.display = "none";
-        });
+$('#inicio').on('click', () => {
+    $('#dificuldade').show();
+    $('#ranking').hide();
+});
+
+const configurarDificuldade = (seletor, valor) => {
+    $(seletor).on('click', () => {
+        $('#dificuldade').hide();
+        localStorage.setItem('dificuldade', valor);
+        location.href = "disfarcando.html";
+    });
+};
+
+configurarDificuldade('#facil', 0);
+configurarDificuldade('#normal', 1);
+configurarDificuldade('#dificil', 2);
+configurarDificuldade('#impossivel', 3);
 
 
-        document.querySelector('#facil').addEventListener('click', () => {
-            document.querySelector("#dificuldade").style.display = "none";
-            localStorage.setItem('dificuldade', 0);
-            location.href = "disfarcando.html";
-        });
-        document.querySelector('#normal').addEventListener('click', () => {
-            document.querySelector("#dificuldade").style.display = "none";
-            localStorage.setItem('dificuldade', 1);
-            location.href = "disfarcando.html";
-        });
-        document.querySelector('#dificil').addEventListener('click', () => {
-            document.querySelector("#dificuldade").style.display = "none";
-            localStorage.setItem('dificuldade', 2);
-            location.href = "disfarcando.html";
-        });
-        document.querySelector('#impossivel').addEventListener('click', () => {
-            document.querySelector("#dificuldade").style.display = "none";
-            localStorage.setItem('dificuldade', 3);
-            location.href = "disfarcando.html";
-        });
-
-        document.querySelector('#ranking').addEventListener('click', () => {
-            location.href = "ranking.html";
-        });
+$('#ranking').on('click', () => {
+    location.href = "ranking.html";
+});

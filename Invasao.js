@@ -22,8 +22,8 @@ const RAIOS_CONE = 40;
 const PASSO_RAIO = 2;
 
 // Detecção (um valor por dificuldade)
-const TEMPO_DETECCAO_MAX = [8, 6, 4, 2.5];
-const TEMPO_DETECCAO_MIN = [2, 1.5, 1, 0.5];
+const TEMPO_DETECCAO_MAX = [8, 6, 4, 3.4];
+const TEMPO_DETECCAO_MIN = [2, 1.5, 1, 0.8];
 const ESVAZIAMENTO_BARRA = [0.5, 0.35, 0.2, 0.1];
 const MULT_CAMERA = 1.5;
 
@@ -181,6 +181,7 @@ const jogador = { x: 0, y: 0 };
 const cofres = [];
 let saida = null;
 grade.forEach((l, lin) => l.forEach((c, col) => {
+    
     if (c === 'P') {
         jogador.x = col * TILE + TILE / 2;
         jogador.y = lin * TILE + TILE / 2;
@@ -204,7 +205,7 @@ const cameras = mapa.cameras.map(c => {
     const centro = c.direcao * Math.PI / 180;
     return { x: p.x, y: p.y, centro, angulo: centro, cone: [] };
 });
-
+console.log("Posição inicial do pinguim -> X:", jogador.x, "Y:", jogador.y);
 let tempoJogo = 0;
 let deteccao = 0;
 let estadoJogo = 'intro';
@@ -260,6 +261,7 @@ window.addEventListener('blur', () => { for (const k in teclas) teclas[k] = fals
 // Canvas
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
+const palco = document.getElementById('palco');
 
 // HUD e telas
 const barraNivel = document.getElementById('barra-alerta-nivel');
@@ -474,6 +476,10 @@ function tentarAbrirPainel() {
 }
 
 function confirmarCodigo() {
+    if (digitado === '') {
+        fecharPainel();
+        return;
+    }
     if (digitado !== codigoAtual) {
         digitado = '';
         return;
@@ -490,9 +496,26 @@ function confirmarCodigo() {
     }
 }
 
+function oPinguimBotaOvo(e) {
+    window.addEventListener('keydown', (e) => {
+    if (e.code === 'Space' || e.key === 'e' || e.key === 'E') {
+        const ovo = document.createElement('img');
+        ovo.src = 'imgs/ovo.png';
+        ovo.style.position = 'absolute';
+        ovo.style.left = jogador.x + 'px';
+        ovo.style.top = (jogador.y + offsetY) + 'px';
+        ovo.style.width = '25px';
+        ovo.style.height = '30px';
+        ovo.style.transform = 'translate(-50%, -50%)';
+        ovo.style.zIndex = '99999';
+        palco.appendChild(ovo);
+    }
+})
+}
+oPinguimBotaOvo();
 function aoPressionar(e) {
     teclas[e.code] = true;
-    if (estadoJogo === 'intro' && e.code === 'KeyL') {
+    if (estadoJogo === 'intro' && (e.code === 'KeyL' || e.code === 'Enter')) {
         iniciarMissao();
         return;
     }
@@ -522,7 +545,7 @@ function aoPressionar(e) {
         if (painelAberto) atualizarPainel();
         return;
     }
-    if (e.code === 'KeyL') tentarAbrirPainel();
+    if (e.code === 'KeyL' || e.code === 'Enter') tentarAbrirPainel();
 }
 
 function atualizarMissao() {
@@ -789,17 +812,17 @@ function renderizar() {
     desenharIndicadorInteracao();
 }
 
-// "L" sobre o cofre ao alcance
+// "L" ou "Enter" sobre o cofre ao alcance
 function desenharIndicadorInteracao() {
     if (estadoJogo !== 'jogando' || painelAberto) return;
     const cofre = cofreAoAlcance();
     if (!cofre) return;
-    const lado = 24;
+    const lado = 38;
     const x = cofre.x - lado / 2;
     const y = offsetY + cofre.y - TILE / 2 - lado - 6;
     ctx.save();
     ctx.beginPath();
-    ctx.roundRect(x, y, lado, lado, 7);
+    ctx.roundRect(x-20, y, lado*2, lado, 6);
     ctx.fillStyle = '#ffe066';
     ctx.fill();
     contorno(3);
@@ -807,7 +830,7 @@ function desenharIndicadorInteracao() {
     ctx.font = 'bold 16px Arial';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText('L', cofre.x, y + lado / 2 + 1);
+    ctx.fillText('Enter/L', cofre.x, y + lado / 2 + 1);
     ctx.restore();
 }
 
