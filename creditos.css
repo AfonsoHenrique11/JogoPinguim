@@ -1,0 +1,25 @@
+#lista-creditos {
+    list-style: none;
+    margin-bottom: 26px;
+    text-align: left;
+}
+
+#lista-creditos li {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 4px;
+    border-bottom: 2px dashed rgba(7, 89, 133, 0.25);
+}
+
+#lista-creditos li:last-child {
+    border-bottom: 0;
+}
+
+#lista-creditos span {
+    color: darkblue;
+}
+
+#inicio {
+    text-decoration: none;
+}
