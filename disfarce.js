@@ -1,8 +1,6 @@
 let botao = document.querySelector('#verAlvo');
 botao.addEventListener('click', () => {
-    setTimeout(() => {
     document.getElementById("alvo").style.display = "block";
-}, 1000);
 
     setTimeout(() => {
     document.getElementById("alvo").style.display = "none";
