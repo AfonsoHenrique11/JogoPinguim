@@ -20,3 +20,6 @@ configurarDificuldade('#impossivel', 3);
 $('#ranking').on('click', () => {
     location.href = "ranking.html";
 });
+$('#creditos').on('click', () => {
+    location.href = "creditos.html";
+});
