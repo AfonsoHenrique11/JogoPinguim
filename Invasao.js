@@ -382,31 +382,32 @@ function nickValido(texto) {
     return n.length >= 1 && n.length <= NICKNAME_MAX;
 }
 
-function obterNomeConta() {
+function obterDadosConta() {
     try {
         const bruto = localStorage.getItem('pinguim_logado');
-        if (!bruto) return 'Agente';
-        // Suporta tanto o objeto JSON { nome, senha, avatar } quanto string pura
+        if (!bruto) return { nome: 'Agente', avatar: 'imgs/pinguim.png' };
         if (bruto.startsWith('{')) {
             const usuario = JSON.parse(bruto);
-            return (usuario.nome || 'Agente').trim().slice(0, NICKNAME_MAX);
+            return {
+                nome: (usuario.nome || 'Agente').trim().slice(0, NICKNAME_MAX),
+                avatar: usuario.avatar || 'imgs/pinguim.png'
+            };
         }
-        return bruto.trim().slice(0, NICKNAME_MAX);
+        return { nome: bruto.trim().slice(0, NICKNAME_MAX), avatar: 'imgs/pinguim.png' };
     } catch (e) {
-        return 'Agente';
+        return { nome: 'Agente', avatar: 'imgs/pinguim.png' };
     }
 }
 
-// Passa a partida ao ranking pelo localStorage usando o nome da conta
-// Passa a partida ao ranking pelo localStorage usando o nome da conta e o tempo
 const CHAVE_PARTIDA = 'pinguinsEspioes.partida';
 function irParaRanking() {
     if (estadoJogo !== 'venceu') return;
-    const nick = obterNomeConta();
+    const conta = obterDadosConta();
     const tempo = formatarTempo(tempoJogo);
     try {
         localStorage.setItem(CHAVE_PARTIDA, JSON.stringify({ 
-            nick, 
+            nick: conta.nome, 
+            avatar: conta.avatar, // <-- Avatar enviado para o ranking
             pontos: pontuacaoFinal, 
             tempo, 
             dif: dificuldade 

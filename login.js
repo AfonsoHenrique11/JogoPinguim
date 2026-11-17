@@ -8,7 +8,7 @@ formUsuario.addEventListener('submit', function(e) {
     e.preventDefault();
     const nome = document.getElementById('usuario-nome').value.trim();
     const senha = document.getElementById('usuario-senha').value.trim();
-    const avatarSelecionado = document.querySelector('input[name="avatar"]:checked').value;
+    const radioSelecionado = document.querySelector('input[name="avatar"]:checked');
 
     if (!nome || !senha) {
         mensagemAlerta.innerText = "Preencha todos os campos!";
@@ -18,26 +18,43 @@ formUsuario.addEventListener('submit', function(e) {
     let usuarios = JSON.parse(localStorage.getItem('pinguims')) || [];
     let usuarioEncontrado = usuarios.find(u => u.nome === nome);
 
-    if (usuarioEncontrado) {
-        if (usuarioEncontrado.senha === senha) {
-            // Atualiza o avatar caso ele tenha mudado na tela de login
-            usuarioEncontrado.avatar = avatarSelecionado;
-            localStorage.setItem('pinguims', JSON.stringify(usuarios));
-            salvarSessao(usuarioEncontrado);
+    // Função interna para finalizar o salvamento e login
+    const prosseguirComAvatar = (avatarFinal) => {
+        if (usuarioEncontrado) {
+            if (usuarioEncontrado.senha === senha) {
+                usuarioEncontrado.avatar = avatarFinal;
+                localStorage.setItem('pinguims', JSON.stringify(usuarios));
+                salvarSessao(usuarioEncontrado);
+            } else {
+                mensagemAlerta.innerText = "Senha incorreta!";
+            }
         } else {
-            mensagemAlerta.innerText = "Senha incorreta!";
+            const novoUsuario = { nome, senha, avatar: avatarFinal };
+            usuarios.push(novoUsuario);
+            localStorage.setItem('pinguims', JSON.stringify(usuarios));
+            salvarSessao(novoUsuario);
+        }
+    };
+
+    // Se a opção selecionada for o upload de arquivo personalizado
+    if (radioSelecionado && radioSelecionado.value === 'upload') {
+        const inputArquivo = document.getElementById('input-arquivo-avatar');
+        if (inputArquivo.files && inputArquivo.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                prosseguirComAvatar(event.target.result); // Base64 da imagem
+            };
+            reader.readAsDataURL(inputArquivo.files[0]);
+        } else {
+            mensagemAlerta.innerText = "Por favor, selecione uma imagem para o upload!";
         }
     } else {
-        // Cria novo usuário com o avatar escolhido
-        const novoUsuario = { nome, senha, avatar: avatarSelecionado };
-        usuarios.push(novoUsuario);
-        localStorage.setItem('pinguims', JSON.stringify(usuarios));
-        salvarSessao(novoUsuario);
+        const avatarSelecionado = radioSelecionado ? radioSelecionado.value : 'imgs/pinguim.png';
+        prosseguirComAvatar(avatarSelecionado);
     }
 });
 
 function salvarSessao(usuario) {
-    // Salva o objeto completo do usuário logado para facilitar o acesso à foto e nome
     localStorage.setItem('pinguim_logado', JSON.stringify(usuario));
     entrarNoJogo(usuario.nome);
 }

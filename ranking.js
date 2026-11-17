@@ -35,7 +35,7 @@ function lerDados() {
     return dados;
 }
 
-// Partida da invasão
+// No leitor de partida, adicione a captura do avatar:
 function lerPartida() {
     const bruto = lerBruto(CHAVE_PARTIDA);
     if (bruto === null) return null;
@@ -44,6 +44,7 @@ function lerPartida() {
     let p;
     try { p = JSON.parse(bruto); } catch (e) { p = null; }
     const nick = p && typeof p.nick === 'string' ? p.nick.trim() : '';
+    const avatar = p && typeof p.avatar === 'string' ? p.avatar : 'imgs/pinguim.png';
     const tempo = p && typeof p.tempo === 'string' ? p.tempo.trim() : '--:--';
     const ok = p && nick.length >= 1 && nick.length <= NICKNAME_MAX &&
         Number.isInteger(p.pontos) && p.pontos >= 0 && p.pontos <= PONTUACAO_MAXIMA &&
@@ -52,12 +53,12 @@ function lerPartida() {
         console.warn('Dados da partida inválidos; nada foi registrado.');
         return null;
     }
-    return { nick, pontos: p.pontos, tempo, dif: p.dif };
+    return { nick, avatar, pontos: p.pontos, tempo, dif: p.dif };
 }
 
-// Registra a partida
+// Na função registrar, inclua o avatar na entrada:
 function registrar(partida, dados) {
-    const entrada = { nick: partida.nick, pontos: partida.pontos, tempo: partida.tempo };
+    const entrada = { nick: partida.nick, avatar: partida.avatar, pontos: partida.pontos, tempo: partida.tempo };
     const lista = dados[partida.dif];
     lista.push(entrada);
     lista.sort((a, b) => b.pontos - a.pontos);
@@ -83,6 +84,7 @@ function criar(tag, classe, texto) {
     return el;
 }
 
+// Na criação da tabela do painel, adicione a imagem do avatar na coluna de Nickname:
 function criarPainel(dif) {
     const painel = criar('section', 'painel dif-' + dif);
     if (resultado && resultado.dif === dif) painel.classList.add('atual');
@@ -94,13 +96,39 @@ function criarPainel(dif) {
     } else {
         const tabela = criar('table');
         const cabecalho = criar('tr');
-        ['#', 'Nickname', 'Tempo', 'Pontos'].forEach(t => cabecalho.appendChild(criar('th', '', t)));
+        ['#', 'Agente', 'Tempo', 'Pontos'].forEach(t => cabecalho.appendChild(criar('th', '', t)));
         tabela.appendChild(criar('thead')).appendChild(cabecalho);
         const corpo = criar('tbody');
         lista.forEach((e, i) => {
             const tr = criar('tr');
-            const tempoExibicao = e.tempo || '--:--';
-            [i + 1, e.nick, tempoExibicao, e.pontos].forEach(v => tr.appendChild(criar('td', '', v)));
+            
+            // Coluna 1: Posição (#)
+            tr.appendChild(criar('td', '', i + 1));
+
+            // Coluna 2: Avatar + Nickname
+            const tdNick = criar('td');
+            tdNick.style.display = 'flex';
+            tdNick.style.alignItems = 'center';
+            tdNick.style.gap = '8px';
+
+            const imgAvatar = criar('img');
+            imgAvatar.src = e.avatar || 'imgs/pinguim.png';
+            imgAvatar.style.width = '24px';
+            imgAvatar.style.height = '24px';
+            imgAvatar.style.borderRadius = '50%';
+            imgAvatar.style.objectFit = 'cover';
+            imgAvatar.style.border = '1px solid #075985';
+
+            tdNick.appendChild(imgAvatar);
+            tdNick.appendChild(document.createTextNode(e.nick));
+            tr.appendChild(tdNick);
+
+            // Coluna 3: Tempo
+            tr.appendChild(criar('td', '', e.tempo || '--:--'));
+
+            // Coluna 4: Pontos
+            tr.appendChild(criar('td', '', e.pontos));
+
             if (resultado && e === resultado.entrada && dif === resultado.dif) tr.classList.add('destaque');
             corpo.appendChild(tr);
         });
