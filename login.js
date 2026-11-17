@@ -8,36 +8,38 @@ formUsuario.addEventListener('submit', function(e) {
     e.preventDefault();
     const nome = document.getElementById('usuario-nome').value.trim();
     const senha = document.getElementById('usuario-senha').value.trim();
+    const avatarSelecionado = document.querySelector('input[name="avatar"]:checked').value;
 
     if (!nome || !senha) {
         mensagemAlerta.innerText = "Preencha todos os campos!";
         return;
     }
 
-    // Pega a lista de usuários salvos no localStorage
     let usuarios = JSON.parse(localStorage.getItem('pinguims')) || [];
-
-    // Procura se o usuário já existe
     let usuarioEncontrado = usuarios.find(u => u.nome === nome);
 
     if (usuarioEncontrado) {
-        // Se existe, valida a senha
         if (usuarioEncontrado.senha === senha) {
-            salvarSessao(nome);
+            // Atualiza o avatar caso ele tenha mudado na tela de login
+            usuarioEncontrado.avatar = avatarSelecionado;
+            localStorage.setItem('pinguims', JSON.stringify(usuarios));
+            salvarSessao(usuarioEncontrado);
         } else {
             mensagemAlerta.innerText = "Senha incorreta!";
         }
     } else {
-        // Se não existe, cadastra automaticamente e já faz o login
-        usuarios.push({ nome, senha });
+        // Cria novo usuário com o avatar escolhido
+        const novoUsuario = { nome, senha, avatar: avatarSelecionado };
+        usuarios.push(novoUsuario);
         localStorage.setItem('pinguims', JSON.stringify(usuarios));
-        salvarSessao(nome);
+        salvarSessao(novoUsuario);
     }
 });
 
-function salvarSessao(nome) {
-    localStorage.setItem('pinguim_logado', nome);
-    entrarNoJogo(nome);
+function salvarSessao(usuario) {
+    // Salva o objeto completo do usuário logado para facilitar o acesso à foto e nome
+    localStorage.setItem('pinguim_logado', JSON.stringify(usuario));
+    entrarNoJogo(usuario.nome);
 }
 
 function entrarNoJogo(nome) {
@@ -51,10 +53,10 @@ function fazerLogout() {
     location.reload();
 }
 
-// Verifica automaticamente se já há um usuário conectado ao abrir a página
 window.onload = function() {
-    const usuarioLogado = localStorage.getItem('pinguim_logado');
-    if (usuarioLogado) {
-        entrarNoJogo(usuarioLogado);
+    const usuarioLogadoStr = localStorage.getItem('pinguim_logado');
+    if (usuarioLogadoStr) {
+        const usuario = JSON.parse(usuarioLogadoStr);
+        entrarNoJogo(usuario.nome);
     }
 };

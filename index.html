@@ -4,25 +4,32 @@
     <title>Jogasso Pinguinástico</title>
     <link rel="stylesheet" href="principal.css">
     <link rel="shortcut icon" href="imgs/favicon.png">
-    <link rel="shortcut icon" href="imgs/Pinguim Espião_ Logo Gamer Neon.png">
     <link rel="stylesheet" href="index.css">
-    <link rel="shortcut icon" href="imgs/Jogo Pinguim_ Aventura Gelada.png">
-    <img src="imgs/Jogo Pinguim_ Aventura Gelada.png" alt="" id="img1">
 </head>
     <body>
+
+        <div id="perfil-usuario" style="display: none; align-items: center; gap: 12px; background: rgba(255, 255, 255, 0.95); padding: 8px 18px; border-radius: 20px; border: 2px solid white; box-shadow: 0 4px 15px rgba(7, 89, 133, 0.25); position: absolute; top: 20px; left: 20px; z-index: 10;">
+            <img id="avatar-atual" src="imgs/pinguim.png" alt="Avatar" style="width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 2px solid #075985;">
+            <div>
+                <span style="font-size: 12px; color: #075985; display: block; font-weight: bold;">Agente:</span>
+                <span id="nome-usuario-logado" style="font-weight: bold; color: #123047; font-size: 15px;"></span>
+            </div>
+        </div>
+
         <img src="imgs/pinguim.png" alt="" id="img1">
-    <div id="caixinha">
+        
+        <div id="caixinha">
             <h2>Olá agente, prepare-se para sua missão!</h2>
             <button id="inicio">Estou pronto</button>  
         </div>  
 
-    <div id="dificuldade">
-        <h3>Escolha o Nível da Missão:</h3>
-        <button id="facil">Fácil</button>
-        <button id="normal">Normal</button>
-        <button id="dificil">Difícil</button>
-        <button id="impossivel">Impossível</button>
-    </div>
+        <div id="dificuldade">
+            <h3>Escolha o Nível da Missão:</h3>
+            <button id="facil">Fácil</button>
+            <button id="normal">Normal</button>
+            <button id="dificil">Difícil</button>
+            <button id="impossivel">Impossível</button>
+        </div>
 
         <div style="display: flex; gap: 10px;">
             <button id="ranking">Ranking</button>
@@ -31,6 +38,6 @@
         </div>
 
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-        <script src = "index.js"></script>
+        <script src="index.js"></script>
     </body>
-</html> 
+</html>

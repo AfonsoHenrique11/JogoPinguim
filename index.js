@@ -1,3 +1,16 @@
+// Verifica se o usuário está logado ao carregar a página inicial para mostrar o avatar/nome
+$(document).ready(() => {
+    const usuarioLogadoStr = localStorage.getItem('pinguim_logado');
+    if (usuarioLogadoStr) {
+        const usuario = JSON.parse(usuarioLogadoStr);
+        $('#nome-usuario-logado').text(usuario.nome);
+        if (usuario.avatar) {
+            $('#avatar-atual').attr('src', usuario.avatar);
+        }
+        $('#perfil-usuario').css('display', 'flex');
+    }
+});
+
 $('#inicio').on('click', () => {
     const usuarioLogado = localStorage.getItem('pinguim_logado');
 
@@ -9,8 +22,6 @@ $('#inicio').on('click', () => {
 
     $('#dificuldade').show();
     $('#ranking').hide();
-    $('#creditos').hide();
-    $('#conta').hide();
 });
 
 const configurarDificuldade = (seletor, valor) => {

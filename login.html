@@ -20,6 +20,21 @@
                 <input type="text" id="usuario-nome" class="input-jogo" placeholder="Nome de usuário" required autocomplete="off">
                 <input type="password" id="usuario-senha" class="input-jogo" placeholder="Senha" required>
                 
+                <!-- Escolha de Avatar -->
+                <div style="margin-bottom: 15px; text-align: left; background: rgba(255,255,255,0.6); padding: 10px; border-radius: 10px;">
+                    <label style="font-size: 13px; font-weight: bold; color: var(--azul-escuro); display: block; margin-bottom: 8px;">Escolha seu Avatar:</label>
+                    <div style="display: flex; gap: 20px; justify-content: center; align-items: center;">
+                        <label style="cursor: pointer; text-align: center; font-size: 12px;">
+                            <input type="radio" name="avatar" value="imgs/pinguim.png" checked> 
+                            <br><img src="imgs/pinguim.png" width="35" style="border-radius:50%; border: 1px solid #075985;">
+                        </label>
+                        <label style="cursor: pointer; text-align: center; font-size: 12px;">
+                            <input type="radio" name="avatar" value="imgs/favicon.png"> 
+                            <br><img src="imgs/favicon.png" width="35" style="border-radius:50%; border: 1px solid #075985;">
+                        </label>
+                    </div>
+                </div>
+
                 <button type="submit" id="inicio">Entrar</button>
             </form>
             <p id="mensagem-alerta" style="margin-top: 12px; color: #075985; font-size: 14px; font-weight: bold;"></p>
@@ -30,7 +45,6 @@
             <button id="inicio" onclick="fazerLogout()">Sair da Conta</button>
         </div>
 
-        <!-- Botão de Voltar corrigido e visível abaixo das opções -->
         <div style="margin-top: 15px;">
             <button id="voltar" onclick="window.location.href='index.html'">Voltar</button>
         </div>
