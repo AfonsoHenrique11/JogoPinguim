@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo Pinguim - Conta</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+
+    <img id="img1" src="imgs/pinguim.png">
+
+    <div id="caixinha">
+        <h2>Conta</h2>
+        <h2>Login/Criar</h2>
+
+        <div id="secao-login">
+            <form id="form-usuario">
+                <input type="text" id="usuario-nome" class="input-jogo" placeholder="Nome de usuário" required autocomplete="off">
+                <input type="password" id="usuario-senha" class="input-jogo" placeholder="Senha" required>
+                
+                <button type="submit" id="inicio">Entrar</button>
+            </form>
+            <p id="mensagem-alerta" style="margin-top: 12px; color: #075985; font-size: 14px; font-weight: bold;"></p>
+        </div>
+
+        <div id="secao-jogo" style="display: none;">
+            <h3 id="saudacao" style="color: var(--azul-escuro); margin-bottom: 15px;"></h3>
+            <button id="inicio" onclick="fazerLogout()">Sair da Conta</button>
+        </div>
+    </div>
+</body>
+</html>
