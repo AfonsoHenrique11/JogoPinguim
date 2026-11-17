@@ -1,17 +1,43 @@
 .input-jogo {
-            width: 100%;
-            padding: 12px 15px;
-            margin-bottom: 15px;
-            border: 2px solid rgba(7, 89, 133, 0.3);
-            border-radius: 12px;
-            font-size: 15px;
-            font-family: inherit;
-            color: var(--texto);
-            background: rgba(255, 255, 255, 0.9);
-            outline: none;
-            transition: border-color 0.3px ease;
-        }
-        .input-jogo:focus {
-            border-color: var(--azul-escuro);
-            box-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
-        }
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 15px;
+    border: 2px solid rgba(7, 89, 133, 0.3);
+    border-radius: 12px;
+    font-size: 15px;
+    font-family: inherit;
+    color: var(--texto);
+    background: rgba(255, 255, 255, 0.9);
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.input-jogo:focus {
+    border-color: var(--azul-escuro);
+    box-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
+}
+
+/* Estilo do botão Voltar */
+#voltar {
+    padding: 10px 24px;
+    color: var(--azul-escuro);
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    background: linear-gradient(135deg, #e0f2fe, #bae6fd);
+    border: 2px solid var(--azul-escuro);
+    border-radius: 12px;
+    box-shadow: 0 4px 0 rgba(7, 89, 133, 0.25);
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+#voltar:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.05);
+}
+
+#voltar:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 rgba(7, 89, 133, 0.25);
+}
