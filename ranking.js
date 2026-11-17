@@ -1,7 +1,7 @@
 const CHAVE_RANKING = 'pinguinsEspioes.ranking';
 const CHAVE_PARTIDA = 'pinguinsEspioes.partida';
 const MAX_ENTRADAS = 10;
-const NICKNAME_MAX = 12;
+const NICKNAME_MAX = 20;
 const PONTUACAO_MAXIMA = 1000;
 
 // Armazenamento
@@ -44,6 +44,7 @@ function lerPartida() {
     let p;
     try { p = JSON.parse(bruto); } catch (e) { p = null; }
     const nick = p && typeof p.nick === 'string' ? p.nick.trim() : '';
+    const tempo = p && typeof p.tempo === 'string' ? p.tempo.trim() : '--:--';
     const ok = p && nick.length >= 1 && nick.length <= NICKNAME_MAX &&
         Number.isInteger(p.pontos) && p.pontos >= 0 && p.pontos <= PONTUACAO_MAXIMA &&
         Number.isInteger(p.dif) && p.dif >= 0 && p.dif <= 3;
@@ -51,12 +52,12 @@ function lerPartida() {
         console.warn('Dados da partida inválidos; nada foi registrado.');
         return null;
     }
-    return { nick, pontos: p.pontos, dif: p.dif };
+    return { nick, pontos: p.pontos, tempo, dif: p.dif };
 }
 
 // Registra a partida
 function registrar(partida, dados) {
-    const entrada = { nick: partida.nick, pontos: partida.pontos };
+    const entrada = { nick: partida.nick, pontos: partida.pontos, tempo: partida.tempo };
     const lista = dados[partida.dif];
     lista.push(entrada);
     lista.sort((a, b) => b.pontos - a.pontos);
@@ -93,12 +94,13 @@ function criarPainel(dif) {
     } else {
         const tabela = criar('table');
         const cabecalho = criar('tr');
-        ['#', 'Nickname', 'Pontuação'].forEach(t => cabecalho.appendChild(criar('th', '', t)));
+        ['#', 'Nickname', 'Tempo', 'Pontos'].forEach(t => cabecalho.appendChild(criar('th', '', t)));
         tabela.appendChild(criar('thead')).appendChild(cabecalho);
         const corpo = criar('tbody');
         lista.forEach((e, i) => {
             const tr = criar('tr');
-            [i + 1, e.nick, e.pontos].forEach(v => tr.appendChild(criar('td', '', v)));
+            const tempoExibicao = e.tempo || '--:--';
+            [i + 1, e.nick, tempoExibicao, e.pontos].forEach(v => tr.appendChild(criar('td', '', v)));
             if (resultado && e === resultado.entrada && dif === resultado.dif) tr.classList.add('destaque');
             corpo.appendChild(tr);
         });

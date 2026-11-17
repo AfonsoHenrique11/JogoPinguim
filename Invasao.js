@@ -38,7 +38,7 @@ const PESO_DISFARCE = 0.35;
 const PESO_TEMPO = 0.65;
 const TEMPO_EXTRA = [20, 25, 30, 35];
 const TEMPO_ZERO = [60, 120, 180, 240];
-const NICKNAME_MAX = 12;
+const NICKNAME_MAX = 20;
 
 // Imagens por nome (opcional): parede, chao, inicio, saida, cofre, cofre_aberto, jogador, guarda, camera
 const IMAGENS_INVASAO = {};
@@ -275,8 +275,6 @@ const hudCodigo = document.getElementById('hud-codigo');
 const painelCofre = document.getElementById('painel-cofre');
 const digitosPainel = painelCofre.querySelectorAll('#painel-digitos span');
 const tempoResultado = document.getElementById('resultado-tempo');
-const grupoRanking = document.getElementById('grupo-ranking');
-const campoNickname = document.getElementById('campo-nickname');
 const botaoRanking = document.getElementById('botao-ranking');
 const telaIntro = document.getElementById('tela-intro');
 const botaoComecar = document.getElementById('botao-comecar');
@@ -290,8 +288,6 @@ document.getElementById('botao-jogar-de-novo').addEventListener('click', () => {
 botaoPausa.addEventListener('click', pausarJogo);
 botaoRetomar.addEventListener('click', retomarJogo);
 botaoDesistir.addEventListener('click', desistirJogo);
-campoNickname.addEventListener('input', () => { botaoRanking.disabled = !nickValido(campoNickname.value); });
-campoNickname.addEventListener('keydown', e => { if (e.key === 'Enter') irParaRanking(); });
 botaoRanking.addEventListener('click', irParaRanking);
 
 function iniciarMissao() {
@@ -386,13 +382,35 @@ function nickValido(texto) {
     return n.length >= 1 && n.length <= NICKNAME_MAX;
 }
 
-// Passa a partida ao ranking pelo localStorage
+function obterNomeConta() {
+    try {
+        const bruto = localStorage.getItem('pinguim_logado');
+        if (!bruto) return 'Agente';
+        // Suporta tanto o objeto JSON { nome, senha, avatar } quanto string pura
+        if (bruto.startsWith('{')) {
+            const usuario = JSON.parse(bruto);
+            return (usuario.nome || 'Agente').trim().slice(0, NICKNAME_MAX);
+        }
+        return bruto.trim().slice(0, NICKNAME_MAX);
+    } catch (e) {
+        return 'Agente';
+    }
+}
+
+// Passa a partida ao ranking pelo localStorage usando o nome da conta
+// Passa a partida ao ranking pelo localStorage usando o nome da conta e o tempo
 const CHAVE_PARTIDA = 'pinguinsEspioes.partida';
 function irParaRanking() {
-    const nick = campoNickname.value.trim();
-    if (estadoJogo !== 'venceu' || !nickValido(nick)) return;
+    if (estadoJogo !== 'venceu') return;
+    const nick = obterNomeConta();
+    const tempo = formatarTempo(tempoJogo);
     try {
-        localStorage.setItem(CHAVE_PARTIDA, JSON.stringify({ nick, pontos: pontuacaoFinal, dif: dificuldade }));
+        localStorage.setItem(CHAVE_PARTIDA, JSON.stringify({ 
+            nick, 
+            pontos: pontuacaoFinal, 
+            tempo, 
+            dif: dificuldade 
+        }));
     } catch (e) {
         console.warn('Não foi possível gravar a partida para o ranking (' + e.name + ')');
     }
@@ -432,11 +450,9 @@ function encerrar(resultado) {
     pontuacaoResultado.textContent = 'Pontuação: ' + pontuacaoFinal;
     tempoResultado.textContent = 'Tempo: ' + formatarTempo(tempoJogo);
     tempoResultado.classList.toggle('hidden', !venceu);
-    grupoRanking.classList.toggle('hidden', !venceu);
     botaoRanking.classList.toggle('hidden', !venceu);
-    botaoRanking.disabled = !nickValido(campoNickname.value);
     telaResultado.classList.remove('hidden');
-    if (venceu) campoNickname.focus();
+    if (venceu) botaoRanking.focus();
 }
 
 // Painel do cofre
@@ -545,7 +561,7 @@ function aoPressionar(e) {
         if (painelAberto) atualizarPainel();
         return;
     }
-    if (e.code === 'KeyL' || e.code === 'Enter') tentarAbrirPainel();
+    if (e.code === 'KeyL') tentarAbrirPainel();
 }
 
 function atualizarMissao() {
@@ -830,7 +846,7 @@ function desenharIndicadorInteracao() {
     ctx.font = 'bold 16px Arial';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText('Enter/L', cofre.x, y + lado / 2 + 1);
+    ctx.fillText('L', cofre.x, y + lado / 2 + 1);
     ctx.restore();
 }
 

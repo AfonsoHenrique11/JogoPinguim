@@ -22,6 +22,8 @@ $('#inicio').on('click', () => {
 
     $('#dificuldade').show();
     $('#ranking').hide();
+    $('#creditos').hide();
+    $('#conta').hide();
 });
 
 const configurarDificuldade = (seletor, valor) => {
