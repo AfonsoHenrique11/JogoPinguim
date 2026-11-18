@@ -285,6 +285,7 @@ const botaoDesistir = document.getElementById('botao-desistir');
 document.getElementById('botao-jogar-de-novo').addEventListener('click', () => {
     location.href = 'index.html';
 });
+const musica = document.getElementbyId('musica');
 botaoPausa.addEventListener('click', pausarJogo);
 botaoRetomar.addEventListener('click', retomarJogo);
 botaoDesistir.addEventListener('click', desistirJogo);
@@ -424,6 +425,17 @@ function iniciarMissao() {
     estadoJogo = 'jogando';
     telaIntro.classList.add('hidden');
 }
+
+function tocaMusica() {
+    musica.play();
+}
+function pausaMusica() {
+    musica.pause();
+}
+
+botaoComecar.addEventListener('click', tocaMusica);
+botaoRetomar.addEventListener('click', tocaMusica);
+botaoPausar.addEventListener('click', pausaMusica);
 
 document.getElementById('intro-titulo').textContent = mapa.nome;
 document.getElementById('intro-info').textContent = 'Dificuldade: ' + NOMES_DIFICULDADE[dificuldade] + ' · ' +
