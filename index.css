@@ -437,7 +437,7 @@ button:focus-visible {
         filter 0.25s ease;
 }
 
-#ranking:hover {
+#ranking:hover, #creditos:hover, #conta:hover {
     transform: translateY(-4px) scale(1.03);
     filter: brightness(1.1);
     box-shadow:
