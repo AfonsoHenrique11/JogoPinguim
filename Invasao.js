@@ -562,7 +562,7 @@ function aoPressionar(e) {
         if (painelAberto) atualizarPainel();
         return;
     }
-    if (e.code === 'KeyL') tentarAbrirPainel();
+    if (e.code === 'KeyL' || e.code === 'Enter') tentarAbrirPainel();
 }
 
 function atualizarMissao() {
@@ -847,7 +847,7 @@ function desenharIndicadorInteracao() {
     ctx.font = 'bold 16px Arial';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText('L', cofre.x, y + lado / 2 + 1);
+    ctx.fillText('Enter/L', cofre.x, y + lado / 2 + 1);
     ctx.restore();
 }
 
