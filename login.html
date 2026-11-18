@@ -9,69 +9,49 @@
 </head>
 <body>
 
-    <img id="img1" src="imgs/pinguim.png">
+    <img id="img1" src="imgs/pinguim.png" alt="Pinguim">
 
     <div id="caixinha">
         <h2>Conta</h2>
 
-        <!-- TELA DESCONECTADA (Login / Criar Conta) -->
+        <!-- FORMULÁRIO DE LOGIN -->
         <div id="secao-login">
-            <h3 style="color: var(--azul-escuro); margin-bottom: 12px; font-size: 16px;">Login / Criar</h3>
+            <h3 style="color: var(--azul-escuro); margin-bottom: 10px; font-size: 16px;">Entrar na Conta</h3>
             <form id="form-usuario">
                 <input type="text" id="usuario-nome" class="input-jogo" placeholder="Nome de usuário" required autocomplete="off">
                 <input type="password" id="usuario-senha" class="input-jogo" placeholder="Senha" required>
-                
-                <!-- Escolha de Avatar (Usada apenas ao criar uma conta nova) -->
-                <div style="margin-bottom: 15px; text-align: left; background: rgba(255,255,255,0.6); padding: 10px; border-radius: 10px;">
-                    <label style="font-size: 13px; font-weight: bold; color: var(--azul-escuro); display: block; margin-bottom: 4px;">Avatar (para novas contas):</label>
-                    <div style="display: flex; gap: 15px; justify-content: center; align-items: center; flex-wrap: wrap; margin-top: 8px;">
-                        <label style="cursor: pointer; text-align: center; font-size: 12px;">
-                            <input type="radio" name="avatar" value="imgs/pinguim.png" checked> 
-                            <br><img src="imgs/pinguim.png" width="35" style="border-radius:50%; border: 1px solid #075985;">
-                        </label>
-                        <label style="cursor: pointer; text-align: center; font-size: 12px; display: flex; flex-direction: column; align-items: center;">
-                            <input type="radio" name="avatar" id="radio-upload" value="upload">
-                            <span style="font-size: 11px; color: #075985; font-weight: bold; margin-top: 2px;">Enviar Foto</span>
-                            <input type="file" id="input-arquivo-avatar" accept="image/*" style="font-size: 10px; width: 90px; margin-top: 4px;">
-                        </label>
-                    </div>
-                </div>
-
                 <button type="submit" id="inicio">Entrar</button>
             </form>
-            <p id="mensagem-alerta" style="margin-top: 12px; color: #075985; font-size: 14px; font-weight: bold;"></p>
-        </div>
 
-        <!-- TELA CONECTADA (Perfil e Alteração de Avatar) -->
-        <div id="secao-jogo" style="display: none;">
-            <img id="avatar-perfil-atual" src="imgs/pinguim.png" alt="Seu Avatar" style="width: 75px; height: 75px; border-radius: 50%; object-fit: cover; border: 3px solid #075985; margin-bottom: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.15);">
-            <h3 id="saudacao" style="color: var(--azul-escuro); margin-bottom: 15px;"></h3>
-
-            <!-- Área para alterar o avatar estando logado -->
-            <div style="margin-bottom: 18px; text-align: left; background: rgba(255,255,255,0.7); padding: 12px; border-radius: 12px; border: 1px solid rgba(7, 89, 133, 0.2);">
-                <label style="font-size: 13px; font-weight: bold; color: var(--azul-escuro); display: block; margin-bottom: 8px;">Alterar Avatar:</label>
-                <div style="display: flex; gap: 15px; justify-content: center; align-items: center; flex-wrap: wrap;">
-                    <label style="cursor: pointer; text-align: center; font-size: 12px;">
-                        <input type="radio" name="novo-avatar" value="imgs/pinguim.png" checked> 
-                        <br><img src="imgs/pinguim.png" width="32" style="border-radius:50%; border: 1px solid #075985;">
-                    </label>
-                    <label style="cursor: pointer; text-align: center; font-size: 12px; display: flex; flex-direction: column; align-items: center;">
-                        <input type="radio" name="novo-avatar" id="radio-upload-perfil" value="upload">
-                        <span style="font-size: 11px; color: #075985; font-weight: bold; margin-top: 2px;">Nova Foto</span>
-                        <input type="file" id="input-arquivo-perfil" accept="image/*" style="font-size: 10px; width: 90px; margin-top: 4px;">
-                    </label>
-                </div>
-                <div style="text-align: center; margin-top: 10px;">
-                    <button type="button" id="btn-salvar-avatar" style="padding: 7px 16px; font-size: 13px; font-weight: bold; color: white; background: #0284c7; border: 2px solid white; border-radius: 10px; cursor: pointer;">Salvar Novo Avatar</button>
-                </div>
-                <p id="msg-avatar-salvo" style="margin-top: 8px; color: #16a34a; font-size: 12px; font-weight: bold; text-align: center;"></p>
+            <div style="margin-top: 15px; text-align: center;">
+                <button type="button" id="btn-mostrar-cadastro" style="background: none; border: none; color: #075985; font-weight: bold; cursor: pointer; text-decoration: underline; font-size: 13px;">
+                    Não tem uma conta? Cadastre-se aqui
+                </button>
             </div>
-
-            <button id="inicio" onclick="fazerLogout()">Sair da Conta</button>
         </div>
 
+        <!-- FORMULÁRIO DE CADASTRO (Oculto inicialmente) -->
+        <div id="secao-cadastro" style="display: none;">
+            <h3 style="color: var(--azul-escuro); margin-bottom: 10px; font-size: 16px;">Criar Nova Conta</h3>
+            <form id="form-cadastro">
+                <input type="text" id="cad-nome" class="input-jogo" placeholder="Escolha um nome" required autocomplete="off">
+                <input type="password" id="cad-senha" class="input-jogo" placeholder="Escolha uma senha" required>
+                <button type="submit" id="inicio">Cadastrar</button>
+            </form>
+
+            <div style="margin-top: 15px; text-align: center;">
+                <button type="button" id="btn-voltar-login" style="background: none; border: none; color: #075985; font-weight: bold; cursor: pointer; text-decoration: underline; font-size: 13px;">
+                    Já tem uma conta? Faça login
+                </button>
+            </div>
+        </div>
+
+        <!-- MENSAGEM DE ALERTA / RETORNO -->
+        <p id="mensagem-alerta" style="margin-top: 12px; font-size: 14px; font-weight: bold; text-align: center;"></p>
+
+        <!-- BOTÃO DE VOLTAR -->
         <div style="margin-top: 15px;">
-            <button id="voltar" onclick="window.location.href='index.html'">Voltar</button>
+            <button id="voltar" onclick="window.location.href='index.html'">Voltar ao Menu</button>
         </div>
     </div>
 
